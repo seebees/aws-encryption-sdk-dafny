@@ -8,7 +8,7 @@ operation GenerateRandomBytes {
 
 structure GenerateRandomBytesInput {
   @required
-  length: Long
+  length: Integer
 }
 
 @aws.polymorph#positional

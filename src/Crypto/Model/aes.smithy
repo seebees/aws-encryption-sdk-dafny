@@ -25,7 +25,9 @@ structure AESEncryptInput {
 }
 
 structure AESEncryptOutput {
+  @required
   cipherText: Blob,
+  @required
   authTag: Blob
 }
 
@@ -51,9 +53,9 @@ structure AESDecryptOutput {
 
 structure AES_GCM {
   @required
-  keyLength: Long,
+  keyLength: Integer,
   @required
-  tagLength: Long,
+  tagLength: Integer,
   @required
-  ivLength: Long
+  ivLength: Integer
 }

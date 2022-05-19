@@ -9,9 +9,9 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  import opened StandardLibrary.UInt
  import opened UTF8
  datatype AES_GCM = AES_GCM (
-	nameonly keyLength: int64 ,
-	nameonly tagLength: int64 ,
-	nameonly ivLength: int64 )
+	nameonly keyLength: int32 ,
+	nameonly tagLength: int32 ,
+	nameonly ivLength: int32 )
  datatype AESDecryptInput = AESDecryptInput (
 	nameonly encAlg: AES_GCM ,
 	nameonly key: seq<uint8> ,
@@ -26,8 +26,8 @@ include "../../StandardLibrary/StandardLibrary.dfy"
 	nameonly msg: seq<uint8> ,
 	nameonly aad: seq<uint8> )
  datatype AESEncryptOutput = AESEncryptOutput (
-	nameonly cipherText: Option<seq<uint8>> ,
-	nameonly authTag: Option<seq<uint8>> )
+	nameonly cipherText: seq<uint8> ,
+	nameonly authTag: seq<uint8> )
  trait {:termination false} IAtomicPrimitives {
  predicate {:opaque} DigestCalledWith ( input: DigestInput ) {true}
  predicate {:opaque} DigestSucceededWith (  input: DigestInput , output: seq<uint8> ) {true}
@@ -128,12 +128,12 @@ include "../../StandardLibrary/StandardLibrary.dfy"
 	nameonly digestAlgorithm: DigestAlgorithm ,
 	nameonly message: seq<uint8> )
  datatype GenerateRandomBytesInput = GenerateRandomBytesInput (
-	nameonly length: int64 )
+	nameonly length: int32 )
  datatype HkdfExpandInput = HkdfExpandInput (
 	nameonly digestAlgorithm: DigestAlgorithm ,
 	nameonly prk: seq<uint8> ,
 	nameonly info: Option<seq<uint8>> ,
-	nameonly expectedLength: int64 )
+	nameonly expectedLength: int32 )
  datatype HkdfExtractInput = HkdfExtractInput (
 	nameonly digest: DigestAlgorithm ,
 	nameonly salt: Option<seq<uint8>> ,

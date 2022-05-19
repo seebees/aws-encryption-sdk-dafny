@@ -33,7 +33,7 @@ structure HkdfExpandInput {
   prk: Blob,
   info: Blob,
   @required
-  expectedLength: Long
+  expectedLength: Integer
 }
 
 @aws.polymorph#positional
