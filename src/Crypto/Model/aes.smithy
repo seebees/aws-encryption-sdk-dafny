@@ -53,9 +53,12 @@ structure AESDecryptOutput {
 
 structure AES_GCM {
   @required
+  @range(min: 0)
   keyLength: Integer,
   @required
+  @range(min: 0)
   tagLength: Integer,
   @required
+  @range(min: 0)
   ivLength: Integer
 }
