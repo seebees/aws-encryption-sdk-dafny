@@ -6,7 +6,9 @@ operation HMac {
 }
 
 structure HMacInput {
+  @required
   digestAlgorithm: DigestAlgorithm,
+  @required
   message: Blob,
 }
 
