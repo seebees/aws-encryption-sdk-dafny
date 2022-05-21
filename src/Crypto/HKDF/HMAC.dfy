@@ -2,6 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0
 
 include "../../StandardLibrary/StandardLibrary.dfy"
+include "../Model/Aws.Cryptography.PrimitivesAbstract.dfy"
+
+module HMac {
+  import opened Wrappers
+  import opened UInt = StandardLibrary.UInt
+  import Types = AwsCryptographyPrimitivesTypes
+
+  method Digest(input: Types.HMacInput)
+    returns  ( output: Result<seq<uint8>, Types.Error> )
+  {
+
+  }
+}
+
 
 module {:extern "HMAC"} HMAC {
   import opened StandardLibrary

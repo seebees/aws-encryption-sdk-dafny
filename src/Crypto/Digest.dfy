@@ -2,35 +2,41 @@
 // SPDX-License-Identifier: Apache-2.0
 
 include "../StandardLibrary/StandardLibrary.dfy"
-include "../StandardLibrary/UInt.dfy"
-include "./Datatypes.dfy"
+include "Model/Aws.Cryptography.PrimitivesAbstract.dfy"
 
 module Digest {
   import opened Wrappers
   import opened UInt = StandardLibrary.UInt
-  import CryptoDatatypes
+  import Types = AwsCryptographyPrimitivesTypes
   import ExternDigest
 
-  function method Length(alg: CryptoDatatypes.DigestAlgorithm): nat {
-    match alg
-    case SHA_512 => 64
+  function method Length(digestAlgorithm: Types.DigestAlgorithm): nat
+  {
+    match digestAlgorithm
+      case SHA_512 => 64
+      case SHA_384 => 48
+      case SHA_256 => 32
   }
 
-  method Digest(alg: CryptoDatatypes.DigestAlgorithm, msg: seq<uint8>) returns (res: Result<seq<uint8>, string>)
-    ensures res.Success? ==> |res.value| == Length(alg)
+  method Digest(input: Types.DigestInput)
+    returns (res: Result<seq<uint8>, Types.Error>)
+    ensures res.Success? ==> |res.value| == Length(input.digestAlgorithm)
   {
-    var result := ExternDigest.Digest(alg, msg);
-    if result.Success? && |result.value| != Length(alg) {
-        return Failure("Incorrect length digest from ExternDigest.");
-    }
-    return result;
+    var DigestInput(digestAlgorithm, message) := input;
+    var value :- ExternDigest.Digest(digestAlgorithm, message);
+    :- Need(
+      |value| == Length(digestAlgorithm),
+      Types.AwsCryptographicPrimitivesError("Incorrect length digest from ExternDigest.")
+    );
+    return Success(value);
   }
 }
 
 module {:extern "ExternDigest" } ExternDigest {
   import opened Wrappers
   import opened UInt = StandardLibrary.UInt
-  import opened CryptoDatatypes
+  import Types = AwsCryptographyPrimitivesTypes
 
-  method {:extern } Digest(alg: CryptoDatatypes.DigestAlgorithm, msg: seq<uint8>) returns (res: Result<seq<uint8>, string>)
+  method {:extern } Digest(alg: Types.DigestAlgorithm, msg: seq<uint8>)
+    returns (res: Result<seq<uint8>, Types.OpaqueError>)
 }

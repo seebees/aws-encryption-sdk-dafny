@@ -125,6 +125,6 @@ module AwsCryptographyPrimitivesTypes
 	nameonly info: Option<seq<uint8>> ,
 	nameonly expectedLength: int64 )
  datatype HMacInput = HMacInput (
-	nameonly digestAlgorithm: Option<DigestAlgorithm> ,
-	nameonly message: Option<seq<uint8>> )
+	nameonly digestAlgorithm: DigestAlgorithm,
+	nameonly message: seq<uint8> )
 }
