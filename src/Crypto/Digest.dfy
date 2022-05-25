@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 include "../StandardLibrary/StandardLibrary.dfy"
-include "Model/Aws.Cryptography.PrimitivesAbstract.dfy"
+include "Model/AwsCryptographyPrimitivesTypes.dfy"
 
 module Digest {
   import opened Wrappers
@@ -10,6 +10,7 @@ module Digest {
   import Types = AwsCryptographyPrimitivesTypes
   import ExternDigest
 
+  // Hash length in octets (bytes), e.g. GetHashLength(SHA_256) ==> 256 bits = 32 bytes ==> n = 32
   function method Length(digestAlgorithm: Types.DigestAlgorithm): nat
   {
     match digestAlgorithm
@@ -26,7 +27,7 @@ module Digest {
     var value :- ExternDigest.Digest(digestAlgorithm, message);
     :- Need(
       |value| == Length(digestAlgorithm),
-      Types.AwsCryptographicPrimitivesError("Incorrect length digest from ExternDigest.")
+      Types.AwsCryptographicPrimitivesError(message := "Incorrect length digest from ExternDigest.")
     );
     return Success(value);
   }

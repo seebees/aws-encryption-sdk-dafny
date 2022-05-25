@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 include "../StandardLibrary/StandardLibrary.dfy"
-include "Model/Aws.Cryptography.PrimitivesAbstract.dfy"
+include "Model/AwsCryptographyPrimitivesTypes.dfy"
 
 module Random {
   import opened Wrappers
@@ -18,7 +18,7 @@ module Random {
 
     :- Need(
       |value| == i as int,
-      Types.AwsCryptographicPrimitivesError("Incorrect length from ExternRandom.")
+      Types.AwsCryptographicPrimitivesError(message := "Incorrect length from ExternRandom.")
     );
 
     return Success(value);

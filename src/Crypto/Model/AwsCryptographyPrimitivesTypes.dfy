@@ -3,22 +3,11 @@
 // Do not modify this file. This file is machine generated, and any changes to it will be overwritten.
 include "../../StandardLibrary/StandardLibrary.dfy"
  include "../../Util/UTF8.dfy"
-module AwsCryptographyPrimitivesTypes
-{
-	import opened Wrappers
- 	import opened StandardLibrary.UInt
- 	import opened UTF8
-
-
-
-	datatype Error =
-		| AwsCryptographicPrimitivesError(message: string)
-		| IncorrectLength()
-		| Unknown(message: string)
-		| Opaque(obj: object)
-	type OpaqueError = e: Error | e.Opaque? witness *
-
-
+ module AwsCryptographyPrimitivesTypes
+ {
+ import opened Wrappers
+ import opened StandardLibrary.UInt
+ import opened UTF8
  datatype AES_GCM = AES_GCM (
 	nameonly keyLength: int32 ,
 	nameonly tagLength: int32 ,
@@ -39,7 +28,13 @@ module AwsCryptographyPrimitivesTypes
  datatype AESEncryptOutput = AESEncryptOutput (
 	nameonly cipherText: seq<uint8> ,
 	nameonly authTag: seq<uint8> )
- trait {:termination false} IAtomicPrimitives {
+ trait {:termination false} IAwsCryptographicPrimitivesClient {
+ predicate GenerateRandomBytesCalledWith ( input: GenerateRandomBytesInput ) {true}
+ predicate GenerateRandomBytesSucceededWith (  input: GenerateRandomBytesInput , output: seq<uint8> ) {true}
+ method GenerateRandomBytes ( input: GenerateRandomBytesInput ) returns  ( output: Result<seq<uint8>, Error> )
+	ensures GenerateRandomBytesCalledWith (  input )
+	ensures output.Success? ==> GenerateRandomBytesSucceededWith (  input , output.value )
+
  predicate DigestCalledWith ( input: DigestInput ) {true}
  predicate DigestSucceededWith (  input: DigestInput , output: seq<uint8> ) {true}
  method Digest ( input: DigestInput ) returns  ( output: Result<seq<uint8>, Error> )
@@ -52,29 +47,17 @@ module AwsCryptographyPrimitivesTypes
 	ensures HMacCalledWith (  input )
 	ensures output.Success? ==> HMacSucceededWith (  input , output.value )
 
- predicate HkdfExpandCalledWith ( input: HkdfExpandInput ) {true}
- predicate HkdfExpandSucceededWith (  input: HkdfExpandInput , output: seq<uint8> ) {true}
- method HkdfExpand ( input: HkdfExpandInput ) returns  ( output: Result<seq<uint8>, Error> )
-	ensures HkdfExpandCalledWith (  input )
-	ensures output.Success? ==> HkdfExpandSucceededWith (  input , output.value )
-
  predicate HkdfExtractCalledWith ( input: HkdfExtractInput ) {true}
  predicate HkdfExtractSucceededWith (  input: HkdfExtractInput , output: seq<uint8> ) {true}
  method HkdfExtract ( input: HkdfExtractInput ) returns  ( output: Result<seq<uint8>, Error> )
 	ensures HkdfExtractCalledWith (  input )
 	ensures output.Success? ==> HkdfExtractSucceededWith (  input , output.value )
 
- predicate AESDecryptCalledWith ( input: AESDecryptInput ) {true}
- predicate AESDecryptSucceededWith (  input: AESDecryptInput , output: seq<uint8> ) {true}
- method AESDecrypt ( input: AESDecryptInput ) returns  ( output: Result<seq<uint8>, Error> )
-	ensures AESDecryptCalledWith (  input )
-	ensures output.Success? ==> AESDecryptSucceededWith (  input , output.value )
-
- predicate GenerateRandomBytesCalledWith ( input: GenerateRandomBytesInput ) {true}
- predicate GenerateRandomBytesSucceededWith (  input: GenerateRandomBytesInput , output: seq<uint8> ) {true}
- method GenerateRandomBytes ( input: GenerateRandomBytesInput ) returns  ( output: Result<seq<uint8>, Error> )
-	ensures GenerateRandomBytesCalledWith (  input )
-	ensures output.Success? ==> GenerateRandomBytesSucceededWith (  input , output.value )
+ predicate HkdfExpandCalledWith ( input: HkdfExpandInput ) {true}
+ predicate HkdfExpandSucceededWith (  input: HkdfExpandInput , output: seq<uint8> ) {true}
+ method HkdfExpand ( input: HkdfExpandInput ) returns  ( output: Result<seq<uint8>, Error> )
+	ensures HkdfExpandCalledWith (  input )
+	ensures output.Success? ==> HkdfExpandSucceededWith (  input , output.value )
 
  predicate HkdfCalledWith ( input: HkdfInput ) {true}
  predicate HkdfSucceededWith (  input: HkdfInput , output: seq<uint8> ) {true}
@@ -88,18 +71,14 @@ module AwsCryptographyPrimitivesTypes
 	ensures AESEncryptCalledWith (  input )
 	ensures output.Success? ==> AESEncryptSucceededWith (  input , output.value )
 
-}
- trait {:termination false} IAwsCryptographicPrimitivesClient {
- predicate CreateAtomicPrimitivesCalledWith ( input: AwsCryptographicPrimitivesVersion ) {true}
- predicate CreateAtomicPrimitivesSucceededWith (  input: AwsCryptographicPrimitivesVersion , output: IAtomicPrimitives ) {true}
- method CreateAtomicPrimitives ( input: AwsCryptographicPrimitivesVersion ) returns  ( output: Result<IAtomicPrimitives, Error> )
-	ensures CreateAtomicPrimitivesCalledWith (  input )
-	ensures output.Success? ==> CreateAtomicPrimitivesSucceededWith (  input , output.value )
+ predicate AESDecryptCalledWith ( input: AESDecryptInput ) {true}
+ predicate AESDecryptSucceededWith (  input: AESDecryptInput , output: seq<uint8> ) {true}
+ method AESDecrypt ( input: AESDecryptInput ) returns  ( output: Result<seq<uint8>, Error> )
+	ensures AESDecryptCalledWith (  input )
+	ensures output.Success? ==> AESDecryptSucceededWith (  input , output.value )
 
 }
-
- datatype AwsCryptographicPrimitivesVersion =
-	| V20211101
+ datatype CryptoConfig = CryptoConfig (  )
  datatype DigestAlgorithm =
 	| SHA_512
 	| SHA_384
@@ -125,6 +104,30 @@ module AwsCryptographyPrimitivesTypes
 	nameonly info: Option<seq<uint8>> ,
 	nameonly expectedLength: int64 )
  datatype HMacInput = HMacInput (
-	nameonly digestAlgorithm: DigestAlgorithm,
+	nameonly digestAlgorithm: DigestAlgorithm ,
+	nameonly key: seq<uint8> ,
 	nameonly message: seq<uint8> )
+ type UnsignedInteger = x: int32 | IsValid_UnsignedInteger(x) witness *
+ predicate method IsValid_UnsignedInteger(x: int32) {
+ ( 0 <= x  )
+}
+ datatype Error =
+ // Local Error structures are listed here
+ | AwsCryptographicPrimitivesError (
+	nameonly message: string )
+ // Any dependent models are listed here
+ 
+ // The Opaque error, used for native, extern, wrapped or unknown errors
+ | Opaque(obj: object)
+ type OpaqueError = e: Error | e.Opaque? witness *
+}
+
+abstract module AwsCryptographyPrimitivesService {
+	import opened Types = AwsCryptographyPrimitivesTypes
+	import opened Wrappers
+  import opened StandardLibrary.UInt
+
+	method AtomicPrimitives(config: CryptoConfig)
+		returns (res: Result<IAwsCryptographicPrimitivesClient,Error>)
+
 }

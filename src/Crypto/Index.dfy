@@ -1,44 +1,32 @@
 // Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-include "Model/Aws.Cryptography.PrimitivesAbstract.dfy"
-include "../StandardLibrary/StandardLibrary.dfy"
+include "Model/AwsCryptographyPrimitivesTypes.dfy"
 include "Random.dfy"
+include "WrappedHMAC.dfy"
+include "WrappedHKDF.dfy"
 include "AESEncryption.dfy"
 include "Digest.dfy"
-// include "RSAEncryption.dfy"
-// include "Signature.dfy"
+include "RSAEncryption.dfy"
+include "Signature.dfy"
 
-// TODO add back the `Aws.`
-module Aws.Cryptography.Primitives {
+module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesService {
   import Random
   import AESEncryption
   import D = Digest
-  import opened AwsCryptographyPrimitivesTypes
-  import opened Wrappers
-  import opened StandardLibrary.UInt
+  import WrappedHMAC
+  import WrappedHKDF
 
-  class AwsCryptographicPrimitives extends IAwsCryptographicPrimitivesClient {
-
-    method CreateAtomicPrimitives ( input: AwsCryptographicPrimitivesVersion )
-      returns  ( output: Result<IAtomicPrimitives, Error> )
-      ensures CreateAtomicPrimitivesCalledWith (  input )
-      ensures output.Success? ==> CreateAtomicPrimitivesSucceededWith (  input , output.value )
-    {
-      var p := new AtomicPrimitives(input);
-      return Success(p);
-    }
+  method AtomicPrimitives(config: CryptoConfig)
+		returns (res: Result<IAwsCryptographicPrimitivesClient,Error>)
+  {
+    var client := new AtomicPrimitivesServiceThing();
+    return Success(client);
   }
 
-  class AtomicPrimitives extends IAtomicPrimitives {
-    const version: AwsCryptographicPrimitivesVersion;
+  class AtomicPrimitivesServiceThing extends IAwsCryptographicPrimitivesClient {
 
-    constructor( version: AwsCryptographicPrimitivesVersion )
-      ensures this.version == version
-    {
-      this.version := version;
-    }
-
+    constructor(){}
 
     method GenerateRandomBytes ( input: GenerateRandomBytesInput )
       returns  ( output: Result<seq<uint8>, Error> )
@@ -47,13 +35,6 @@ module Aws.Cryptography.Primitives {
     {
       output := Random.GenerateBytes(input.length);
     }
-
-
-
-
-
-
-
 
     method Digest ( input: DigestInput )
       returns  ( output: Result<seq<uint8>, Error> )
@@ -68,7 +49,7 @@ module Aws.Cryptography.Primitives {
       ensures HMacCalledWith (  input )
       ensures output.Success? ==> HMacSucceededWith (  input , output.value )
     {
-
+      output := WrappedHMAC.Digest(input);
     }
 
     method HkdfExpand ( input: HkdfExpandInput )
@@ -87,20 +68,20 @@ module Aws.Cryptography.Primitives {
 
     }
 
-    method AESDecrypt ( input: AESDecryptInput )
-      returns  ( output: Result<seq<uint8>, Error> )
-      ensures AESDecryptCalledWith (  input )
-      ensures output.Success? ==> AESDecryptSucceededWith (  input , output.value )
-    {
-      output := AESEncryption.AESDecrypt(input);
-    }
-
     method Hkdf ( input: HkdfInput )
       returns  ( output: Result<seq<uint8>, Error> )
       ensures HkdfCalledWith (  input )
       ensures output.Success? ==> HkdfSucceededWith (  input , output.value )
     {
 
+    }
+
+    method AESDecrypt ( input: AESDecryptInput )
+      returns  ( output: Result<seq<uint8>, Error> )
+      ensures AESDecryptCalledWith (  input )
+      ensures output.Success? ==> AESDecryptSucceededWith (  input , output.value )
+    {
+      output := AESEncryption.AESDecrypt(input);
     }
 
     method AESEncrypt ( input: AESEncryptInput )

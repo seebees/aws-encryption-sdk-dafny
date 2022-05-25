@@ -3,7 +3,7 @@
 
 include "../../libraries/src/Wrappers.dfy"
 include "../StandardLibrary/StandardLibrary.dfy"
-include "Model/Aws.Cryptography.PrimitivesAbstract.dfy"
+include "Model/AwsCryptographyPrimitivesTypes.dfy"
 
 module {:extern "AESEncryption"} AESEncryption {
   import opened Wrappers
@@ -66,11 +66,11 @@ module {:extern "AESEncryption"} AESEncryption {
 
     :- Need(
       |value.cipherText| == |msg|,
-      Types.AwsCryptographicPrimitivesError("AESEncrypt did not return cipherText of expected length")
+      Types.AwsCryptographicPrimitivesError(message := "AESEncrypt did not return cipherText of expected length")
     );
     :- Need(
       |value.authTag| == encAlg.tagLength as int,
-      Types.AwsCryptographicPrimitivesError("AESEncryption did not return valid tag")
+      Types.AwsCryptographicPrimitivesError(message := "AESEncryption did not return valid tag")
     );
 
     return Success(value);
@@ -109,7 +109,7 @@ module {:extern "AESEncryption"} AESEncryption {
 
     :- Need(
       |cipherTxt| == |value|,
-      Types.AwsCryptographicPrimitivesError("AESDecrypt did not return plaintext of expected length")
+      Types.AwsCryptographicPrimitivesError(message := "AESDecrypt did not return plaintext of expected length")
     );
 
     return Success(value);

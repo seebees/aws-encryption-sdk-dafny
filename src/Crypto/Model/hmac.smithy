@@ -9,6 +9,8 @@ structure HMacInput {
   @required
   digestAlgorithm: DigestAlgorithm,
   @required
+  key: Blob,
+  @required
   message: Blob,
 }
 

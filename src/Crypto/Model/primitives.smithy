@@ -1,38 +1,14 @@
 namespace aws.cryptography.primitives
 
-// use aws.polymorph#reference
-// use aws.polymorph#positional
+@range(min: 0)
+integer UnsignedInteger
 
-@enum([
-    {
-        name: "V20211101",
-        value: "V20211101",
-    },
-])
-string AwsCryptographicPrimitivesVersion
-
+@aws.polymorph#localService(
+  sdkId: "Crypto",
+  config: CryptoConfig,
+)
 service AwsCryptographicPrimitives {
-  version: AwsCryptographicPrimitivesVersion,
-  operations: [CreateAtomicPrimitives],
-}
-
-operation CreateAtomicPrimitives {
-  input: CreateAtomicPrimitivesInput,
-  output: AtomicPrimitivesReference,
-  errors: [AwsCryptographicPrimitivesError],
-}
-
-@aws.polymorph#positional
-structure CreateAtomicPrimitivesInput {
-  version: AwsCryptographicPrimitivesVersion
-}
-
-@aws.polymorph#reference(resource: AtomicPrimitives)
-structure AtomicPrimitivesReference {}
-
-/////////////
-// AtomicPrimitives
-resource AtomicPrimitives {
+  version: "2020-10-24",
   operations: [
     GenerateRandomBytes,
     Digest,
@@ -45,6 +21,7 @@ resource AtomicPrimitives {
   ]
 }
 
+structure CryptoConfig {}
 
 ///////////////////
 // Errors
