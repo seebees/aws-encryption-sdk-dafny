@@ -1,4 +1,4 @@
-namespace aws.encryptionSdk.core
+namespace aws.cryptography.materialProviders
 
 use aws.polymorph#reference
 use aws.polymorph#positional
@@ -6,7 +6,7 @@ use aws.polymorph#extendable
 
 @extendable
 resource Keyring {
-    operations: [OnEncrypt, OnDecrypt]
+  operations: [OnEncrypt, OnDecrypt]
 }
 
 
@@ -17,20 +17,20 @@ resource Keyring {
 structure KeyringReference {}
 
 list KeyringList {
-    member: KeyringReference
+  member: KeyringReference
 }
 
 structure DiscoveryFilter {
-    @required
-    accountIds: AccountIdList,
+  @required
+  accountIds: AccountIdList,
 
-    @required
-    partition: String
+  @required
+  partition: String
 }
 
 map EncryptionContext {
-    key: Utf8Bytes,
-    value: Utf8Bytes,
+  key: Utf8Bytes,
+  value: Utf8Bytes,
 }
 
 // Grant Tokens are base64 encoded strings
@@ -40,7 +40,7 @@ map EncryptionContext {
 // https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateGrant.html
 // For now we'll mirror the API docs (generated from the model) and omit the pattern.
 list GrantTokenList {
-    member: String
+  member: String
 }
 
 
@@ -48,36 +48,36 @@ list GrantTokenList {
 // Keyring Operations
 
 operation OnEncrypt {
-    input: OnEncryptInput,
-    output: OnEncryptOutput,
+  input: OnEncryptInput,
+  output: OnEncryptOutput,
 }
 
 structure OnEncryptInput {
-    @required
-    materials: EncryptionMaterials
+  @required
+  materials: EncryptionMaterials
 }
 
 structure OnEncryptOutput {
-    @required
-    materials: EncryptionMaterials
+  @required
+  materials: EncryptionMaterials
 }
 
 operation OnDecrypt {
-    input: OnDecryptInput,
-    output: OnDecryptOutput,
+  input: OnDecryptInput,
+  output: OnDecryptOutput,
 }
 
 structure OnDecryptInput {
-    @required
-    materials: DecryptionMaterials,
+  @required
+  materials: DecryptionMaterials,
 
-    @required
-    encryptedDataKeys: EncryptedDataKeyList
+  @required
+  encryptedDataKeys: EncryptedDataKeyList
 }
 
 structure OnDecryptOutput {
-    @required
-    materials: DecryptionMaterials
+  @required
+  materials: DecryptionMaterials
 }
 
 
@@ -86,190 +86,190 @@ structure OnDecryptOutput {
 
 @positional
 structure CreateKeyringOutput {
-    keyring: KeyringReference
+  keyring: KeyringReference
 }
 
 // KMS - Strict
 operation CreateAwsKmsKeyring {
-    input: CreateAwsKmsKeyringInput,
-    output: CreateKeyringOutput
+  input: CreateAwsKmsKeyringInput,
+  output: CreateKeyringOutput
 }
 structure CreateAwsKmsKeyringInput {
-    @required
-    kmsKeyId: KmsKeyId,
+  @required
+  kmsKeyId: KmsKeyId,
 
-    @required
-    kmsClient: KmsClientReference,
+  @required
+  kmsClient: KmsClientReference,
 
-    grantTokens: GrantTokenList
+  grantTokens: GrantTokenList
 }
 
 operation CreateAwsKmsMultiKeyring {
-    input: CreateAwsKmsMultiKeyringInput,
-    output: CreateKeyringOutput,
+  input: CreateAwsKmsMultiKeyringInput,
+  output: CreateKeyringOutput,
 }
 
 structure CreateAwsKmsMultiKeyringInput {
-    generator:  KmsKeyId,
+  generator:  KmsKeyId,
 
-    kmsKeyIds: KmsKeyIdList,
+  kmsKeyIds: KmsKeyIdList,
 
-    clientSupplier: ClientSupplierReference,
+  clientSupplier: ClientSupplierReference,
 
-    grantTokens: GrantTokenList
+  grantTokens: GrantTokenList
 }
 
 // KMS - Discovery
 operation CreateAwsKmsDiscoveryKeyring {
-    input: CreateAwsKmsDiscoveryKeyringInput,
-    output: CreateKeyringOutput
+  input: CreateAwsKmsDiscoveryKeyringInput,
+  output: CreateKeyringOutput
 }
 
 structure CreateAwsKmsDiscoveryKeyringInput {
-    @required
-    kmsClient: KmsClientReference,
+  @required
+  kmsClient: KmsClientReference,
 
-    discoveryFilter: DiscoveryFilter,
+  discoveryFilter: DiscoveryFilter,
 
-    grantTokens: GrantTokenList
+  grantTokens: GrantTokenList
 }
 
 operation CreateAwsKmsDiscoveryMultiKeyring {
-    input: CreateAwsKmsDiscoveryMultiKeyringInput,
-    output: CreateKeyringOutput,
+  input: CreateAwsKmsDiscoveryMultiKeyringInput,
+  output: CreateKeyringOutput,
 }
 
 structure CreateAwsKmsDiscoveryMultiKeyringInput {
-    @required
-    regions: RegionList,
+  @required
+  regions: RegionList,
 
-    discoveryFilter: DiscoveryFilter,
+  discoveryFilter: DiscoveryFilter,
 
-    clientSupplier: ClientSupplierReference,
+  clientSupplier: ClientSupplierReference,
 
-    grantTokens: GrantTokenList
+  grantTokens: GrantTokenList
 }
 
 // KMS - MRK Aware, Strict
 operation CreateAwsKmsMrkKeyring {
-    input: CreateAwsKmsMrkKeyringInput,
-    output: CreateKeyringOutput,
+  input: CreateAwsKmsMrkKeyringInput,
+  output: CreateKeyringOutput,
 }
 
 structure CreateAwsKmsMrkKeyringInput {
-    @required
-    kmsKeyId: KmsKeyId,
+  @required
+  kmsKeyId: KmsKeyId,
 
-    @required
-    kmsClient: KmsClientReference,
+  @required
+  kmsClient: KmsClientReference,
 
-    grantTokens: GrantTokenList
+  grantTokens: GrantTokenList
 }
 
 operation CreateAwsKmsMrkMultiKeyring {
-    input: CreateAwsKmsMrkMultiKeyringInput,
-    output: CreateKeyringOutput,
+  input: CreateAwsKmsMrkMultiKeyringInput,
+  output: CreateKeyringOutput,
 }
 
 structure CreateAwsKmsMrkMultiKeyringInput {
-    generator:  KmsKeyId,
+  generator:  KmsKeyId,
 
-    kmsKeyIds: KmsKeyIdList,
+  kmsKeyIds: KmsKeyIdList,
 
-    clientSupplier: ClientSupplierReference,
+  clientSupplier: ClientSupplierReference,
 
-    grantTokens: GrantTokenList
+  grantTokens: GrantTokenList
 }
 
 // KMS - MRK Aware, Discovery
 
 operation CreateAwsKmsMrkDiscoveryKeyring {
-    input: CreateAwsKmsMrkDiscoveryKeyringInput,
-    output: CreateKeyringOutput,
+  input: CreateAwsKmsMrkDiscoveryKeyringInput,
+  output: CreateKeyringOutput,
 }
 
 structure CreateAwsKmsMrkDiscoveryKeyringInput {
-    @required
-    kmsClient: KmsClientReference,
+  @required
+  kmsClient: KmsClientReference,
 
-    discoveryFilter: DiscoveryFilter,
+  discoveryFilter: DiscoveryFilter,
 
-    grantTokens: GrantTokenList,
+  grantTokens: GrantTokenList,
 
-    @required // TODO: probably shouldn't be
-    region: Region
+  @required // TODO: probably shouldn't be
+  region: Region
 }
 
 operation CreateAwsKmsMrkDiscoveryMultiKeyring {
-    input: CreateAwsKmsMrkDiscoveryMultiKeyringInput,
-    output: CreateKeyringOutput,
+  input: CreateAwsKmsMrkDiscoveryMultiKeyringInput,
+  output: CreateKeyringOutput,
 }
 
 structure CreateAwsKmsMrkDiscoveryMultiKeyringInput {
-    @required
-    regions: RegionList,
+  @required
+  regions: RegionList,
 
-    discoveryFilter: DiscoveryFilter,
+  discoveryFilter: DiscoveryFilter,
 
-    clientSupplier: ClientSupplierReference,
+  clientSupplier: ClientSupplierReference,
 
-    grantTokens: GrantTokenList
+  grantTokens: GrantTokenList
 }
 
 // TODO
 // Multi
 
 operation CreateMultiKeyring {
-    input: CreateMultiKeyringInput,
-    output: CreateKeyringOutput,
+  input: CreateMultiKeyringInput,
+  output: CreateKeyringOutput,
 }
 
 structure CreateMultiKeyringInput {
-    generator: KeyringReference,
+  generator: KeyringReference,
 
-    // We'll represent "no children" as an empty list
-    @required
-    childKeyrings: KeyringList
+  // We'll represent "no children" as an empty list
+  @required
+  childKeyrings: KeyringList
 }
 
 // Raw
 
 operation CreateRawAesKeyring {
-    input: CreateRawAesKeyringInput,
-    output: CreateKeyringOutput,
+  input: CreateRawAesKeyringInput,
+  output: CreateKeyringOutput,
 }
 
 structure CreateRawAesKeyringInput {
-    @required
-    keyNamespace: String,
+  @required
+  keyNamespace: String,
 
-    @required
-    keyName: String,
+  @required
+  keyName: String,
 
-    @required
-    wrappingKey: Blob,
+  @required
+  wrappingKey: Blob,
 
-    @required
-    wrappingAlg: AesWrappingAlg,
+  @required
+  wrappingAlg: AesWrappingAlg,
 }
 
 // TODO
  operation CreateRawRsaKeyring {
-     input: CreateRawRsaKeyringInput,
-     output: CreateKeyringOutput,
+   input: CreateRawRsaKeyringInput,
+   output: CreateKeyringOutput,
  }
 
  structure CreateRawRsaKeyringInput {
-     @required
-     keyNamespace: String,
+   @required
+   keyNamespace: String,
 
-     @required
-     keyName: String,
+   @required
+   keyName: String,
 
-     @required
-     paddingScheme: PaddingScheme,
+   @required
+   paddingScheme: PaddingScheme,
 
-     // One or both is required
-     publicKey: Blob,
-     privateKey: Blob
+   // One or both is required
+   publicKey: Blob,
+   privateKey: Blob
  }

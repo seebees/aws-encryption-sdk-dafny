@@ -1,64 +1,48 @@
-namespace aws.encryptionSdk.core
-
-use aws.polymorph#reference
+namespace aws.cryptography.materialProviders
 
 /////////////
 // AwsCryptographicMaterialProviders Creation
+@aws.polymorph#localService(
+  sdkId: "MaterialProviders",
+  config: MaterialProvidersConfig,
+)
+service AwsCryptographicMaterialProviders {
+  version: "2021-11-01",
+  resources: [
+    Keyring,
+    CryptographicMaterialsManager,
+    ClientSupplier,
+  ],
+  operations: [
+    // Keyrings
+    CreateAwsKmsKeyring,
+    CreateAwsKmsDiscoveryKeyring,
+    CreateAwsKmsMultiKeyring,
+    CreateAwsKmsDiscoveryMultiKeyring,
+    CreateAwsKmsMrkKeyring,
+    CreateAwsKmsMrkMultiKeyring,
+    CreateAwsKmsMrkDiscoveryKeyring,
+    CreateAwsKmsMrkDiscoveryMultiKeyring,
+    CreateMultiKeyring,
+    CreateRawAesKeyring,
+    CreateRawRsaKeyring,
 
-// TODO add a trait to indicate that 'Client' should not be appended to this name,
-// and that the code gen should expose operations under this service statically if
-// possible in the target language
-service AwsCryptographicMaterialProvidersFactory {
-    version: "2021-11-01",
-    operations: [CreateDefaultAwsCryptographicMaterialProviders],
-    errors: [AwsCryptographicMaterialProvidersException],
+    // CMMs
+    CreateDefaultCryptographicMaterialsManager,
+
+    // ClientSupplier
+    CreateDefaultClientSupplier
+  ],
+  errors: [AwsCryptographicMaterialProvidersException],
 }
 
-operation CreateDefaultAwsCryptographicMaterialProviders {
-    output: AwsCryptographicMaterialProvidersReference,
-    errors: [AwsCryptographicMaterialProvidersException],
-}
-
-@reference(resource: AwsCryptographicMaterialProviders)
-structure AwsCryptographicMaterialProvidersReference {}
-
-/////////////
-// AwsCryptographicMaterialProviders
-
-resource AwsCryptographicMaterialProviders {
-    resources: [
-        Keyring,
-        CryptographicMaterialsManager,
-        ClientSupplier,
-    ],
-    operations: [
-        // Keyrings
-        CreateAwsKmsKeyring,
-        CreateAwsKmsDiscoveryKeyring,
-        CreateAwsKmsMultiKeyring,
-        CreateAwsKmsDiscoveryMultiKeyring,
-        CreateAwsKmsMrkKeyring,
-        CreateAwsKmsMrkMultiKeyring,
-        CreateAwsKmsMrkDiscoveryKeyring,
-        CreateAwsKmsMrkDiscoveryMultiKeyring,
-        CreateMultiKeyring,
-        CreateRawAesKeyring,
-        CreateRawRsaKeyring,
-
-        // CMMs
-        CreateDefaultCryptographicMaterialsManager,
-
-        // ClientSupplier
-        CreateDefaultClientSupplier
-    ]
-}
-
+structure MaterialProvidersConfig {}
 
 ///////////////////
 // Errors
 
 @error("client")
 structure AwsCryptographicMaterialProvidersException {
-    @required
-    message: String,
+  @required
+  message: String,
 }

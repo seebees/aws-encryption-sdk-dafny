@@ -1,4 +1,4 @@
-namespace aws.encryptionSdk.core
+namespace aws.cryptography.materialProviders
 
 use aws.polymorph#dafnyUtf8Bytes
 
@@ -19,57 +19,59 @@ string Utf8Bytes
 // Note that both of these will be breaking changes to any customers building
 // custom implementations of keyrings or CMMs.
 structure EncryptionMaterials {
-    @required
-    algorithmSuiteId: AlgorithmSuiteId,
+  @required
+  algorithmSuiteId: AlgorithmSuiteId,
 
-    @required
-    encryptionContext: EncryptionContext,
+  @required
+  encryptionContext: EncryptionContext,
 
-    @required
-    encryptedDataKeys: EncryptedDataKeyList,
+  @required
+  encryptedDataKeys: EncryptedDataKeyList,
 
-    @sensitive
-    plaintextDataKey: Blob,
+  @sensitive
+  plaintextDataKey: Blob,
 
-    @sensitive
-    signingKey: Blob
+  @sensitive
+  signingKey: Blob
 }
 
 structure DecryptionMaterials {
-    @required
-    algorithmSuiteId: AlgorithmSuiteId,
+  @required
+  algorithmSuiteId: AlgorithmSuiteId,
 
-    @required
-    encryptionContext: EncryptionContext,
+  @required
+  encryptionContext: EncryptionContext,
 
-    @sensitive
-    plaintextDataKey: Blob,
+  @sensitive
+  plaintextDataKey: Blob,
 
-    @sensitive
-    verificationKey: Blob
+  @sensitive
+  verificationKey: Blob
 }
 
 structure EncryptedDataKey {
-    // The spec defines keyProviderId in 2 places,
-    // and, while they are not identical,
-    // they do not disagree.
-    // data-format/message-header.md#encrypted-data-key-entries ::
-    // UTF-8 encoded bytes
-    // framework/keyring-interface.md#key-provider-id ::
-    // The key provider ID MUST be a binary value and SHOULD be equal to a UTF-8 encoding of the key namespace.
-    @required
-    keyProviderId: Utf8Bytes,
+  // The spec defines keyProviderId in 2 places,
+  // and, while they are not identical,
+  // they do not disagree.
+  // data-format/message-header.md#encrypted-data-key-entries ::
+  // UTF-8 encoded bytes
+  // framework/keyring-interface.md#key-provider-id ::
+  // The key provider ID MUST be a binary value and SHOULD be equal to a UTF-8 encoding of the key namespace.
+  @required
+  keyProviderId: Utf8Bytes,
 
-    // The key provider info MUST be a binary value and SHOULD be equal to a UTF-8 encoding of the key name.
-    @required
-    keyProviderInfo: Blob,
+  // The key provider info MUST be a binary value and SHOULD be equal to a UTF-8 encoding of the key name.
+  @required
+  keyProviderInfo: Blob,
 
-    @required
-    ciphertext: Blob
+  @required
+  ciphertext: Blob
 }
 
 list EncryptedDataKeyList {
-    member: EncryptedDataKey
+  member: EncryptedDataKey
 }
 
+structure AlgorithmSuite {
 
+}
