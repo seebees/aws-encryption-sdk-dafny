@@ -51,3 +51,22 @@ structure dafnyUtf8Bytes {}
 // Polymorph will generate and utilize NativeWrappers for these resources.
 @trait(selector: "resource")
 structure extendable {}
+
+// A trait indicating that a structure is a members of a union
+// and MUST NOT be used independently of the union.
+// This is syntactic sugar for
+//  union Foo {
+//    Bar: structure Bar { baz: String }
+//  }
+//
+// It is used like this
+//  union Foo {
+//    Bar: Bar
+//  }
+//  structure Bar { baz: String }
+// This is especilay useful in Dafny.
+// Because it results in a single datatype
+// whos constructors are the member structures.
+// datatypes Foo = Bar( baz: String )
+@trait(selector: "structure")
+structure datatypeUnion {}

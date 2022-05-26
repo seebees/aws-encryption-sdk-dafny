@@ -1,7 +1,7 @@
 namespace aws.cryptography.primitives
 
 @range(min: 0)
-integer UnsignedInteger
+integer PositiveInteger
 
 @aws.polymorph#localService(
   sdkId: "Crypto",

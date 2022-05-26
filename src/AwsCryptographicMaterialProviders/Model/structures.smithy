@@ -71,7 +71,3 @@ structure EncryptedDataKey {
 list EncryptedDataKeyList {
   member: EncryptedDataKey
 }
-
-structure AlgorithmSuite {
-
-}
