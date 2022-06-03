@@ -20,7 +20,7 @@ string Utf8Bytes
 // custom implementations of keyrings or CMMs.
 structure EncryptionMaterials {
   @required
-  algorithmSuiteId: AlgorithmSuiteId,
+  algorithmSuite: AlgorithmSuiteInfo,
 
   @required
   encryptionContext: EncryptionContext,
@@ -37,7 +37,7 @@ structure EncryptionMaterials {
 
 structure DecryptionMaterials {
   @required
-  algorithmSuiteId: AlgorithmSuiteId,
+  algorithmSuite: AlgorithmSuiteInfo,
 
   @required
   encryptionContext: EncryptionContext,

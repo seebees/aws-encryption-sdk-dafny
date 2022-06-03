@@ -24,7 +24,6 @@ union SignatureAlgorithm {
   None: None
 }
 
-@aws.polymorph#datatypeUnion
 structure HKDF {
   @required
   hmac: aws.cryptography.primitives#DigestAlgorithm,
@@ -35,12 +34,9 @@ structure HKDF {
   @required
   outputKeyLength: aws.cryptography.primitives#PositiveInteger,
 }
-@aws.polymorph#datatypeUnion
 structure IDENTITY {}
-@aws.polymorph#datatypeUnion
 structure None {}
 
-@aws.polymorph#datatypeUnion
 structure ECDSA {
   @required
   curve: String

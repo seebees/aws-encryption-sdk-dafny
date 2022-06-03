@@ -1,10 +1,10 @@
 namespace aws.encryptionSdk
 
-use aws.encryptionSdk.core#KeyringReference
-use aws.encryptionSdk.core#CryptographicMaterialsManagerReference
-use aws.encryptionSdk.core#EncryptionContext
-use aws.encryptionSdk.core#AlgorithmSuiteId
-use aws.encryptionSdk.core#CommitmentPolicy
+use aws.cryptography.materialProviders#KeyringReference
+use aws.cryptography.materialProviders#CryptographicMaterialsManagerReference
+use aws.cryptography.materialProviders#EncryptionContext
+use aws.cryptography.materialProviders#AlgorithmSuiteId
+use aws.cryptography.materialProviders#CommitmentPolicy
 use aws.polymorph#reference
 
 /////////////
@@ -13,101 +13,87 @@ use aws.polymorph#reference
 // TODO add a trait to indicate that 'Client' should not be appended to this name,
 // and that the code gen should expose operations under this service statically if
 // possible in the target language
-service AwsEncryptionSdkFactory {
-    version: "2020-10-24",
-    operations: [CreateDefaultAwsEncryptionSdk, CreateAwsEncryptionSdk],
-    errors: [AwsEncryptionSdkException],
+@aws.polymorph#localService(
+  sdkId: "ESDK",
+  config: AwsEncryptionSdkConfig,
+)
+service AwsEncryptionSdk {
+  version: "2020-10-24",
+  operations: [Encrypt, Decrypt],
+  errors: [AwsEncryptionSdkException],
 }
 
-operation CreateDefaultAwsEncryptionSdk {
-    output: AwsEncryptionSdkReference,
-    errors: [AwsEncryptionSdkException],
-}
-
-operation CreateAwsEncryptionSdk {
-    input: AwsEncryptionSdkConfig,
-    output: AwsEncryptionSdkReference,
-    errors: [AwsEncryptionSdkException],
-}
+@range(min: 1)
+long CountingNumbers
 
 structure AwsEncryptionSdkConfig {
-    commitmentPolicy: CommitmentPolicy,
-    maxEncryptedDataKeys: Long,
-}
-
-@reference(resource: AwsEncryptionSdk)
-structure AwsEncryptionSdkReference {}
-
-/////////////
-// ESDK
-
-resource AwsEncryptionSdk {
-    operations: [Encrypt, Decrypt],
+  commitmentPolicy: CommitmentPolicy,
+  maxEncryptedDataKeys: CountingNumbers,
 }
 
 /////////////
 // ESDK Operations
 
 operation Encrypt {
-    input: EncryptInput,
-    output: EncryptOutput,
+  input: EncryptInput,
+  output: EncryptOutput,
 }
 
 structure EncryptInput {
-    @required
-    plaintext: Blob,
+  @required
+  plaintext: Blob,
 
-    encryptionContext: EncryptionContext,
+  encryptionContext: EncryptionContext,
 
-    // One of keyring or CMM are required
-    materialsManager: CryptographicMaterialsManagerReference,
-    keyring: KeyringReference,
+  // One of keyring or CMM are required
+  materialsManager: CryptographicMaterialsManagerReference,
+  keyring: KeyringReference,
 
-    algorithmSuiteId: AlgorithmSuiteId,
+  algorithmSuiteId: AlgorithmSuiteId,
 
-    frameLength: Long
+  frameLength: Long
 }
 
 structure EncryptOutput {
-    @required
-    ciphertext: Blob,
+  @required
+  ciphertext: Blob,
 
-    @required
-    encryptionContext: EncryptionContext,
+  @required
+  encryptionContext: EncryptionContext,
 
-    @required
-    algorithmSuiteId: AlgorithmSuiteId,
+  @required
+  algorithmSuiteId: AlgorithmSuiteId,
 }
 
 operation Decrypt {
-    input: DecryptInput,
-    output: DecryptOutput,
-    errors: [AwsEncryptionSdkException],
+  input: DecryptInput,
+  output: DecryptOutput,
+  errors: [AwsEncryptionSdkException],
 }
 
 structure DecryptInput {
-    @required
-    ciphertext: Blob,
+  @required
+  ciphertext: Blob,
 
-    // One of keyring or CMM are required
-    materialsManager: CryptographicMaterialsManagerReference,
-    keyring: KeyringReference,
+  // One of keyring or CMM are required
+  materialsManager: CryptographicMaterialsManagerReference,
+  keyring: KeyringReference,
 }
 
 structure DecryptOutput {
-    @required
-    plaintext: Blob,
+  @required
+  plaintext: Blob,
 
-    @required
-    encryptionContext: EncryptionContext,
+  @required
+  encryptionContext: EncryptionContext,
 
-    @required
-    algorithmSuiteId: AlgorithmSuiteId,
+  @required
+  algorithmSuiteId: AlgorithmSuiteId,
 
-    // The spec says that decrypt SHOULD also return the parsed
-    // header. We're omitting this for now, until we can spend
-    // some more time figuring out what it looks like to model
-    // the message format and message header in Smithy.
+  // The spec says that decrypt SHOULD also return the parsed
+  // header. We're omitting this for now, until we can spend
+  // some more time figuring out what it looks like to model
+  // the message format and message header in Smithy.
 }
 
 /////////////
@@ -115,6 +101,6 @@ structure DecryptOutput {
 
 @error("client")
 structure AwsEncryptionSdkException {
-    @required
-    message: String,
+  @required
+  message: String,
 }

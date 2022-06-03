@@ -8,7 +8,7 @@ include "Model/AwsCryptographyPrimitivesTypes.dfy"
 /*
  * Implementation of the https://tools.ietf.org/html/rfc5869 HMAC-based key derivation function
  */
-module Wrapped {
+module WrappedHKDF {
   import opened Wrappers
   import opened UInt = StandardLibrary.UInt
   import Types = AwsCryptographyPrimitivesTypes
@@ -23,8 +23,6 @@ module Wrapped {
   method Expand(input: Types.HkdfExpandInput) returns (okm: seq<uint8>)
   {
     var HkdfExpandInput(digest, prk, info, expectedLength) := input;
-
-
   }
 
   /*
@@ -34,6 +32,6 @@ module Wrapped {
   {
     var HkdfInput(digest, salt, ikm, info, expectedLength) := input;
 
-    okm := HKDF.Hkdf(digest, salt, ikm, info, expectedLength);
+    // okm := HKDF.Hkdf(digest, salt, ikm, info, expectedLength);
   }
 }

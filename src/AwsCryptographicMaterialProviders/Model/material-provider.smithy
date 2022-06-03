@@ -31,7 +31,13 @@ service AwsCryptographicMaterialProviders {
     CreateDefaultCryptographicMaterialsManager,
 
     // ClientSupplier
-    CreateDefaultClientSupplier
+    CreateDefaultClientSupplier,
+
+    // Materials
+    InitializeEncryptionMaterials,
+    InitializeDecryptionMaterials,
+    ValidEncryptionMaterialsTransition,
+    ValidDecryptionMaterialsTransition,
   ],
   errors: [AwsCryptographicMaterialProvidersException],
 }
