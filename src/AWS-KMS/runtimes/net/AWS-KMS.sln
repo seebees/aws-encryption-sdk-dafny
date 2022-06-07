@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS-KMS", "Source\AWS-KMS.csproj", "{61FC146E-FF9F-4FA5-AB14-6CF2CFE3A519}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{5B88FDFB-B6FA-4743-9695-41407C6A4FE6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61FC146E-FF9F-4FA5-AB14-6CF2CFE3A519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61FC146E-FF9F-4FA5-AB14-6CF2CFE3A519}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61FC146E-FF9F-4FA5-AB14-6CF2CFE3A519}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61FC146E-FF9F-4FA5-AB14-6CF2CFE3A519}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B88FDFB-B6FA-4743-9695-41407C6A4FE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B88FDFB-B6FA-4743-9695-41407C6A4FE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B88FDFB-B6FA-4743-9695-41407C6A4FE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B88FDFB-B6FA-4743-9695-41407C6A4FE6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
