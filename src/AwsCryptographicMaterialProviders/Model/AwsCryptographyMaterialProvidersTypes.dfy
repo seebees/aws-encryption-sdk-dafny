@@ -39,57 +39,91 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  )
  trait {:termination false} IAwsCryptographicMaterialProvidersClient
  {
- method CreateAwsKmsKeyring ( input: CreateAwsKmsKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateAwsKmsKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateAwsKmsKeyringSucceededWith (  input , output.value )
- method CreateAwsKmsDiscoveryKeyring ( input: CreateAwsKmsDiscoveryKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateAwsKmsDiscoveryKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateAwsKmsDiscoveryKeyringSucceededWith (  input , output.value )
- method CreateAwsKmsMultiKeyring ( input: CreateAwsKmsMultiKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateAwsKmsMultiKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateAwsKmsMultiKeyringSucceededWith (  input , output.value )
- method CreateAwsKmsDiscoveryMultiKeyring ( input: CreateAwsKmsDiscoveryMultiKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateAwsKmsDiscoveryMultiKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateAwsKmsDiscoveryMultiKeyringSucceededWith (  input , output.value )
- method CreateAwsKmsMrkKeyring ( input: CreateAwsKmsMrkKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateAwsKmsMrkKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateAwsKmsMrkKeyringSucceededWith (  input , output.value )
- method CreateAwsKmsMrkMultiKeyring ( input: CreateAwsKmsMrkMultiKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateAwsKmsMrkMultiKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateAwsKmsMrkMultiKeyringSucceededWith (  input , output.value )
- method CreateAwsKmsMrkDiscoveryKeyring ( input: CreateAwsKmsMrkDiscoveryKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateAwsKmsMrkDiscoveryKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateAwsKmsMrkDiscoveryKeyringSucceededWith (  input , output.value )
- method CreateAwsKmsMrkDiscoveryMultiKeyring ( input: CreateAwsKmsMrkDiscoveryMultiKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateAwsKmsMrkDiscoveryMultiKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateAwsKmsMrkDiscoveryMultiKeyringSucceededWith (  input , output.value )
- method CreateMultiKeyring ( input: CreateMultiKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateMultiKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateMultiKeyringSucceededWith (  input , output.value )
- method CreateRawAesKeyring ( input: CreateRawAesKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateRawAesKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateRawAesKeyringSucceededWith (  input , output.value )
- method CreateRawRsaKeyring ( input: CreateRawRsaKeyringInput ) returns (output: Result<IKeyring, Error>)
-	ensures CreateRawRsaKeyringCalledWith (  input )
-	ensures output.Success? ==> CreateRawRsaKeyringSucceededWith (  input , output.value )
- method CreateDefaultCryptographicMaterialsManager ( input: CreateDefaultCryptographicMaterialsManagerInput ) returns (output: Result<ICryptographicMaterialsManager, Error>)
-	ensures CreateDefaultCryptographicMaterialsManagerCalledWith (  input )
-	ensures output.Success? ==> CreateDefaultCryptographicMaterialsManagerSucceededWith (  input , output.value )
- method CreateDefaultClientSupplier ( input: CreateDefaultClientSupplierInput ) returns (output: Result<IClientSupplier, Error>)
-	ensures CreateDefaultClientSupplierCalledWith (  input )
-	ensures output.Success? ==> CreateDefaultClientSupplierSucceededWith (  input , output.value )
- method InitializeEncryptionMaterials ( input: InitializeMaterialsInput ) returns (output: Result<EncryptionMaterials, Error>)
-	ensures InitializeEncryptionMaterialsCalledWith (  input )
-	ensures output.Success? ==> InitializeEncryptionMaterialsSucceededWith (  input , output.value )
- method InitializeDecryptionMaterials ( input: InitializeMaterialsInput ) returns (output: Result<DecryptionMaterials, Error>)
-	ensures InitializeDecryptionMaterialsCalledWith (  input )
-	ensures output.Success? ==> InitializeDecryptionMaterialsSucceededWith (  input , output.value )
- method ValidEncryptionMaterialsTransition ( input: ValidEncryptionMaterialsTransitionInput ) returns (output: Result<bool, Error>)
-	ensures ValidEncryptionMaterialsTransitionCalledWith (  input )
-	ensures output.Success? ==> ValidEncryptionMaterialsTransitionSucceededWith (  input , output.value )
- method ValidDecryptionMaterialsTransition ( input: ValidDecryptionMaterialsTransitionInput ) returns (output: Result<bool, Error>)
-	ensures ValidDecryptionMaterialsTransitionCalledWith (  input )
-	ensures output.Success? ==> ValidDecryptionMaterialsTransitionSucceededWith (  input , output.value )
+ method  CreateAwsKmsKeyring
+ ( input: CreateAwsKmsKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateAwsKmsKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateAwsKmsKeyringSucceededWith (  input , output.value )
+ method  CreateAwsKmsDiscoveryKeyring
+ ( input: CreateAwsKmsDiscoveryKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateAwsKmsDiscoveryKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateAwsKmsDiscoveryKeyringSucceededWith (  input , output.value )
+ method  CreateAwsKmsMultiKeyring
+ ( input: CreateAwsKmsMultiKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateAwsKmsMultiKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateAwsKmsMultiKeyringSucceededWith (  input , output.value )
+ method  CreateAwsKmsDiscoveryMultiKeyring
+ ( input: CreateAwsKmsDiscoveryMultiKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateAwsKmsDiscoveryMultiKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateAwsKmsDiscoveryMultiKeyringSucceededWith (  input , output.value )
+ method  CreateAwsKmsMrkKeyring
+ ( input: CreateAwsKmsMrkKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateAwsKmsMrkKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateAwsKmsMrkKeyringSucceededWith (  input , output.value )
+ method  CreateAwsKmsMrkMultiKeyring
+ ( input: CreateAwsKmsMrkMultiKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateAwsKmsMrkMultiKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateAwsKmsMrkMultiKeyringSucceededWith (  input , output.value )
+ method  CreateAwsKmsMrkDiscoveryKeyring
+ ( input: CreateAwsKmsMrkDiscoveryKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateAwsKmsMrkDiscoveryKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateAwsKmsMrkDiscoveryKeyringSucceededWith (  input , output.value )
+ method  CreateAwsKmsMrkDiscoveryMultiKeyring
+ ( input: CreateAwsKmsMrkDiscoveryMultiKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateAwsKmsMrkDiscoveryMultiKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateAwsKmsMrkDiscoveryMultiKeyringSucceededWith (  input , output.value )
+ method  CreateMultiKeyring
+ ( input: CreateMultiKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateMultiKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateMultiKeyringSucceededWith (  input , output.value )
+ method  CreateRawAesKeyring
+ ( input: CreateRawAesKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateRawAesKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateRawAesKeyringSucceededWith (  input , output.value )
+ method  CreateRawRsaKeyring
+ ( input: CreateRawRsaKeyringInput )
+ returns (output: Result<IKeyring, Error>)
+  ensures CreateRawRsaKeyringCalledWith (  input )
+ ensures output.Success? ==> CreateRawRsaKeyringSucceededWith (  input , output.value )
+ method  CreateDefaultCryptographicMaterialsManager
+ ( input: CreateDefaultCryptographicMaterialsManagerInput )
+ returns (output: Result<ICryptographicMaterialsManager, Error>)
+  ensures CreateDefaultCryptographicMaterialsManagerCalledWith (  input )
+ ensures output.Success? ==> CreateDefaultCryptographicMaterialsManagerSucceededWith (  input , output.value )
+ method  CreateDefaultClientSupplier
+ ( input: CreateDefaultClientSupplierInput )
+ returns (output: Result<IClientSupplier, Error>)
+  ensures CreateDefaultClientSupplierCalledWith (  input )
+ ensures output.Success? ==> CreateDefaultClientSupplierSucceededWith (  input , output.value )
+ function method  InitializeEncryptionMaterials
+ ( input: InitializeMaterialsInput )
+ : (output: Result<EncryptionMaterials, Error>)
+  ensures InitializeEncryptionMaterialsCalledWith (  input )
+ ensures output.Success? ==> InitializeEncryptionMaterialsSucceededWith (  input , output.value )
+ function method  InitializeDecryptionMaterials
+ ( input: InitializeMaterialsInput )
+ : (output: Result<DecryptionMaterials, Error>)
+  ensures InitializeDecryptionMaterialsCalledWith (  input )
+ ensures output.Success? ==> InitializeDecryptionMaterialsSucceededWith (  input , output.value )
+ function method  ValidEncryptionMaterialsTransition
+ ( input: ValidEncryptionMaterialsTransitionInput )
+ : (output: Result<(), Error>)
+  ensures ValidEncryptionMaterialsTransitionCalledWith (  input )
+ ensures output.Success? ==> ValidEncryptionMaterialsTransitionSucceededWith (  input )
+ function method  ValidDecryptionMaterialsTransition
+ ( input: ValidDecryptionMaterialsTransitionInput )
+ : (output: Result<(), Error>)
+  ensures ValidDecryptionMaterialsTransitionCalledWith (  input )
+ ensures output.Success? ==> ValidDecryptionMaterialsTransitionSucceededWith (  input )
 }
  // Predicates are separated from the trait. This is temporary.
  predicate {:opaque} CreateAwsKmsKeyringCalledWith ( input: CreateAwsKmsKeyringInput ) {true}
@@ -123,14 +157,16 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  predicate {:opaque} InitializeDecryptionMaterialsCalledWith ( input: InitializeMaterialsInput ) {true}
  predicate {:opaque} InitializeDecryptionMaterialsSucceededWith (  input: InitializeMaterialsInput , output: DecryptionMaterials ) {true}
  predicate {:opaque} ValidEncryptionMaterialsTransitionCalledWith ( input: ValidEncryptionMaterialsTransitionInput ) {true}
- predicate {:opaque} ValidEncryptionMaterialsTransitionSucceededWith (  input: ValidEncryptionMaterialsTransitionInput , output: bool ) {true}
+ predicate {:opaque} ValidEncryptionMaterialsTransitionSucceededWith (  input: ValidEncryptionMaterialsTransitionInput ) {true}
  predicate {:opaque} ValidDecryptionMaterialsTransitionCalledWith ( input: ValidDecryptionMaterialsTransitionInput ) {true}
- predicate {:opaque} ValidDecryptionMaterialsTransitionSucceededWith (  input: ValidDecryptionMaterialsTransitionInput , output: bool ) {true}
+ predicate {:opaque} ValidDecryptionMaterialsTransitionSucceededWith (  input: ValidDecryptionMaterialsTransitionInput ) {true}
  trait {:termination false} IClientSupplier
  {
- method GetClient ( input: GetClientInput ) returns (output: Result<ComAmazonawsKmsTypes.IKeyManagementServiceClient, Error>)
-	ensures GetClientCalledWith (  input )
-	ensures output.Success? ==> GetClientSucceededWith (  input , output.value )
+ method  GetClient
+ ( input: GetClientInput )
+ returns (output: Result<ComAmazonawsKmsTypes.IKeyManagementServiceClient, Error>)
+  ensures GetClientCalledWith (  input )
+ ensures output.Success? ==> GetClientSucceededWith (  input , output.value )
 }
  // Predicates are separated from the trait. This is temporary.
  predicate {:opaque} GetClientCalledWith ( input: GetClientInput ) {true}
@@ -209,12 +245,16 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  )
  trait {:termination false} ICryptographicMaterialsManager
  {
- method GetEncryptionMaterials ( input: GetEncryptionMaterialsInput ) returns (output: Result<GetEncryptionMaterialsOutput, Error>)
-	ensures GetEncryptionMaterialsCalledWith (  input )
-	ensures output.Success? ==> GetEncryptionMaterialsSucceededWith (  input , output.value )
- method DecryptMaterials ( input: DecryptMaterialsInput ) returns (output: Result<DecryptMaterialsOutput, Error>)
-	ensures DecryptMaterialsCalledWith (  input )
-	ensures output.Success? ==> DecryptMaterialsSucceededWith (  input , output.value )
+ method  GetEncryptionMaterials
+ ( input: GetEncryptionMaterialsInput )
+ returns (output: Result<GetEncryptionMaterialsOutput, Error>)
+  ensures GetEncryptionMaterialsCalledWith (  input )
+ ensures output.Success? ==> GetEncryptionMaterialsSucceededWith (  input , output.value )
+ method  DecryptMaterials
+ ( input: DecryptMaterialsInput )
+ returns (output: Result<DecryptMaterialsOutput, Error>)
+  ensures DecryptMaterialsCalledWith (  input )
+ ensures output.Success? ==> DecryptMaterialsSucceededWith (  input , output.value )
 }
  // Predicates are separated from the trait. This is temporary.
  predicate {:opaque} GetEncryptionMaterialsCalledWith ( input: GetEncryptionMaterialsInput ) {true}
@@ -291,12 +331,16 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  type KeyringList = seq<IKeyring>
  trait {:termination false} IKeyring
  {
- method OnEncrypt ( input: OnEncryptInput ) returns (output: Result<OnEncryptOutput, Error>)
-	ensures OnEncryptCalledWith (  input )
-	ensures output.Success? ==> OnEncryptSucceededWith (  input , output.value )
- method OnDecrypt ( input: OnDecryptInput ) returns (output: Result<OnDecryptOutput, Error>)
-	ensures OnDecryptCalledWith (  input )
-	ensures output.Success? ==> OnDecryptSucceededWith (  input , output.value )
+ method  OnEncrypt
+ ( input: OnEncryptInput )
+ returns (output: Result<OnEncryptOutput, Error>)
+  ensures OnEncryptCalledWith (  input )
+ ensures output.Success? ==> OnEncryptSucceededWith (  input , output.value )
+ method  OnDecrypt
+ ( input: OnDecryptInput )
+ returns (output: Result<OnDecryptOutput, Error>)
+  ensures OnDecryptCalledWith (  input )
+ ensures output.Success? ==> OnDecryptSucceededWith (  input , output.value )
 }
  // Predicates are separated from the trait. This is temporary.
  predicate {:opaque} OnEncryptCalledWith ( input: OnEncryptInput ) {true}
@@ -346,6 +390,12 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  )
  datatype Error =
  // Local Error structures are listed here
+ | InvalidDecryptionMaterialsTransition (
+ nameonly message: string
+ )
+ | InvalidEncryptionMaterialsTransition (
+ nameonly message: string
+ )
  | AwsCryptographicMaterialProvidersException (
  nameonly message: string
  )

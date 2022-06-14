@@ -1,10 +1,12 @@
 namespace aws.cryptography.materialProviders
 
+@readonly
 operation InitializeEncryptionMaterials {
   input: InitializeMaterialsInput,
   output: EncryptionMaterials,
 }
 
+@readonly
 operation InitializeDecryptionMaterials {
   input: InitializeMaterialsInput,
   output: DecryptionMaterials,
@@ -27,14 +29,16 @@ structure InitializeMaterialsInput {
   signingKey: Blob
 }
 
+@readonly
 operation ValidEncryptionMaterialsTransition {
   input: ValidEncryptionMaterialsTransitionInput,
-  output: ValidTransition
+  errors: [InvalidEncryptionMaterialsTransition]
 }
 
+@readonly
 operation ValidDecryptionMaterialsTransition {
   input: ValidDecryptionMaterialsTransitionInput,
-  output: ValidTransition
+  errors: [InvalidDecryptionMaterialsTransition]
 }
 
 structure ValidEncryptionMaterialsTransitionInput {
@@ -47,7 +51,13 @@ structure ValidDecryptionMaterialsTransitionInput {
   stop: DecryptionMaterials,
 }
 
-@aws.polymorph#positional
-structure ValidTransition {
-  valid: Boolean
+@error("client")
+structure InvalidEncryptionMaterialsTransition {
+  @required
+  message: String,
+}
+@error("client")
+structure InvalidDecryptionMaterialsTransition {
+  @required
+  message: String,
 }

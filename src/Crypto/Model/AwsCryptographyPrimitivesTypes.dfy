@@ -34,30 +34,46 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  )
  trait {:termination false} IAwsCryptographicPrimitivesClient
  {
- method GenerateRandomBytes ( input: GenerateRandomBytesInput ) returns (output: Result<seq<uint8>, Error>)
-	ensures GenerateRandomBytesCalledWith (  input )
-	ensures output.Success? ==> GenerateRandomBytesSucceededWith (  input , output.value )
- method Digest ( input: DigestInput ) returns (output: Result<seq<uint8>, Error>)
-	ensures DigestCalledWith (  input )
-	ensures output.Success? ==> DigestSucceededWith (  input , output.value )
- method HMac ( input: HMacInput ) returns (output: Result<seq<uint8>, Error>)
-	ensures HMacCalledWith (  input )
-	ensures output.Success? ==> HMacSucceededWith (  input , output.value )
- method HkdfExtract ( input: HkdfExtractInput ) returns (output: Result<seq<uint8>, Error>)
-	ensures HkdfExtractCalledWith (  input )
-	ensures output.Success? ==> HkdfExtractSucceededWith (  input , output.value )
- method HkdfExpand ( input: HkdfExpandInput ) returns (output: Result<seq<uint8>, Error>)
-	ensures HkdfExpandCalledWith (  input )
-	ensures output.Success? ==> HkdfExpandSucceededWith (  input , output.value )
- method Hkdf ( input: HkdfInput ) returns (output: Result<seq<uint8>, Error>)
-	ensures HkdfCalledWith (  input )
-	ensures output.Success? ==> HkdfSucceededWith (  input , output.value )
- method AESEncrypt ( input: AESEncryptInput ) returns (output: Result<AESEncryptOutput, Error>)
-	ensures AESEncryptCalledWith (  input )
-	ensures output.Success? ==> AESEncryptSucceededWith (  input , output.value )
- method AESDecrypt ( input: AESDecryptInput ) returns (output: Result<seq<uint8>, Error>)
-	ensures AESDecryptCalledWith (  input )
-	ensures output.Success? ==> AESDecryptSucceededWith (  input , output.value )
+ method  GenerateRandomBytes
+ ( input: GenerateRandomBytesInput )
+ returns (output: Result<seq<uint8>, Error>)
+  ensures GenerateRandomBytesCalledWith (  input )
+ ensures output.Success? ==> GenerateRandomBytesSucceededWith (  input , output.value )
+ method  Digest
+ ( input: DigestInput )
+ returns (output: Result<seq<uint8>, Error>)
+  ensures DigestCalledWith (  input )
+ ensures output.Success? ==> DigestSucceededWith (  input , output.value )
+ method  HMac
+ ( input: HMacInput )
+ returns (output: Result<seq<uint8>, Error>)
+  ensures HMacCalledWith (  input )
+ ensures output.Success? ==> HMacSucceededWith (  input , output.value )
+ method  HkdfExtract
+ ( input: HkdfExtractInput )
+ returns (output: Result<seq<uint8>, Error>)
+  ensures HkdfExtractCalledWith (  input )
+ ensures output.Success? ==> HkdfExtractSucceededWith (  input , output.value )
+ method  HkdfExpand
+ ( input: HkdfExpandInput )
+ returns (output: Result<seq<uint8>, Error>)
+  ensures HkdfExpandCalledWith (  input )
+ ensures output.Success? ==> HkdfExpandSucceededWith (  input , output.value )
+ method  Hkdf
+ ( input: HkdfInput )
+ returns (output: Result<seq<uint8>, Error>)
+  ensures HkdfCalledWith (  input )
+ ensures output.Success? ==> HkdfSucceededWith (  input , output.value )
+ method  AESEncrypt
+ ( input: AESEncryptInput )
+ returns (output: Result<AESEncryptOutput, Error>)
+  ensures AESEncryptCalledWith (  input )
+ ensures output.Success? ==> AESEncryptSucceededWith (  input , output.value )
+ method  AESDecrypt
+ ( input: AESDecryptInput )
+ returns (output: Result<seq<uint8>, Error>)
+  ensures AESDecryptCalledWith (  input )
+ ensures output.Success? ==> AESDecryptSucceededWith (  input , output.value )
 }
  // Predicates are separated from the trait. This is temporary.
  predicate {:opaque} GenerateRandomBytesCalledWith ( input: GenerateRandomBytesInput ) {true}

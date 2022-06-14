@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <TargetFrameworks>net452;netcoreapp3.1</TargetFrameworks>
-    </PropertyGroup>
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TargetFrameworks>net452;netcoreapp3.1</TargetFrameworks>
+  </PropertyGroup>
 
 </Project>

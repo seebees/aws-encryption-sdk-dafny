@@ -17,16 +17,24 @@ module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesService {
   import WrappedHMAC
   import WrappedHKDF
 
+  function method DefaultConfig(): CryptoConfig {
+    CryptoConfig()
+  }
+
   method AtomicPrimitives(config: CryptoConfig)
 		returns (res: Result<IAwsCryptographicPrimitivesClient,Error>)
   {
-    var client := new AtomicPrimitivesServiceThing();
+    var client := new AtomicPrimitivesServiceThing(config);
     return Success(client);
   }
 
   class AtomicPrimitivesServiceThing extends IAwsCryptographicPrimitivesClient {
 
-    constructor(){}
+    const config: CryptoConfig
+    constructor(config: CryptoConfig)
+    {
+      this.config := config;
+    }
 
     method GenerateRandomBytes ( input: GenerateRandomBytesInput )
       returns  ( output: Result<seq<uint8>, Error> )

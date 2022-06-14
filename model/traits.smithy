@@ -20,10 +20,10 @@ structure reference {
 // available in the generated methods for creating clients.
 @trait(selector: "service")
 structure localService {
-  @required
+  // @required
   sdkId: String,
-  @required
-  @idRef(failWhenMissing: true, selector: "structure")
+  // @required
+  // @idRef(failWhenMissing: true, selector: "structure")
   config: String,
 }
 

@@ -22,13 +22,13 @@ export AWS_KMS_ROOT=$DAFNY_ROOT/src/AWS-KMS
 
 cd "$POLYMORPH_ROOT"
 
-# Generate code for the AWS KMS SDK
-# ./gradlew run --args="\
-#     --output-dotnet $DOTNET_ROOT/Source/API/Generated/Kms \
-#     --model $AWS_KMS_ROOT/Model \
-#     --dependent-model $DAFNY_ROOT/model \
-#     --namespace com.amazonaws.kms \
-#     --aws-sdk"
+# # Generate code for the AWS KMS SDK
+./gradlew run --args="\
+    --output-dotnet $AWS_KMS_ROOT/runtimes/net/Source/Generated/ \
+    --model $AWS_KMS_ROOT/Model \
+    --dependent-model $DAFNY_ROOT/model \
+    --namespace com.amazonaws.kms \
+    --aws-sdk"
 
 # Generate code for cryptographic primitives
 ./gradlew run --args="\
@@ -38,20 +38,22 @@ cd "$POLYMORPH_ROOT"
     --namespace aws.cryptography.primitives"
 
 # Generate code for material providers
-# ./gradlew run --args="\
-#     --output-dotnet $DOTNET_ROOT/Source/API/Generated/Crypto \
-#     --model $MaterialProviders_ROOT/Model \
-#     --dependent-model $AWS_KMS_ROOT/Model \
-#     --dependent-model $DAFNY_ROOT/model \
-#     --namespace aws.cryptography.materialProviders"
+./gradlew run --args="\
+    --output-dotnet $DOTNET_ROOT/Source/API/Generated/Crypto \
+    --model $MaterialProviders_ROOT/Model \
+    --dependent-model $AWS_KMS_ROOT/Model \
+    --dependent-model $DAFNY_ROOT/model \
+    --dependent-model $Crypto_ROOT/Model \
+    --namespace aws.cryptography.materialProviders"
 
-# # Generate code for ESDK
+# # # Generate code for ESDK
 # ./gradlew run --args="\
 #     --output-dotnet $DOTNET_ROOT/Source/API/Generated/Esdk \
 #     --model $ESDK_ROOT/Model \
 #     --dependent-model $MaterialProviders_ROOT/Model \
-#     --dependent-model $AWS_KMS_ROOT/Model \
 #     --dependent-model $DAFNY_ROOT/model \
+#     --dependent-model $AWS_KMS_ROOT/Model \
+#     --dependent-model $Crypto_ROOT/Model \
 #     --namespace aws.encryptionSdk"
 
 popd
