@@ -1,24 +1,27 @@
-using Amazon;
 using Amazon.KeyManagementService;
+using Wrappers_Compile;
 using Amazon.Runtime;
 
-namespace Com.Amazonaws.Kms
+namespace Dafny.Com.Amazonaws.Kms
 {
-  public partial class __default {
+    public partial class __default
+    {
+        public static
+            _IResult<
+                Dafny.Com.Amazonaws.Kms.Types.IKeyManagementServiceClient,
+                Dafny.Com.Amazonaws.Kms.Types._IError
+            >
+            KMSClient()
+        {
+            var asdf = new EnvironmentVariablesAWSCredentials();
+            var client = new AmazonKeyManagementServiceClient(
+                asdf
+                );
 
-    public static 
-      Wrappers_Compile._IResult<
-        Dafny.Com.Amazonaws.Kms.IKeyManagementServiceClient,
-        Dafny.Com.Amazonaws.Kms.Error
-      >
-    KMSClient() {
-      client = new AmazonKeyManagementServiceClient();
-
-      return Wrappers_Compile.Result<Dafny.Com.Amazonaws.Kms.IKeyManagementServiceClient,
-        Dafny.Aws.EncryptionSdk.Core.IAwsCryptographicMaterialProvidersException>.create_Success(
-        AWS.EncryptionSDK.Core.TypeConversion.ToDafny_N3_aws__N13_encryptionSdk__N4_core__S15_GetClientOutput__M6_client(client)
-      );
-     }
-  }
-
+            return Result<
+                Dafny.Com.Amazonaws.Kms.Types.IKeyManagementServiceClient,
+                Dafny.Com.Amazonaws.Kms.Types._IError>
+                .create_Success(new Kms.KeyManagementServiceShim(client));
+        }
+    }
 }

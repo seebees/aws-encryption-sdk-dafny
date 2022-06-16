@@ -6,7 +6,7 @@
 /spillTargetCode:3 \
 /compile:0 \
 /noVerify \
-/out runtimes/net/Source/FromDafny \
+/out runtimes/net/Source/ImplementationFromDafny \
 src/Index.dfy
 # Run the tests
 "/usr/local/share/dotnet/dotnet" "/Users/ryanemer/.vscode/extensions/dafny-lang.ide-vscode-2.4.0/out/resources/3.6.0/dafny/Dafny.dll" \
@@ -15,6 +15,5 @@ src/Index.dfy
 /runAllTests:1 \
 /compile:0 \
 /noVerify \
-/out runtimes/net/Test/FromDafny \
+/out runtimes/net/Source/TestsFromDafny \
 test/*.dfy
-

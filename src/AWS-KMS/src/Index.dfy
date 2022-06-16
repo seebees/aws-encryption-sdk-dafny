@@ -3,16 +3,7 @@
 
 include "../Model/ComAmazonawsKmsTypes.dfy"
 
-module {:extern "Com.Amazonaws.Kms"} Com.Amazonaws.Kms {
-
- import opened Wrappers
- import opened StandardLibrary.UInt
- import opened UTF8
- import opened Types = ComAmazonawsKmsTypes
- datatype KMSClientConfigType = KMSClientConfigType
-//  function method DefaultKMSClientConfigType(): KMSClientConfigType
- method {:extern} KMSClient()
- returns (res: Result<IKeyManagementServiceClient, Error>)
+module {:extern "Dafny.Com.Amazonaws.Kms"} Com.Amazonaws.Kms refines ComAmazonawsKmsAbstract {
 
   function method DefaultKMSClientConfigType() : KMSClientConfigType {
     KMSClientConfigType

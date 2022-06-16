@@ -3,7 +3,7 @@
 // Do not modify this file. This file is machine generated, and any changes to it will be overwritten.
 include "../../StandardLibrary/StandardLibrary.dfy"
  include "../../Util/UTF8.dfy"
- module ComAmazonawsKmsTypes
+ module {:extern "Dafny.Com.Amazonaws.Kms.Types" } ComAmazonawsKmsTypes
  {
  import opened Wrappers
  import opened StandardLibrary.UInt
@@ -1025,76 +1025,40 @@ include "../../StandardLibrary/StandardLibrary.dfy"
 	| RSA_2048
  datatype Error =
  // Local Error structures are listed here
- | CloudHsmClusterNotFoundException (
- nameonly message: Option<ErrorMessageType>
- )
- | CustomKeyStoreHasCMKsException (
- nameonly message: Option<ErrorMessageType>
- )
- | TagException (
- nameonly message: Option<ErrorMessageType>
- )
- | InvalidImportTokenException (
- nameonly message: Option<ErrorMessageType>
- )
- | CloudHsmClusterNotRelatedException (
- nameonly message: Option<ErrorMessageType>
- )
- | DependencyTimeoutException (
- nameonly message: Option<ErrorMessageType>
- )
- | InvalidGrantIdException (
- nameonly message: Option<ErrorMessageType>
- )
- | MalformedPolicyDocumentException (
- nameonly message: Option<ErrorMessageType>
- )
- | ExpiredImportTokenException (
- nameonly message: Option<ErrorMessageType>
- )
- | UnsupportedOperationException (
- nameonly message: Option<ErrorMessageType>
- )
  | InvalidGrantTokenException (
  nameonly message: Option<ErrorMessageType>
  )
- | KeyUnavailableException (
- nameonly message: Option<ErrorMessageType>
- )
- | KMSInternalException (
+ | CloudHsmClusterNotActiveException (
  nameonly message: Option<ErrorMessageType>
  )
  | IncorrectKeyMaterialException (
  nameonly message: Option<ErrorMessageType>
  )
- | InvalidCiphertextException (
- nameonly message: Option<ErrorMessageType>
- )
- | IncorrectTrustAnchorException (
- nameonly message: Option<ErrorMessageType>
- )
- | InvalidMarkerException (
- nameonly message: Option<ErrorMessageType>
- )
- | LimitExceededException (
- nameonly message: Option<ErrorMessageType>
- )
- | InvalidKeyUsageException (
- nameonly message: Option<ErrorMessageType>
- )
- | AlreadyExistsException (
- nameonly message: Option<ErrorMessageType>
- )
- | InvalidArnException (
- nameonly message: Option<ErrorMessageType>
- )
- | CustomKeyStoreNotFoundException (
+ | InvalidImportTokenException (
  nameonly message: Option<ErrorMessageType>
  )
  | InvalidAliasNameException (
  nameonly message: Option<ErrorMessageType>
  )
- | CloudHsmClusterInUseException (
+ | InvalidKeyUsageException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | CloudHsmClusterNotFoundException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | TagException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | CustomKeyStoreNotFoundException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | InvalidArnException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | CloudHsmClusterNotRelatedException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | NotFoundException (
  nameonly message: Option<ErrorMessageType>
  )
  | CloudHsmClusterInvalidConfigurationException (
@@ -1103,25 +1067,61 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  | CustomKeyStoreNameInUseException (
  nameonly message: Option<ErrorMessageType>
  )
- | KMSInvalidSignatureException (
+ | UnsupportedOperationException (
  nameonly message: Option<ErrorMessageType>
  )
- | KMSInvalidStateException (
+ | DependencyTimeoutException (
  nameonly message: Option<ErrorMessageType>
  )
- | IncorrectKeyException (
- nameonly message: Option<ErrorMessageType>
- )
- | CloudHsmClusterNotActiveException (
- nameonly message: Option<ErrorMessageType>
- )
- | CustomKeyStoreInvalidStateException (
+ | CloudHsmClusterInUseException (
  nameonly message: Option<ErrorMessageType>
  )
  | DisabledException (
  nameonly message: Option<ErrorMessageType>
  )
- | NotFoundException (
+ | KeyUnavailableException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | KMSInvalidSignatureException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | IncorrectKeyException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | CustomKeyStoreInvalidStateException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | ExpiredImportTokenException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | KMSInvalidStateException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | InvalidMarkerException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | InvalidGrantIdException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | AlreadyExistsException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | MalformedPolicyDocumentException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | LimitExceededException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | CustomKeyStoreHasCMKsException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | IncorrectTrustAnchorException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | InvalidCiphertextException (
+ nameonly message: Option<ErrorMessageType>
+ )
+ | KMSInternalException (
  nameonly message: Option<ErrorMessageType>
  )
  // Any dependent models are listed here
@@ -1138,7 +1138,6 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  import opened Types = ComAmazonawsKmsTypes
  datatype KMSClientConfigType = KMSClientConfigType
  function method DefaultKMSClientConfigType(): KMSClientConfigType
- method {:extern} KMSClient(config: KMSClientConfigType := DefaultKMSClientConfigType())
+ method {:extern} KMSClient()
  returns (res: Result<IKeyManagementServiceClient, Error>)
-
 }

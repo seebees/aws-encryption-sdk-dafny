@@ -8,7 +8,7 @@
 using System;
 using System.Numerics;
 [assembly: DafnyAssembly.DafnySourceAttribute(@"// Dafny 3.6.0.40511
-// Command Line Options: /compileTarget:cs /spillTargetCode:3 /runAllTests:1 /compile:4 /noVerify /out runtimes/net/Test/FromDafny test/BasicGenerate.dfy
+// Command Line Options: /compileTarget:cs /spillTargetCode:3 /runAllTests:1 /compile:0 /noVerify /out runtimes/net/Source/TestsFromDafny test/BasicGenerate.dfy
 // BasicGenerate.dfy
 
 
@@ -30,7 +30,7 @@ module TestComAmazonawsKms {
 }
 method {:verify false} Main()
 
-module ComAmazonawsKmsTypes {
+module {:extern ""Dafny.Com.Amazonaws.Kms.Types""} ComAmazonawsKmsTypes {
 
   import opened Wrappers
 
@@ -621,7 +621,7 @@ module ComAmazonawsKmsTypes {
 
   datatype WrappingKeySpec = RSA_2048
 
-  datatype Error = CloudHsmClusterNotFoundException(nameonly message: Option<ErrorMessageType>) | CustomKeyStoreHasCMKsException(nameonly message: Option<ErrorMessageType>) | TagException(nameonly message: Option<ErrorMessageType>) | InvalidImportTokenException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterNotRelatedException(nameonly message: Option<ErrorMessageType>) | DependencyTimeoutException(nameonly message: Option<ErrorMessageType>) | InvalidGrantIdException(nameonly message: Option<ErrorMessageType>) | MalformedPolicyDocumentException(nameonly message: Option<ErrorMessageType>) | ExpiredImportTokenException(nameonly message: Option<ErrorMessageType>) | UnsupportedOperationException(nameonly message: Option<ErrorMessageType>) | InvalidGrantTokenException(nameonly message: Option<ErrorMessageType>) | KeyUnavailableException(nameonly message: Option<ErrorMessageType>) | KMSInternalException(nameonly message: Option<ErrorMessageType>) | IncorrectKeyMaterialException(nameonly message: Option<ErrorMessageType>) | InvalidCiphertextException(nameonly message: Option<ErrorMessageType>) | IncorrectTrustAnchorException(nameonly message: Option<ErrorMessageType>) | InvalidMarkerException(nameonly message: Option<ErrorMessageType>) | LimitExceededException(nameonly message: Option<ErrorMessageType>) | InvalidKeyUsageException(nameonly message: Option<ErrorMessageType>) | AlreadyExistsException(nameonly message: Option<ErrorMessageType>) | InvalidArnException(nameonly message: Option<ErrorMessageType>) | CustomKeyStoreNotFoundException(nameonly message: Option<ErrorMessageType>) | InvalidAliasNameException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterInUseException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterInvalidConfigurationException(nameonly message: Option<ErrorMessageType>) | CustomKeyStoreNameInUseException(nameonly message: Option<ErrorMessageType>) | KMSInvalidSignatureException(nameonly message: Option<ErrorMessageType>) | KMSInvalidStateException(nameonly message: Option<ErrorMessageType>) | IncorrectKeyException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterNotActiveException(nameonly message: Option<ErrorMessageType>) | CustomKeyStoreInvalidStateException(nameonly message: Option<ErrorMessageType>) | DisabledException(nameonly message: Option<ErrorMessageType>) | NotFoundException(nameonly message: Option<ErrorMessageType>) | Opaque(obj: object)
+  datatype Error = InvalidGrantTokenException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterNotActiveException(nameonly message: Option<ErrorMessageType>) | IncorrectKeyMaterialException(nameonly message: Option<ErrorMessageType>) | InvalidImportTokenException(nameonly message: Option<ErrorMessageType>) | InvalidAliasNameException(nameonly message: Option<ErrorMessageType>) | InvalidKeyUsageException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterNotFoundException(nameonly message: Option<ErrorMessageType>) | TagException(nameonly message: Option<ErrorMessageType>) | CustomKeyStoreNotFoundException(nameonly message: Option<ErrorMessageType>) | InvalidArnException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterNotRelatedException(nameonly message: Option<ErrorMessageType>) | NotFoundException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterInvalidConfigurationException(nameonly message: Option<ErrorMessageType>) | CustomKeyStoreNameInUseException(nameonly message: Option<ErrorMessageType>) | UnsupportedOperationException(nameonly message: Option<ErrorMessageType>) | DependencyTimeoutException(nameonly message: Option<ErrorMessageType>) | CloudHsmClusterInUseException(nameonly message: Option<ErrorMessageType>) | DisabledException(nameonly message: Option<ErrorMessageType>) | KeyUnavailableException(nameonly message: Option<ErrorMessageType>) | KMSInvalidSignatureException(nameonly message: Option<ErrorMessageType>) | IncorrectKeyException(nameonly message: Option<ErrorMessageType>) | CustomKeyStoreInvalidStateException(nameonly message: Option<ErrorMessageType>) | ExpiredImportTokenException(nameonly message: Option<ErrorMessageType>) | KMSInvalidStateException(nameonly message: Option<ErrorMessageType>) | InvalidMarkerException(nameonly message: Option<ErrorMessageType>) | InvalidGrantIdException(nameonly message: Option<ErrorMessageType>) | AlreadyExistsException(nameonly message: Option<ErrorMessageType>) | MalformedPolicyDocumentException(nameonly message: Option<ErrorMessageType>) | LimitExceededException(nameonly message: Option<ErrorMessageType>) | CustomKeyStoreHasCMKsException(nameonly message: Option<ErrorMessageType>) | IncorrectTrustAnchorException(nameonly message: Option<ErrorMessageType>) | InvalidCiphertextException(nameonly message: Option<ErrorMessageType>) | KMSInternalException(nameonly message: Option<ErrorMessageType>) | Opaque(obj: object)
 
   type OpaqueError = e: Error
     | e.Opaque?
@@ -1349,8 +1349,7 @@ abstract module ComAmazonawsKmsAbstract {
 
   function method DefaultKMSClientConfigType(): KMSClientConfigType
 
-  method {:extern} KMSClient(config: KMSClientConfigType := DefaultKMSClientConfigType()) returns (res: Result<IKeyManagementServiceClient, Error>)
-    decreases config
+  method {:extern} KMSClient() returns (res: Result<IKeyManagementServiceClient, Error>)
 }
 
 module StandardLibrary {
@@ -2053,14 +2052,13 @@ module Com {
 
   module Amazonaws {
 
-    module Kms refines ComAmazonawsKmsAbstract {
+    module {:extern ""Dafny.Com.Amazonaws.Kms""} Kms refines ComAmazonawsKmsAbstract {
       function method DefaultKMSClientConfigType(): KMSClientConfigType
       {
         KMSClientConfigType
       }
 
-      method {:extern} KMSClient(config: KMSClientConfigType := DefaultKMSClientConfigType()) returns (res: Result<IKeyManagementServiceClient, Error>)
-        decreases config
+      method {:extern} KMSClient() returns (res: Result<IKeyManagementServiceClient, Error>)
 
       import opened Wrappers
 
@@ -4648,7 +4646,7 @@ namespace UTF8 {
     }
   }
 } // end of namespace UTF8
-namespace ComAmazonawsKmsTypes_Compile {
+namespace Dafny.Com.Amazonaws.Kms.Types {
 
   public interface _IAlgorithmSpec {
     bool is_RSAES__PKCS1__V1__5 { get; }
@@ -4662,8 +4660,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IAlgorithmSpec Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IAlgorithmSpec> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IAlgorithmSpec>(ComAmazonawsKmsTypes_Compile.AlgorithmSpec.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IAlgorithmSpec> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IAlgorithmSpec> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IAlgorithmSpec>(Dafny.Com.Amazonaws.Kms.Types.AlgorithmSpec.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IAlgorithmSpec> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IAlgorithmSpec create_RSAES__PKCS1__V1__5() {
@@ -4695,7 +4693,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new AlgorithmSpec_RSAES__PKCS1__V1__5();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.AlgorithmSpec_RSAES__PKCS1__V1__5;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.AlgorithmSpec_RSAES__PKCS1__V1__5;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -4704,7 +4702,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.AlgorithmSpec.RSAES_PKCS1_V1_5";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.AlgorithmSpec.RSAES_PKCS1_V1_5";
       return s;
     }
   }
@@ -4716,7 +4714,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new AlgorithmSpec_RSAES__OAEP__SHA__1();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.AlgorithmSpec_RSAES__OAEP__SHA__1;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.AlgorithmSpec_RSAES__OAEP__SHA__1;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -4725,7 +4723,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.AlgorithmSpec.RSAES_OAEP_SHA_1";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.AlgorithmSpec.RSAES_OAEP_SHA_1";
       return s;
     }
   }
@@ -4737,7 +4735,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new AlgorithmSpec_RSAES__OAEP__SHA__256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.AlgorithmSpec_RSAES__OAEP__SHA__256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.AlgorithmSpec_RSAES__OAEP__SHA__256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -4746,7 +4744,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.AlgorithmSpec.RSAES_OAEP_SHA_256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.AlgorithmSpec.RSAES_OAEP_SHA_256";
       return s;
     }
   }
@@ -4778,7 +4776,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new AliasListEntry(AliasName, AliasArn, TargetKeyId, CreationDate, LastUpdatedDate);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.AliasListEntry;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.AliasListEntry;
       return oth != null && object.Equals(this.AliasName, oth.AliasName) && object.Equals(this.AliasArn, oth.AliasArn) && object.Equals(this.TargetKeyId, oth.TargetKeyId) && object.Equals(this.CreationDate, oth.CreationDate) && object.Equals(this.LastUpdatedDate, oth.LastUpdatedDate);
     }
     public override int GetHashCode() {
@@ -4792,7 +4790,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.AliasListEntry.AliasListEntry";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.AliasListEntry.AliasListEntry";
       s += "(";
       s += Dafny.Helpers.ToString(this.AliasName);
       s += ", ";
@@ -4810,8 +4808,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IAliasListEntry Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IAliasListEntry> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IAliasListEntry>(ComAmazonawsKmsTypes_Compile.AliasListEntry.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IAliasListEntry> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry>(Dafny.Com.Amazonaws.Kms.Types.AliasListEntry.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IAliasListEntry create(Wrappers_Compile._IOption<Dafny.ISequence<char>> AliasName, Wrappers_Compile._IOption<Dafny.ISequence<char>> AliasArn, Wrappers_Compile._IOption<Dafny.ISequence<char>> TargetKeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> LastUpdatedDate) {
@@ -4874,7 +4872,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CancelKeyDeletionRequest(KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CancelKeyDeletionRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CancelKeyDeletionRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -4884,7 +4882,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CancelKeyDeletionRequest.CancelKeyDeletionRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CancelKeyDeletionRequest.CancelKeyDeletionRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ")";
@@ -4894,8 +4892,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ICancelKeyDeletionRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICancelKeyDeletionRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICancelKeyDeletionRequest>(ComAmazonawsKmsTypes_Compile.CancelKeyDeletionRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICancelKeyDeletionRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICancelKeyDeletionRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICancelKeyDeletionRequest>(Dafny.Com.Amazonaws.Kms.Types.CancelKeyDeletionRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICancelKeyDeletionRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ICancelKeyDeletionRequest create(Dafny.ISequence<char> KeyId) {
@@ -4924,7 +4922,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CancelKeyDeletionResponse(KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CancelKeyDeletionResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CancelKeyDeletionResponse;
       return oth != null && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -4934,7 +4932,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CancelKeyDeletionResponse.CancelKeyDeletionResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CancelKeyDeletionResponse.CancelKeyDeletionResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ")";
@@ -4944,8 +4942,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ICancelKeyDeletionResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICancelKeyDeletionResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICancelKeyDeletionResponse>(ComAmazonawsKmsTypes_Compile.CancelKeyDeletionResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICancelKeyDeletionResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICancelKeyDeletionResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICancelKeyDeletionResponse>(Dafny.Com.Amazonaws.Kms.Types.CancelKeyDeletionResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICancelKeyDeletionResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ICancelKeyDeletionResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId) {
@@ -4988,7 +4986,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectCustomKeyStoreRequest(CustomKeyStoreId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectCustomKeyStoreRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectCustomKeyStoreRequest;
       return oth != null && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId);
     }
     public override int GetHashCode() {
@@ -4998,7 +4996,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectCustomKeyStoreRequest.ConnectCustomKeyStoreRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectCustomKeyStoreRequest.ConnectCustomKeyStoreRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStoreId);
       s += ")";
@@ -5008,8 +5006,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IConnectCustomKeyStoreRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectCustomKeyStoreRequest>(ComAmazonawsKmsTypes_Compile.ConnectCustomKeyStoreRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectCustomKeyStoreRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectCustomKeyStoreRequest>(Dafny.Com.Amazonaws.Kms.Types.ConnectCustomKeyStoreRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectCustomKeyStoreRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IConnectCustomKeyStoreRequest create(Dafny.ISequence<char> CustomKeyStoreId) {
@@ -5035,7 +5033,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectCustomKeyStoreResponse();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectCustomKeyStoreResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectCustomKeyStoreResponse;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5044,15 +5042,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectCustomKeyStoreResponse.ConnectCustomKeyStoreResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectCustomKeyStoreResponse.ConnectCustomKeyStoreResponse";
       return s;
     }
     private static readonly _IConnectCustomKeyStoreResponse theDefault = create();
     public static _IConnectCustomKeyStoreResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectCustomKeyStoreResponse>(ComAmazonawsKmsTypes_Compile.ConnectCustomKeyStoreResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectCustomKeyStoreResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectCustomKeyStoreResponse>(Dafny.Com.Amazonaws.Kms.Types.ConnectCustomKeyStoreResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectCustomKeyStoreResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IConnectCustomKeyStoreResponse create() {
@@ -5084,8 +5082,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IConnectionErrorCodeType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType>(ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType>(Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IConnectionErrorCodeType create_INVALID__CREDENTIALS() {
@@ -5147,7 +5145,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_INVALID__CREDENTIALS();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_INVALID__CREDENTIALS;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_INVALID__CREDENTIALS;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5156,7 +5154,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.INVALID_CREDENTIALS";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.INVALID_CREDENTIALS";
       return s;
     }
   }
@@ -5168,7 +5166,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_CLUSTER__NOT__FOUND();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_CLUSTER__NOT__FOUND;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_CLUSTER__NOT__FOUND;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5177,7 +5175,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.CLUSTER_NOT_FOUND";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.CLUSTER_NOT_FOUND";
       return s;
     }
   }
@@ -5189,7 +5187,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_NETWORK__ERRORS();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_NETWORK__ERRORS;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_NETWORK__ERRORS;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5198,7 +5196,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.NETWORK_ERRORS";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.NETWORK_ERRORS";
       return s;
     }
   }
@@ -5210,7 +5208,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_INTERNAL__ERROR();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_INTERNAL__ERROR;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_INTERNAL__ERROR;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5219,7 +5217,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.INTERNAL_ERROR";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.INTERNAL_ERROR";
       return s;
     }
   }
@@ -5231,7 +5229,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_INSUFFICIENT__CLOUDHSM__HSMS();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_INSUFFICIENT__CLOUDHSM__HSMS;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_INSUFFICIENT__CLOUDHSM__HSMS;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5240,7 +5238,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.INSUFFICIENT_CLOUDHSM_HSMS";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.INSUFFICIENT_CLOUDHSM_HSMS";
       return s;
     }
   }
@@ -5252,7 +5250,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_USER__LOCKED__OUT();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_USER__LOCKED__OUT;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_USER__LOCKED__OUT;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5261,7 +5259,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.USER_LOCKED_OUT";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.USER_LOCKED_OUT";
       return s;
     }
   }
@@ -5273,7 +5271,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_USER__NOT__FOUND();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_USER__NOT__FOUND;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_USER__NOT__FOUND;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5282,7 +5280,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.USER_NOT_FOUND";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.USER_NOT_FOUND";
       return s;
     }
   }
@@ -5294,7 +5292,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_USER__LOGGED__IN();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_USER__LOGGED__IN;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_USER__LOGGED__IN;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5303,7 +5301,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.USER_LOGGED_IN";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.USER_LOGGED_IN";
       return s;
     }
   }
@@ -5315,7 +5313,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionErrorCodeType_SUBNET__NOT__FOUND();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType_SUBNET__NOT__FOUND;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionErrorCodeType_SUBNET__NOT__FOUND;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5324,7 +5322,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionErrorCodeType.SUBNET_NOT_FOUND";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionErrorCodeType.SUBNET_NOT_FOUND";
       return s;
     }
   }
@@ -5343,8 +5341,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IConnectionStateType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectionStateType> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectionStateType>(ComAmazonawsKmsTypes_Compile.ConnectionStateType.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IConnectionStateType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType>(Dafny.Com.Amazonaws.Kms.Types.ConnectionStateType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IConnectionStateType create_CONNECTED() {
@@ -5386,7 +5384,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionStateType_CONNECTED();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionStateType_CONNECTED;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionStateType_CONNECTED;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5395,7 +5393,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionStateType.CONNECTED";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionStateType.CONNECTED";
       return s;
     }
   }
@@ -5407,7 +5405,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionStateType_CONNECTING();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionStateType_CONNECTING;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionStateType_CONNECTING;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5416,7 +5414,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionStateType.CONNECTING";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionStateType.CONNECTING";
       return s;
     }
   }
@@ -5428,7 +5426,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionStateType_FAILED();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionStateType_FAILED;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionStateType_FAILED;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5437,7 +5435,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionStateType.FAILED";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionStateType.FAILED";
       return s;
     }
   }
@@ -5449,7 +5447,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionStateType_DISCONNECTED();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionStateType_DISCONNECTED;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionStateType_DISCONNECTED;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5458,7 +5456,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionStateType.DISCONNECTED";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionStateType.DISCONNECTED";
       return s;
     }
   }
@@ -5470,7 +5468,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ConnectionStateType_DISCONNECTING();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ConnectionStateType_DISCONNECTING;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ConnectionStateType_DISCONNECTING;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -5479,7 +5477,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ConnectionStateType.DISCONNECTING";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ConnectionStateType.DISCONNECTING";
       return s;
     }
   }
@@ -5502,7 +5500,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CreateAliasRequest(AliasName, TargetKeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CreateAliasRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CreateAliasRequest;
       return oth != null && object.Equals(this.AliasName, oth.AliasName) && object.Equals(this.TargetKeyId, oth.TargetKeyId);
     }
     public override int GetHashCode() {
@@ -5513,7 +5511,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CreateAliasRequest.CreateAliasRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CreateAliasRequest.CreateAliasRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.AliasName);
       s += ", ";
@@ -5525,8 +5523,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ICreateAliasRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateAliasRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateAliasRequest>(ComAmazonawsKmsTypes_Compile.CreateAliasRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateAliasRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateAliasRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateAliasRequest>(Dafny.Com.Amazonaws.Kms.Types.CreateAliasRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateAliasRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ICreateAliasRequest create(Dafny.ISequence<char> AliasName, Dafny.ISequence<char> TargetKeyId) {
@@ -5569,7 +5567,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CreateCustomKeyStoreRequest(CustomKeyStoreName, CloudHsmClusterId, TrustAnchorCertificate, KeyStorePassword);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CreateCustomKeyStoreRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CreateCustomKeyStoreRequest;
       return oth != null && object.Equals(this.CustomKeyStoreName, oth.CustomKeyStoreName) && object.Equals(this.CloudHsmClusterId, oth.CloudHsmClusterId) && object.Equals(this.TrustAnchorCertificate, oth.TrustAnchorCertificate) && object.Equals(this.KeyStorePassword, oth.KeyStorePassword);
     }
     public override int GetHashCode() {
@@ -5582,7 +5580,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CreateCustomKeyStoreRequest.CreateCustomKeyStoreRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CreateCustomKeyStoreRequest.CreateCustomKeyStoreRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStoreName);
       s += ", ";
@@ -5598,8 +5596,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ICreateCustomKeyStoreRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateCustomKeyStoreRequest>(ComAmazonawsKmsTypes_Compile.CreateCustomKeyStoreRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateCustomKeyStoreRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateCustomKeyStoreRequest>(Dafny.Com.Amazonaws.Kms.Types.CreateCustomKeyStoreRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateCustomKeyStoreRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ICreateCustomKeyStoreRequest create(Dafny.ISequence<char> CustomKeyStoreName, Dafny.ISequence<char> CloudHsmClusterId, Dafny.ISequence<char> TrustAnchorCertificate, Dafny.ISequence<char> KeyStorePassword) {
@@ -5643,7 +5641,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CreateCustomKeyStoreResponse(CustomKeyStoreId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CreateCustomKeyStoreResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CreateCustomKeyStoreResponse;
       return oth != null && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId);
     }
     public override int GetHashCode() {
@@ -5653,7 +5651,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CreateCustomKeyStoreResponse.CreateCustomKeyStoreResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CreateCustomKeyStoreResponse.CreateCustomKeyStoreResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStoreId);
       s += ")";
@@ -5663,8 +5661,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ICreateCustomKeyStoreResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateCustomKeyStoreResponse>(ComAmazonawsKmsTypes_Compile.CreateCustomKeyStoreResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateCustomKeyStoreResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateCustomKeyStoreResponse>(Dafny.Com.Amazonaws.Kms.Types.CreateCustomKeyStoreResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateCustomKeyStoreResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ICreateCustomKeyStoreResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId) {
@@ -5683,8 +5681,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     Dafny.ISequence<char> dtor_KeyId { get; }
     Dafny.ISequence<char> dtor_GranteePrincipal { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_RetiringPrincipal { get; }
-    Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation> dtor_Operations { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> dtor_Constraints { get; }
+    Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation> dtor_Operations { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> dtor_Constraints { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_Name { get; }
     _ICreateGrantRequest DowncastClone();
@@ -5693,11 +5691,11 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Dafny.ISequence<char> KeyId;
     public readonly Dafny.ISequence<char> GranteePrincipal;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal;
-    public readonly Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation> Operations;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> Constraints;
+    public readonly Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation> Operations;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> Constraints;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> Name;
-    public CreateGrantRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> GranteePrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal, Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation> Operations, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> Constraints, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.ISequence<char>> Name) {
+    public CreateGrantRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> GranteePrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal, Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation> Operations, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> Constraints, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.ISequence<char>> Name) {
       this.KeyId = KeyId;
       this.GranteePrincipal = GranteePrincipal;
       this.RetiringPrincipal = RetiringPrincipal;
@@ -5711,7 +5709,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CreateGrantRequest(KeyId, GranteePrincipal, RetiringPrincipal, Operations, Constraints, GrantTokens, Name);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CreateGrantRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CreateGrantRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.GranteePrincipal, oth.GranteePrincipal) && object.Equals(this.RetiringPrincipal, oth.RetiringPrincipal) && object.Equals(this.Operations, oth.Operations) && object.Equals(this.Constraints, oth.Constraints) && object.Equals(this.GrantTokens, oth.GrantTokens) && object.Equals(this.Name, oth.Name);
     }
     public override int GetHashCode() {
@@ -5727,7 +5725,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CreateGrantRequest.CreateGrantRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CreateGrantRequest.CreateGrantRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -5745,15 +5743,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _ICreateGrantRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Dafny.Sequence<ComAmazonawsKmsTypes_Compile._IGrantOperation>.Empty, Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IGrantConstraints>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default());
+    private static readonly _ICreateGrantRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Dafny.Sequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation>.Empty, Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default());
     public static _ICreateGrantRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateGrantRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateGrantRequest>(ComAmazonawsKmsTypes_Compile.CreateGrantRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateGrantRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateGrantRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateGrantRequest>(Dafny.Com.Amazonaws.Kms.Types.CreateGrantRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateGrantRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _ICreateGrantRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> GranteePrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal, Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation> Operations, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> Constraints, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.ISequence<char>> Name) {
+    public static _ICreateGrantRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> GranteePrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal, Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation> Operations, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> Constraints, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.ISequence<char>> Name) {
       return new CreateGrantRequest(KeyId, GranteePrincipal, RetiringPrincipal, Operations, Constraints, GrantTokens, Name);
     }
     public bool is_CreateGrantRequest { get { return true; } }
@@ -5772,12 +5770,12 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.RetiringPrincipal;
       }
     }
-    public Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation> dtor_Operations {
+    public Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation> dtor_Operations {
       get {
         return this.Operations;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> dtor_Constraints {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> dtor_Constraints {
       get {
         return this.Constraints;
       }
@@ -5812,7 +5810,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CreateGrantResponse(GrantToken, GrantId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CreateGrantResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CreateGrantResponse;
       return oth != null && object.Equals(this.GrantToken, oth.GrantToken) && object.Equals(this.GrantId, oth.GrantId);
     }
     public override int GetHashCode() {
@@ -5823,7 +5821,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CreateGrantResponse.CreateGrantResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CreateGrantResponse.CreateGrantResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.GrantToken);
       s += ", ";
@@ -5835,8 +5833,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ICreateGrantResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateGrantResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateGrantResponse>(ComAmazonawsKmsTypes_Compile.CreateGrantResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateGrantResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateGrantResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateGrantResponse>(Dafny.Com.Amazonaws.Kms.Types.CreateGrantResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateGrantResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ICreateGrantResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantToken, Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantId) {
@@ -5859,28 +5857,28 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_CreateKeyRequest { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_Policy { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_Description { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> dtor_KeyUsage { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> dtor_KeySpec { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> dtor_Origin { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> dtor_KeyUsage { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> dtor_KeySpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> dtor_Origin { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_CustomKeyStoreId { get; }
     Wrappers_Compile._IOption<bool> dtor_BypassPolicyLockoutSafetyCheck { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> dtor_Tags { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> dtor_Tags { get; }
     Wrappers_Compile._IOption<bool> dtor_MultiRegion { get; }
     _ICreateKeyRequest DowncastClone();
   }
   public class CreateKeyRequest : _ICreateKeyRequest {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> Description;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> Origin;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> Origin;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId;
     public readonly Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags;
     public readonly Wrappers_Compile._IOption<bool> MultiRegion;
-    public CreateKeyRequest(Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> Origin, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags, Wrappers_Compile._IOption<bool> MultiRegion) {
+    public CreateKeyRequest(Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> Origin, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags, Wrappers_Compile._IOption<bool> MultiRegion) {
       this.Policy = Policy;
       this.Description = Description;
       this.KeyUsage = KeyUsage;
@@ -5897,7 +5895,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CreateKeyRequest(Policy, Description, KeyUsage, CustomerMasterKeySpec, KeySpec, Origin, CustomKeyStoreId, BypassPolicyLockoutSafetyCheck, Tags, MultiRegion);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CreateKeyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CreateKeyRequest;
       return oth != null && object.Equals(this.Policy, oth.Policy) && object.Equals(this.Description, oth.Description) && object.Equals(this.KeyUsage, oth.KeyUsage) && object.Equals(this.CustomerMasterKeySpec, oth.CustomerMasterKeySpec) && object.Equals(this.KeySpec, oth.KeySpec) && object.Equals(this.Origin, oth.Origin) && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId) && object.Equals(this.BypassPolicyLockoutSafetyCheck, oth.BypassPolicyLockoutSafetyCheck) && object.Equals(this.Tags, oth.Tags) && object.Equals(this.MultiRegion, oth.MultiRegion);
     }
     public override int GetHashCode() {
@@ -5916,7 +5914,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CreateKeyRequest.CreateKeyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CreateKeyRequest.CreateKeyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.Policy);
       s += ", ";
@@ -5940,15 +5938,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _ICreateKeyRequest theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyUsageType>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeySpec>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IOriginType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>>.Default(), Wrappers_Compile.Option<bool>.Default());
+    private static readonly _ICreateKeyRequest theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeySpec>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IOriginType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>>.Default(), Wrappers_Compile.Option<bool>.Default());
     public static _ICreateKeyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateKeyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateKeyRequest>(ComAmazonawsKmsTypes_Compile.CreateKeyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateKeyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateKeyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateKeyRequest>(Dafny.Com.Amazonaws.Kms.Types.CreateKeyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateKeyRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _ICreateKeyRequest create(Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> Origin, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags, Wrappers_Compile._IOption<bool> MultiRegion) {
+    public static _ICreateKeyRequest create(Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> Origin, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags, Wrappers_Compile._IOption<bool> MultiRegion) {
       return new CreateKeyRequest(Policy, Description, KeyUsage, CustomerMasterKeySpec, KeySpec, Origin, CustomKeyStoreId, BypassPolicyLockoutSafetyCheck, Tags, MultiRegion);
     }
     public bool is_CreateKeyRequest { get { return true; } }
@@ -5962,22 +5960,22 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.Description;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> dtor_KeyUsage {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> dtor_KeyUsage {
       get {
         return this.KeyUsage;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec {
       get {
         return this.CustomerMasterKeySpec;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> dtor_KeySpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> dtor_KeySpec {
       get {
         return this.KeySpec;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> dtor_Origin {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> dtor_Origin {
       get {
         return this.Origin;
       }
@@ -5992,7 +5990,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.BypassPolicyLockoutSafetyCheck;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> dtor_Tags {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> dtor_Tags {
       get {
         return this.Tags;
       }
@@ -6006,12 +6004,12 @@ namespace ComAmazonawsKmsTypes_Compile {
 
   public interface _ICreateKeyResponse {
     bool is_CreateKeyResponse { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> dtor_KeyMetadata { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> dtor_KeyMetadata { get; }
     _ICreateKeyResponse DowncastClone();
   }
   public class CreateKeyResponse : _ICreateKeyResponse {
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> KeyMetadata;
-    public CreateKeyResponse(Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> KeyMetadata) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> KeyMetadata;
+    public CreateKeyResponse(Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> KeyMetadata) {
       this.KeyMetadata = KeyMetadata;
     }
     public _ICreateKeyResponse DowncastClone() {
@@ -6019,7 +6017,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CreateKeyResponse(KeyMetadata);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CreateKeyResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CreateKeyResponse;
       return oth != null && object.Equals(this.KeyMetadata, oth.KeyMetadata);
     }
     public override int GetHashCode() {
@@ -6029,25 +6027,25 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CreateKeyResponse.CreateKeyResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CreateKeyResponse.CreateKeyResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyMetadata);
       s += ")";
       return s;
     }
-    private static readonly _ICreateKeyResponse theDefault = create(Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyMetadata>.Default());
+    private static readonly _ICreateKeyResponse theDefault = create(Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata>.Default());
     public static _ICreateKeyResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateKeyResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateKeyResponse>(ComAmazonawsKmsTypes_Compile.CreateKeyResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICreateKeyResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateKeyResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateKeyResponse>(Dafny.Com.Amazonaws.Kms.Types.CreateKeyResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICreateKeyResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _ICreateKeyResponse create(Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> KeyMetadata) {
+    public static _ICreateKeyResponse create(Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> KeyMetadata) {
       return new CreateKeyResponse(KeyMetadata);
     }
     public bool is_CreateKeyResponse { get { return true; } }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> dtor_KeyMetadata {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> dtor_KeyMetadata {
       get {
         return this.KeyMetadata;
       }
@@ -6071,8 +6069,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ICustomerMasterKeySpec Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec>(ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec>(Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ICustomerMasterKeySpec create_RSA__2048() {
@@ -6129,7 +6127,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomerMasterKeySpec_RSA__2048();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec_RSA__2048;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec_RSA__2048;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6138,7 +6136,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.RSA_2048";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomerMasterKeySpec.RSA_2048";
       return s;
     }
   }
@@ -6150,7 +6148,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomerMasterKeySpec_RSA__3072();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec_RSA__3072;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec_RSA__3072;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6159,7 +6157,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.RSA_3072";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomerMasterKeySpec.RSA_3072";
       return s;
     }
   }
@@ -6171,7 +6169,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomerMasterKeySpec_RSA__4096();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec_RSA__4096;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec_RSA__4096;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6180,7 +6178,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.RSA_4096";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomerMasterKeySpec.RSA_4096";
       return s;
     }
   }
@@ -6192,7 +6190,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomerMasterKeySpec_ECC__NIST__P256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec_ECC__NIST__P256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec_ECC__NIST__P256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6201,7 +6199,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.ECC_NIST_P256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomerMasterKeySpec.ECC_NIST_P256";
       return s;
     }
   }
@@ -6213,7 +6211,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomerMasterKeySpec_ECC__NIST__P384();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec_ECC__NIST__P384;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec_ECC__NIST__P384;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6222,7 +6220,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.ECC_NIST_P384";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomerMasterKeySpec.ECC_NIST_P384";
       return s;
     }
   }
@@ -6234,7 +6232,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomerMasterKeySpec_ECC__NIST__P521();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec_ECC__NIST__P521;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec_ECC__NIST__P521;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6243,7 +6241,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.ECC_NIST_P521";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomerMasterKeySpec.ECC_NIST_P521";
       return s;
     }
   }
@@ -6255,7 +6253,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomerMasterKeySpec_ECC__SECG__P256K1();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec_ECC__SECG__P256K1;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec_ECC__SECG__P256K1;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6264,7 +6262,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.ECC_SECG_P256K1";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomerMasterKeySpec.ECC_SECG_P256K1";
       return s;
     }
   }
@@ -6276,7 +6274,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomerMasterKeySpec_SYMMETRIC__DEFAULT();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec_SYMMETRIC__DEFAULT;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomerMasterKeySpec_SYMMETRIC__DEFAULT;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6285,7 +6283,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomerMasterKeySpec.SYMMETRIC_DEFAULT";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomerMasterKeySpec.SYMMETRIC_DEFAULT";
       return s;
     }
   }
@@ -6310,8 +6308,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_CustomKeyStoreName { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_CloudHsmClusterId { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_TrustAnchorCertificate { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionStateType> dtor_ConnectionState { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType> dtor_ConnectionErrorCode { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType> dtor_ConnectionState { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType> dtor_ConnectionErrorCode { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_CreationDate { get; }
     _ICustomKeyStoresListEntry DowncastClone();
   }
@@ -6320,10 +6318,10 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreName;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> TrustAnchorCertificate;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionStateType> ConnectionState;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType> ConnectionErrorCode;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType> ConnectionState;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType> ConnectionErrorCode;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate;
-    public CustomKeyStoresListEntry(Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreName, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId, Wrappers_Compile._IOption<Dafny.ISequence<char>> TrustAnchorCertificate, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionStateType> ConnectionState, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType> ConnectionErrorCode, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate) {
+    public CustomKeyStoresListEntry(Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreName, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId, Wrappers_Compile._IOption<Dafny.ISequence<char>> TrustAnchorCertificate, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType> ConnectionState, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType> ConnectionErrorCode, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate) {
       this.CustomKeyStoreId = CustomKeyStoreId;
       this.CustomKeyStoreName = CustomKeyStoreName;
       this.CloudHsmClusterId = CloudHsmClusterId;
@@ -6337,7 +6335,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new CustomKeyStoresListEntry(CustomKeyStoreId, CustomKeyStoreName, CloudHsmClusterId, TrustAnchorCertificate, ConnectionState, ConnectionErrorCode, CreationDate);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.CustomKeyStoresListEntry;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.CustomKeyStoresListEntry;
       return oth != null && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId) && object.Equals(this.CustomKeyStoreName, oth.CustomKeyStoreName) && object.Equals(this.CloudHsmClusterId, oth.CloudHsmClusterId) && object.Equals(this.TrustAnchorCertificate, oth.TrustAnchorCertificate) && object.Equals(this.ConnectionState, oth.ConnectionState) && object.Equals(this.ConnectionErrorCode, oth.ConnectionErrorCode) && object.Equals(this.CreationDate, oth.CreationDate);
     }
     public override int GetHashCode() {
@@ -6353,7 +6351,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.CustomKeyStoresListEntry.CustomKeyStoresListEntry";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.CustomKeyStoresListEntry.CustomKeyStoresListEntry";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStoreId);
       s += ", ";
@@ -6371,15 +6369,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _ICustomKeyStoresListEntry theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IConnectionStateType>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default());
+    private static readonly _ICustomKeyStoresListEntry theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default());
     public static _ICustomKeyStoresListEntry Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry>(ComAmazonawsKmsTypes_Compile.CustomKeyStoresListEntry.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry>(Dafny.Com.Amazonaws.Kms.Types.CustomKeyStoresListEntry.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _ICustomKeyStoresListEntry create(Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreName, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId, Wrappers_Compile._IOption<Dafny.ISequence<char>> TrustAnchorCertificate, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionStateType> ConnectionState, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType> ConnectionErrorCode, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate) {
+    public static _ICustomKeyStoresListEntry create(Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreName, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId, Wrappers_Compile._IOption<Dafny.ISequence<char>> TrustAnchorCertificate, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType> ConnectionState, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType> ConnectionErrorCode, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate) {
       return new CustomKeyStoresListEntry(CustomKeyStoreId, CustomKeyStoreName, CloudHsmClusterId, TrustAnchorCertificate, ConnectionState, ConnectionErrorCode, CreationDate);
     }
     public bool is_CustomKeyStoresListEntry { get { return true; } }
@@ -6403,12 +6401,12 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.TrustAnchorCertificate;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionStateType> dtor_ConnectionState {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionStateType> dtor_ConnectionState {
       get {
         return this.ConnectionState;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IConnectionErrorCodeType> dtor_ConnectionErrorCode {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IConnectionErrorCodeType> dtor_ConnectionErrorCode {
       get {
         return this.ConnectionErrorCode;
       }
@@ -6436,8 +6434,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDataKeyPairSpec Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec>(ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec>(Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDataKeyPairSpec create_RSA__2048() {
@@ -6489,7 +6487,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeyPairSpec_RSA__2048();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeyPairSpec_RSA__2048;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec_RSA__2048;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6498,7 +6496,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.RSA_2048";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeyPairSpec.RSA_2048";
       return s;
     }
   }
@@ -6510,7 +6508,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeyPairSpec_RSA__3072();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeyPairSpec_RSA__3072;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec_RSA__3072;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6519,7 +6517,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.RSA_3072";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeyPairSpec.RSA_3072";
       return s;
     }
   }
@@ -6531,7 +6529,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeyPairSpec_RSA__4096();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeyPairSpec_RSA__4096;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec_RSA__4096;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6540,7 +6538,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.RSA_4096";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeyPairSpec.RSA_4096";
       return s;
     }
   }
@@ -6552,7 +6550,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeyPairSpec_ECC__NIST__P256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeyPairSpec_ECC__NIST__P256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec_ECC__NIST__P256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6561,7 +6559,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.ECC_NIST_P256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeyPairSpec.ECC_NIST_P256";
       return s;
     }
   }
@@ -6573,7 +6571,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeyPairSpec_ECC__NIST__P384();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeyPairSpec_ECC__NIST__P384;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec_ECC__NIST__P384;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6582,7 +6580,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.ECC_NIST_P384";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeyPairSpec.ECC_NIST_P384";
       return s;
     }
   }
@@ -6594,7 +6592,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeyPairSpec_ECC__NIST__P521();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeyPairSpec_ECC__NIST__P521;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec_ECC__NIST__P521;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6603,7 +6601,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.ECC_NIST_P521";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeyPairSpec.ECC_NIST_P521";
       return s;
     }
   }
@@ -6615,7 +6613,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeyPairSpec_ECC__SECG__P256K1();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeyPairSpec_ECC__SECG__P256K1;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec_ECC__SECG__P256K1;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6624,7 +6622,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.ECC_SECG_P256K1";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeyPairSpec.ECC_SECG_P256K1";
       return s;
     }
   }
@@ -6640,8 +6638,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDataKeySpec Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDataKeySpec> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDataKeySpec>(ComAmazonawsKmsTypes_Compile.DataKeySpec.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDataKeySpec> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec>(Dafny.Com.Amazonaws.Kms.Types.DataKeySpec.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDataKeySpec create_AES__256() {
@@ -6668,7 +6666,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeySpec_AES__256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeySpec_AES__256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeySpec_AES__256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6677,7 +6675,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeySpec.AES_256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeySpec.AES_256";
       return s;
     }
   }
@@ -6689,7 +6687,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DataKeySpec_AES__128();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DataKeySpec_AES__128;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DataKeySpec_AES__128;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6698,7 +6696,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DataKeySpec.AES_128";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DataKeySpec.AES_128";
       return s;
     }
   }
@@ -6709,7 +6707,7 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> dtor_EncryptionContext { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm { get; }
     _IDecryptRequest DowncastClone();
   }
   public class DecryptRequest : _IDecryptRequest {
@@ -6717,8 +6715,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm;
-    public DecryptRequest(Dafny.ISequence<byte> CiphertextBlob, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm;
+    public DecryptRequest(Dafny.ISequence<byte> CiphertextBlob, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
       this.CiphertextBlob = CiphertextBlob;
       this.EncryptionContext = EncryptionContext;
       this.GrantTokens = GrantTokens;
@@ -6730,7 +6728,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DecryptRequest(CiphertextBlob, EncryptionContext, GrantTokens, KeyId, EncryptionAlgorithm);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DecryptRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DecryptRequest;
       return oth != null && object.Equals(this.CiphertextBlob, oth.CiphertextBlob) && object.Equals(this.EncryptionContext, oth.EncryptionContext) && object.Equals(this.GrantTokens, oth.GrantTokens) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.EncryptionAlgorithm, oth.EncryptionAlgorithm);
     }
     public override int GetHashCode() {
@@ -6744,7 +6742,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DecryptRequest.DecryptRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DecryptRequest.DecryptRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.CiphertextBlob);
       s += ", ";
@@ -6758,15 +6756,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IDecryptRequest theDefault = create(Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>.Default());
+    private static readonly _IDecryptRequest theDefault = create(Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>.Default());
     public static _IDecryptRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDecryptRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDecryptRequest>(ComAmazonawsKmsTypes_Compile.DecryptRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDecryptRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDecryptRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDecryptRequest>(Dafny.Com.Amazonaws.Kms.Types.DecryptRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDecryptRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IDecryptRequest create(Dafny.ISequence<byte> CiphertextBlob, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
+    public static _IDecryptRequest create(Dafny.ISequence<byte> CiphertextBlob, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
       return new DecryptRequest(CiphertextBlob, EncryptionContext, GrantTokens, KeyId, EncryptionAlgorithm);
     }
     public bool is_DecryptRequest { get { return true; } }
@@ -6790,7 +6788,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm {
       get {
         return this.EncryptionAlgorithm;
       }
@@ -6801,14 +6799,14 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_DecryptResponse { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_Plaintext { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm { get; }
     _IDecryptResponse DowncastClone();
   }
   public class DecryptResponse : _IDecryptResponse {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> Plaintext;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm;
-    public DecryptResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Plaintext, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm;
+    public DecryptResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Plaintext, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
       this.KeyId = KeyId;
       this.Plaintext = Plaintext;
       this.EncryptionAlgorithm = EncryptionAlgorithm;
@@ -6818,7 +6816,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DecryptResponse(KeyId, Plaintext, EncryptionAlgorithm);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DecryptResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DecryptResponse;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Plaintext, oth.Plaintext) && object.Equals(this.EncryptionAlgorithm, oth.EncryptionAlgorithm);
     }
     public override int GetHashCode() {
@@ -6830,7 +6828,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DecryptResponse.DecryptResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DecryptResponse.DecryptResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -6840,15 +6838,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IDecryptResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>.Default());
+    private static readonly _IDecryptResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>.Default());
     public static _IDecryptResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDecryptResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDecryptResponse>(ComAmazonawsKmsTypes_Compile.DecryptResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDecryptResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDecryptResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDecryptResponse>(Dafny.Com.Amazonaws.Kms.Types.DecryptResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDecryptResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IDecryptResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Plaintext, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
+    public static _IDecryptResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Plaintext, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
       return new DecryptResponse(KeyId, Plaintext, EncryptionAlgorithm);
     }
     public bool is_DecryptResponse { get { return true; } }
@@ -6862,7 +6860,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.Plaintext;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm {
       get {
         return this.EncryptionAlgorithm;
       }
@@ -6884,7 +6882,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DeleteAliasRequest(AliasName);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DeleteAliasRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DeleteAliasRequest;
       return oth != null && object.Equals(this.AliasName, oth.AliasName);
     }
     public override int GetHashCode() {
@@ -6894,7 +6892,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DeleteAliasRequest.DeleteAliasRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DeleteAliasRequest.DeleteAliasRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.AliasName);
       s += ")";
@@ -6904,8 +6902,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDeleteAliasRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteAliasRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteAliasRequest>(ComAmazonawsKmsTypes_Compile.DeleteAliasRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteAliasRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteAliasRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteAliasRequest>(Dafny.Com.Amazonaws.Kms.Types.DeleteAliasRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteAliasRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDeleteAliasRequest create(Dafny.ISequence<char> AliasName) {
@@ -6934,7 +6932,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DeleteCustomKeyStoreRequest(CustomKeyStoreId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DeleteCustomKeyStoreRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DeleteCustomKeyStoreRequest;
       return oth != null && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId);
     }
     public override int GetHashCode() {
@@ -6944,7 +6942,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DeleteCustomKeyStoreRequest.DeleteCustomKeyStoreRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DeleteCustomKeyStoreRequest.DeleteCustomKeyStoreRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStoreId);
       s += ")";
@@ -6954,8 +6952,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDeleteCustomKeyStoreRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteCustomKeyStoreRequest>(ComAmazonawsKmsTypes_Compile.DeleteCustomKeyStoreRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteCustomKeyStoreRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteCustomKeyStoreRequest>(Dafny.Com.Amazonaws.Kms.Types.DeleteCustomKeyStoreRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteCustomKeyStoreRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDeleteCustomKeyStoreRequest create(Dafny.ISequence<char> CustomKeyStoreId) {
@@ -6981,7 +6979,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DeleteCustomKeyStoreResponse();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DeleteCustomKeyStoreResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DeleteCustomKeyStoreResponse;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -6990,15 +6988,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DeleteCustomKeyStoreResponse.DeleteCustomKeyStoreResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DeleteCustomKeyStoreResponse.DeleteCustomKeyStoreResponse";
       return s;
     }
     private static readonly _IDeleteCustomKeyStoreResponse theDefault = create();
     public static _IDeleteCustomKeyStoreResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteCustomKeyStoreResponse>(ComAmazonawsKmsTypes_Compile.DeleteCustomKeyStoreResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteCustomKeyStoreResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteCustomKeyStoreResponse>(Dafny.Com.Amazonaws.Kms.Types.DeleteCustomKeyStoreResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteCustomKeyStoreResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDeleteCustomKeyStoreResponse create() {
@@ -7027,7 +7025,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DeleteImportedKeyMaterialRequest(KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DeleteImportedKeyMaterialRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DeleteImportedKeyMaterialRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -7037,7 +7035,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DeleteImportedKeyMaterialRequest.DeleteImportedKeyMaterialRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DeleteImportedKeyMaterialRequest.DeleteImportedKeyMaterialRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ")";
@@ -7047,8 +7045,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDeleteImportedKeyMaterialRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteImportedKeyMaterialRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteImportedKeyMaterialRequest>(ComAmazonawsKmsTypes_Compile.DeleteImportedKeyMaterialRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDeleteImportedKeyMaterialRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteImportedKeyMaterialRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteImportedKeyMaterialRequest>(Dafny.Com.Amazonaws.Kms.Types.DeleteImportedKeyMaterialRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDeleteImportedKeyMaterialRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDeleteImportedKeyMaterialRequest create(Dafny.ISequence<char> KeyId) {
@@ -7086,7 +7084,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DescribeCustomKeyStoresRequest(CustomKeyStoreId, CustomKeyStoreName, Limit, Marker);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DescribeCustomKeyStoresRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DescribeCustomKeyStoresRequest;
       return oth != null && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId) && object.Equals(this.CustomKeyStoreName, oth.CustomKeyStoreName) && object.Equals(this.Limit, oth.Limit) && object.Equals(this.Marker, oth.Marker);
     }
     public override int GetHashCode() {
@@ -7099,7 +7097,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DescribeCustomKeyStoresRequest.DescribeCustomKeyStoresRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DescribeCustomKeyStoresRequest.DescribeCustomKeyStoresRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStoreId);
       s += ", ";
@@ -7115,8 +7113,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDescribeCustomKeyStoresRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeCustomKeyStoresRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeCustomKeyStoresRequest>(ComAmazonawsKmsTypes_Compile.DescribeCustomKeyStoresRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeCustomKeyStoresRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeCustomKeyStoresRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeCustomKeyStoresRequest>(Dafny.Com.Amazonaws.Kms.Types.DescribeCustomKeyStoresRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeCustomKeyStoresRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDescribeCustomKeyStoresRequest create(Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreName, Wrappers_Compile._IOption<int> Limit, Wrappers_Compile._IOption<Dafny.ISequence<char>> Marker) {
@@ -7147,16 +7145,16 @@ namespace ComAmazonawsKmsTypes_Compile {
 
   public interface _IDescribeCustomKeyStoresResponse {
     bool is_DescribeCustomKeyStoresResponse { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry>> dtor_CustomKeyStores { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry>> dtor_CustomKeyStores { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_NextMarker { get; }
     Wrappers_Compile._IOption<bool> dtor_Truncated { get; }
     _IDescribeCustomKeyStoresResponse DowncastClone();
   }
   public class DescribeCustomKeyStoresResponse : _IDescribeCustomKeyStoresResponse {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry>> CustomKeyStores;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry>> CustomKeyStores;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker;
     public readonly Wrappers_Compile._IOption<bool> Truncated;
-    public DescribeCustomKeyStoresResponse(Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry>> CustomKeyStores, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
+    public DescribeCustomKeyStoresResponse(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry>> CustomKeyStores, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
       this.CustomKeyStores = CustomKeyStores;
       this.NextMarker = NextMarker;
       this.Truncated = Truncated;
@@ -7166,7 +7164,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DescribeCustomKeyStoresResponse(CustomKeyStores, NextMarker, Truncated);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DescribeCustomKeyStoresResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DescribeCustomKeyStoresResponse;
       return oth != null && object.Equals(this.CustomKeyStores, oth.CustomKeyStores) && object.Equals(this.NextMarker, oth.NextMarker) && object.Equals(this.Truncated, oth.Truncated);
     }
     public override int GetHashCode() {
@@ -7178,7 +7176,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DescribeCustomKeyStoresResponse.DescribeCustomKeyStoresResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DescribeCustomKeyStoresResponse.DescribeCustomKeyStoresResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStores);
       s += ", ";
@@ -7188,19 +7186,19 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IDescribeCustomKeyStoresResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default());
+    private static readonly _IDescribeCustomKeyStoresResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default());
     public static _IDescribeCustomKeyStoresResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeCustomKeyStoresResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeCustomKeyStoresResponse>(ComAmazonawsKmsTypes_Compile.DescribeCustomKeyStoresResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeCustomKeyStoresResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeCustomKeyStoresResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeCustomKeyStoresResponse>(Dafny.Com.Amazonaws.Kms.Types.DescribeCustomKeyStoresResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeCustomKeyStoresResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IDescribeCustomKeyStoresResponse create(Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry>> CustomKeyStores, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
+    public static _IDescribeCustomKeyStoresResponse create(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry>> CustomKeyStores, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
       return new DescribeCustomKeyStoresResponse(CustomKeyStores, NextMarker, Truncated);
     }
     public bool is_DescribeCustomKeyStoresResponse { get { return true; } }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ICustomKeyStoresListEntry>> dtor_CustomKeyStores {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ICustomKeyStoresListEntry>> dtor_CustomKeyStores {
       get {
         return this.CustomKeyStores;
       }
@@ -7235,7 +7233,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DescribeKeyRequest(KeyId, GrantTokens);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DescribeKeyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DescribeKeyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.GrantTokens, oth.GrantTokens);
     }
     public override int GetHashCode() {
@@ -7246,7 +7244,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DescribeKeyRequest.DescribeKeyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DescribeKeyRequest.DescribeKeyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -7258,8 +7256,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDescribeKeyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeKeyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeKeyRequest>(ComAmazonawsKmsTypes_Compile.DescribeKeyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeKeyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeKeyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeKeyRequest>(Dafny.Com.Amazonaws.Kms.Types.DescribeKeyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeKeyRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDescribeKeyRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
@@ -7280,12 +7278,12 @@ namespace ComAmazonawsKmsTypes_Compile {
 
   public interface _IDescribeKeyResponse {
     bool is_DescribeKeyResponse { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> dtor_KeyMetadata { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> dtor_KeyMetadata { get; }
     _IDescribeKeyResponse DowncastClone();
   }
   public class DescribeKeyResponse : _IDescribeKeyResponse {
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> KeyMetadata;
-    public DescribeKeyResponse(Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> KeyMetadata) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> KeyMetadata;
+    public DescribeKeyResponse(Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> KeyMetadata) {
       this.KeyMetadata = KeyMetadata;
     }
     public _IDescribeKeyResponse DowncastClone() {
@@ -7293,7 +7291,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DescribeKeyResponse(KeyMetadata);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DescribeKeyResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DescribeKeyResponse;
       return oth != null && object.Equals(this.KeyMetadata, oth.KeyMetadata);
     }
     public override int GetHashCode() {
@@ -7303,25 +7301,25 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DescribeKeyResponse.DescribeKeyResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DescribeKeyResponse.DescribeKeyResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyMetadata);
       s += ")";
       return s;
     }
-    private static readonly _IDescribeKeyResponse theDefault = create(Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyMetadata>.Default());
+    private static readonly _IDescribeKeyResponse theDefault = create(Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata>.Default());
     public static _IDescribeKeyResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeKeyResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeKeyResponse>(ComAmazonawsKmsTypes_Compile.DescribeKeyResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDescribeKeyResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeKeyResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeKeyResponse>(Dafny.Com.Amazonaws.Kms.Types.DescribeKeyResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDescribeKeyResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IDescribeKeyResponse create(Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> KeyMetadata) {
+    public static _IDescribeKeyResponse create(Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> KeyMetadata) {
       return new DescribeKeyResponse(KeyMetadata);
     }
     public bool is_DescribeKeyResponse { get { return true; } }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> dtor_KeyMetadata {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> dtor_KeyMetadata {
       get {
         return this.KeyMetadata;
       }
@@ -7350,7 +7348,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DisableKeyRequest(KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DisableKeyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DisableKeyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -7360,7 +7358,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DisableKeyRequest.DisableKeyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DisableKeyRequest.DisableKeyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ")";
@@ -7370,8 +7368,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDisableKeyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisableKeyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisableKeyRequest>(ComAmazonawsKmsTypes_Compile.DisableKeyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisableKeyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisableKeyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisableKeyRequest>(Dafny.Com.Amazonaws.Kms.Types.DisableKeyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisableKeyRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDisableKeyRequest create(Dafny.ISequence<char> KeyId) {
@@ -7400,7 +7398,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DisableKeyRotationRequest(KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DisableKeyRotationRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DisableKeyRotationRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -7410,7 +7408,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DisableKeyRotationRequest.DisableKeyRotationRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DisableKeyRotationRequest.DisableKeyRotationRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ")";
@@ -7420,8 +7418,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDisableKeyRotationRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisableKeyRotationRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisableKeyRotationRequest>(ComAmazonawsKmsTypes_Compile.DisableKeyRotationRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisableKeyRotationRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisableKeyRotationRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisableKeyRotationRequest>(Dafny.Com.Amazonaws.Kms.Types.DisableKeyRotationRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisableKeyRotationRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDisableKeyRotationRequest create(Dafny.ISequence<char> KeyId) {
@@ -7450,7 +7448,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DisconnectCustomKeyStoreRequest(CustomKeyStoreId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DisconnectCustomKeyStoreRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DisconnectCustomKeyStoreRequest;
       return oth != null && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId);
     }
     public override int GetHashCode() {
@@ -7460,7 +7458,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DisconnectCustomKeyStoreRequest.DisconnectCustomKeyStoreRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DisconnectCustomKeyStoreRequest.DisconnectCustomKeyStoreRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStoreId);
       s += ")";
@@ -7470,8 +7468,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IDisconnectCustomKeyStoreRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisconnectCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisconnectCustomKeyStoreRequest>(ComAmazonawsKmsTypes_Compile.DisconnectCustomKeyStoreRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisconnectCustomKeyStoreRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisconnectCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisconnectCustomKeyStoreRequest>(Dafny.Com.Amazonaws.Kms.Types.DisconnectCustomKeyStoreRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisconnectCustomKeyStoreRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDisconnectCustomKeyStoreRequest create(Dafny.ISequence<char> CustomKeyStoreId) {
@@ -7497,7 +7495,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new DisconnectCustomKeyStoreResponse();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.DisconnectCustomKeyStoreResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.DisconnectCustomKeyStoreResponse;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -7506,15 +7504,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.DisconnectCustomKeyStoreResponse.DisconnectCustomKeyStoreResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.DisconnectCustomKeyStoreResponse.DisconnectCustomKeyStoreResponse";
       return s;
     }
     private static readonly _IDisconnectCustomKeyStoreResponse theDefault = create();
     public static _IDisconnectCustomKeyStoreResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisconnectCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisconnectCustomKeyStoreResponse>(ComAmazonawsKmsTypes_Compile.DisconnectCustomKeyStoreResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IDisconnectCustomKeyStoreResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisconnectCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisconnectCustomKeyStoreResponse>(Dafny.Com.Amazonaws.Kms.Types.DisconnectCustomKeyStoreResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IDisconnectCustomKeyStoreResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IDisconnectCustomKeyStoreResponse create() {
@@ -7543,7 +7541,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new EnableKeyRequest(KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.EnableKeyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.EnableKeyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -7553,7 +7551,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.EnableKeyRequest.EnableKeyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.EnableKeyRequest.EnableKeyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ")";
@@ -7563,8 +7561,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IEnableKeyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEnableKeyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEnableKeyRequest>(ComAmazonawsKmsTypes_Compile.EnableKeyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEnableKeyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEnableKeyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEnableKeyRequest>(Dafny.Com.Amazonaws.Kms.Types.EnableKeyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEnableKeyRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IEnableKeyRequest create(Dafny.ISequence<char> KeyId) {
@@ -7593,7 +7591,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new EnableKeyRotationRequest(KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.EnableKeyRotationRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.EnableKeyRotationRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -7603,7 +7601,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.EnableKeyRotationRequest.EnableKeyRotationRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.EnableKeyRotationRequest.EnableKeyRotationRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ")";
@@ -7613,8 +7611,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IEnableKeyRotationRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEnableKeyRotationRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEnableKeyRotationRequest>(ComAmazonawsKmsTypes_Compile.EnableKeyRotationRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEnableKeyRotationRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEnableKeyRotationRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEnableKeyRotationRequest>(Dafny.Com.Amazonaws.Kms.Types.EnableKeyRotationRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEnableKeyRotationRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IEnableKeyRotationRequest create(Dafny.ISequence<char> KeyId) {
@@ -7640,8 +7638,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IEncryptionAlgorithmSpec Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>(ComAmazonawsKmsTypes_Compile.EncryptionAlgorithmSpec.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>(Dafny.Com.Amazonaws.Kms.Types.EncryptionAlgorithmSpec.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IEncryptionAlgorithmSpec create_SYMMETRIC__DEFAULT() {
@@ -7673,7 +7671,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new EncryptionAlgorithmSpec_SYMMETRIC__DEFAULT();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.EncryptionAlgorithmSpec_SYMMETRIC__DEFAULT;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.EncryptionAlgorithmSpec_SYMMETRIC__DEFAULT;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -7682,7 +7680,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.EncryptionAlgorithmSpec.SYMMETRIC_DEFAULT";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.EncryptionAlgorithmSpec.SYMMETRIC_DEFAULT";
       return s;
     }
   }
@@ -7694,7 +7692,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new EncryptionAlgorithmSpec_RSAES__OAEP__SHA__1();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.EncryptionAlgorithmSpec_RSAES__OAEP__SHA__1;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.EncryptionAlgorithmSpec_RSAES__OAEP__SHA__1;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -7703,7 +7701,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.EncryptionAlgorithmSpec.RSAES_OAEP_SHA_1";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.EncryptionAlgorithmSpec.RSAES_OAEP_SHA_1";
       return s;
     }
   }
@@ -7715,7 +7713,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new EncryptionAlgorithmSpec_RSAES__OAEP__SHA__256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.EncryptionAlgorithmSpec_RSAES__OAEP__SHA__256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.EncryptionAlgorithmSpec_RSAES__OAEP__SHA__256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -7724,7 +7722,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.EncryptionAlgorithmSpec.RSAES_OAEP_SHA_256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.EncryptionAlgorithmSpec.RSAES_OAEP_SHA_256";
       return s;
     }
   }
@@ -7735,7 +7733,7 @@ namespace ComAmazonawsKmsTypes_Compile {
     Dafny.ISequence<byte> dtor_Plaintext { get; }
     Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> dtor_EncryptionContext { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm { get; }
     _IEncryptRequest DowncastClone();
   }
   public class EncryptRequest : _IEncryptRequest {
@@ -7743,8 +7741,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Dafny.ISequence<byte> Plaintext;
     public readonly Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm;
-    public EncryptRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Plaintext, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm;
+    public EncryptRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Plaintext, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
       this.KeyId = KeyId;
       this.Plaintext = Plaintext;
       this.EncryptionContext = EncryptionContext;
@@ -7756,7 +7754,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new EncryptRequest(KeyId, Plaintext, EncryptionContext, GrantTokens, EncryptionAlgorithm);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.EncryptRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.EncryptRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Plaintext, oth.Plaintext) && object.Equals(this.EncryptionContext, oth.EncryptionContext) && object.Equals(this.GrantTokens, oth.GrantTokens) && object.Equals(this.EncryptionAlgorithm, oth.EncryptionAlgorithm);
     }
     public override int GetHashCode() {
@@ -7770,7 +7768,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.EncryptRequest.EncryptRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.EncryptRequest.EncryptRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -7784,15 +7782,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IEncryptRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>.Default());
+    private static readonly _IEncryptRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>.Default());
     public static _IEncryptRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptRequest>(ComAmazonawsKmsTypes_Compile.EncryptRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptRequest>(Dafny.Com.Amazonaws.Kms.Types.EncryptRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IEncryptRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Plaintext, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
+    public static _IEncryptRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Plaintext, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
       return new EncryptRequest(KeyId, Plaintext, EncryptionContext, GrantTokens, EncryptionAlgorithm);
     }
     public bool is_EncryptRequest { get { return true; } }
@@ -7816,7 +7814,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.GrantTokens;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm {
       get {
         return this.EncryptionAlgorithm;
       }
@@ -7827,14 +7825,14 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_EncryptResponse { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_CiphertextBlob { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm { get; }
     _IEncryptResponse DowncastClone();
   }
   public class EncryptResponse : _IEncryptResponse {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm;
-    public EncryptResponse(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm;
+    public EncryptResponse(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
       this.CiphertextBlob = CiphertextBlob;
       this.KeyId = KeyId;
       this.EncryptionAlgorithm = EncryptionAlgorithm;
@@ -7844,7 +7842,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new EncryptResponse(CiphertextBlob, KeyId, EncryptionAlgorithm);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.EncryptResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.EncryptResponse;
       return oth != null && object.Equals(this.CiphertextBlob, oth.CiphertextBlob) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.EncryptionAlgorithm, oth.EncryptionAlgorithm);
     }
     public override int GetHashCode() {
@@ -7856,7 +7854,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.EncryptResponse.EncryptResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.EncryptResponse.EncryptResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.CiphertextBlob);
       s += ", ";
@@ -7866,15 +7864,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IEncryptResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>.Default());
+    private static readonly _IEncryptResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>.Default());
     public static _IEncryptResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptResponse>(ComAmazonawsKmsTypes_Compile.EncryptResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IEncryptResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptResponse>(Dafny.Com.Amazonaws.Kms.Types.EncryptResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IEncryptResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IEncryptResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
+    public static _IEncryptResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> EncryptionAlgorithm) {
       return new EncryptResponse(CiphertextBlob, KeyId, EncryptionAlgorithm);
     }
     public bool is_EncryptResponse { get { return true; } }
@@ -7888,7 +7886,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_EncryptionAlgorithm {
       get {
         return this.EncryptionAlgorithm;
       }
@@ -7906,8 +7904,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IExpirationModelType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IExpirationModelType> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IExpirationModelType>(ComAmazonawsKmsTypes_Compile.ExpirationModelType.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IExpirationModelType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType>(Dafny.Com.Amazonaws.Kms.Types.ExpirationModelType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IExpirationModelType create_KEY__MATERIAL__EXPIRES() {
@@ -7934,7 +7932,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ExpirationModelType_KEY__MATERIAL__EXPIRES();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ExpirationModelType_KEY__MATERIAL__EXPIRES;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ExpirationModelType_KEY__MATERIAL__EXPIRES;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -7943,7 +7941,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ExpirationModelType.KEY_MATERIAL_EXPIRES";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ExpirationModelType.KEY_MATERIAL_EXPIRES";
       return s;
     }
   }
@@ -7955,7 +7953,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ExpirationModelType_KEY__MATERIAL__DOES__NOT__EXPIRE();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ExpirationModelType_KEY__MATERIAL__DOES__NOT__EXPIRE;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ExpirationModelType_KEY__MATERIAL__DOES__NOT__EXPIRE;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -7964,7 +7962,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ExpirationModelType.KEY_MATERIAL_DOES_NOT_EXPIRE";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ExpirationModelType.KEY_MATERIAL_DOES_NOT_EXPIRE";
       return s;
     }
   }
@@ -7973,16 +7971,16 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_GenerateDataKeyPairRequest { get; }
     Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> dtor_EncryptionContext { get; }
     Dafny.ISequence<char> dtor_KeyId { get; }
-    ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec dtor_KeyPairSpec { get; }
+    Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec dtor_KeyPairSpec { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
     _IGenerateDataKeyPairRequest DowncastClone();
   }
   public class GenerateDataKeyPairRequest : _IGenerateDataKeyPairRequest {
     public readonly Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext;
     public readonly Dafny.ISequence<char> KeyId;
-    public readonly ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec KeyPairSpec;
+    public readonly Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec KeyPairSpec;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
-    public GenerateDataKeyPairRequest(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Dafny.ISequence<char> KeyId, ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec KeyPairSpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public GenerateDataKeyPairRequest(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Dafny.ISequence<char> KeyId, Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec KeyPairSpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       this.EncryptionContext = EncryptionContext;
       this.KeyId = KeyId;
       this.KeyPairSpec = KeyPairSpec;
@@ -7993,7 +7991,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateDataKeyPairRequest(EncryptionContext, KeyId, KeyPairSpec, GrantTokens);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyPairRequest;
       return oth != null && object.Equals(this.EncryptionContext, oth.EncryptionContext) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.KeyPairSpec, oth.KeyPairSpec) && object.Equals(this.GrantTokens, oth.GrantTokens);
     }
     public override int GetHashCode() {
@@ -8006,7 +8004,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairRequest.GenerateDataKeyPairRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateDataKeyPairRequest.GenerateDataKeyPairRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.EncryptionContext);
       s += ", ";
@@ -8018,15 +8016,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGenerateDataKeyPairRequest theDefault = create(Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Dafny.Sequence<char>.Empty, ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
+    private static readonly _IGenerateDataKeyPairRequest theDefault = create(Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Dafny.Sequence<char>.Empty, Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
     public static _IGenerateDataKeyPairRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairRequest>(ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairRequest>(Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyPairRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGenerateDataKeyPairRequest create(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Dafny.ISequence<char> KeyId, ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec KeyPairSpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public static _IGenerateDataKeyPairRequest create(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Dafny.ISequence<char> KeyId, Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec KeyPairSpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       return new GenerateDataKeyPairRequest(EncryptionContext, KeyId, KeyPairSpec, GrantTokens);
     }
     public bool is_GenerateDataKeyPairRequest { get { return true; } }
@@ -8040,7 +8038,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec dtor_KeyPairSpec {
+    public Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec dtor_KeyPairSpec {
       get {
         return this.KeyPairSpec;
       }
@@ -8058,7 +8056,7 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_PrivateKeyPlaintext { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_PublicKey { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> dtor_KeyPairSpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> dtor_KeyPairSpec { get; }
     _IGenerateDataKeyPairResponse DowncastClone();
   }
   public class GenerateDataKeyPairResponse : _IGenerateDataKeyPairResponse {
@@ -8066,8 +8064,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyPlaintext;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> KeyPairSpec;
-    public GenerateDataKeyPairResponse(Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyPlaintext, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> KeyPairSpec) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> KeyPairSpec;
+    public GenerateDataKeyPairResponse(Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyPlaintext, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> KeyPairSpec) {
       this.PrivateKeyCiphertextBlob = PrivateKeyCiphertextBlob;
       this.PrivateKeyPlaintext = PrivateKeyPlaintext;
       this.PublicKey = PublicKey;
@@ -8079,7 +8077,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateDataKeyPairResponse(PrivateKeyCiphertextBlob, PrivateKeyPlaintext, PublicKey, KeyId, KeyPairSpec);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyPairResponse;
       return oth != null && object.Equals(this.PrivateKeyCiphertextBlob, oth.PrivateKeyCiphertextBlob) && object.Equals(this.PrivateKeyPlaintext, oth.PrivateKeyPlaintext) && object.Equals(this.PublicKey, oth.PublicKey) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.KeyPairSpec, oth.KeyPairSpec);
     }
     public override int GetHashCode() {
@@ -8093,7 +8091,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairResponse.GenerateDataKeyPairResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateDataKeyPairResponse.GenerateDataKeyPairResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.PrivateKeyCiphertextBlob);
       s += ", ";
@@ -8107,15 +8105,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGenerateDataKeyPairResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec>.Default());
+    private static readonly _IGenerateDataKeyPairResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec>.Default());
     public static _IGenerateDataKeyPairResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairResponse>(ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairResponse>(Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyPairResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGenerateDataKeyPairResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyPlaintext, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> KeyPairSpec) {
+    public static _IGenerateDataKeyPairResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyPlaintext, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> KeyPairSpec) {
       return new GenerateDataKeyPairResponse(PrivateKeyCiphertextBlob, PrivateKeyPlaintext, PublicKey, KeyId, KeyPairSpec);
     }
     public bool is_GenerateDataKeyPairResponse { get { return true; } }
@@ -8139,7 +8137,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> dtor_KeyPairSpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> dtor_KeyPairSpec {
       get {
         return this.KeyPairSpec;
       }
@@ -8150,16 +8148,16 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_GenerateDataKeyPairWithoutPlaintextRequest { get; }
     Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> dtor_EncryptionContext { get; }
     Dafny.ISequence<char> dtor_KeyId { get; }
-    ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec dtor_KeyPairSpec { get; }
+    Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec dtor_KeyPairSpec { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
     _IGenerateDataKeyPairWithoutPlaintextRequest DowncastClone();
   }
   public class GenerateDataKeyPairWithoutPlaintextRequest : _IGenerateDataKeyPairWithoutPlaintextRequest {
     public readonly Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext;
     public readonly Dafny.ISequence<char> KeyId;
-    public readonly ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec KeyPairSpec;
+    public readonly Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec KeyPairSpec;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
-    public GenerateDataKeyPairWithoutPlaintextRequest(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Dafny.ISequence<char> KeyId, ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec KeyPairSpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public GenerateDataKeyPairWithoutPlaintextRequest(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Dafny.ISequence<char> KeyId, Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec KeyPairSpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       this.EncryptionContext = EncryptionContext;
       this.KeyId = KeyId;
       this.KeyPairSpec = KeyPairSpec;
@@ -8170,7 +8168,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateDataKeyPairWithoutPlaintextRequest(EncryptionContext, KeyId, KeyPairSpec, GrantTokens);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairWithoutPlaintextRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyPairWithoutPlaintextRequest;
       return oth != null && object.Equals(this.EncryptionContext, oth.EncryptionContext) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.KeyPairSpec, oth.KeyPairSpec) && object.Equals(this.GrantTokens, oth.GrantTokens);
     }
     public override int GetHashCode() {
@@ -8183,7 +8181,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairWithoutPlaintextRequest.GenerateDataKeyPairWithoutPlaintextRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateDataKeyPairWithoutPlaintextRequest.GenerateDataKeyPairWithoutPlaintextRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.EncryptionContext);
       s += ", ";
@@ -8195,15 +8193,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGenerateDataKeyPairWithoutPlaintextRequest theDefault = create(Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Dafny.Sequence<char>.Empty, ComAmazonawsKmsTypes_Compile.DataKeyPairSpec.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
+    private static readonly _IGenerateDataKeyPairWithoutPlaintextRequest theDefault = create(Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Dafny.Sequence<char>.Empty, Dafny.Com.Amazonaws.Kms.Types.DataKeyPairSpec.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
     public static _IGenerateDataKeyPairWithoutPlaintextRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairWithoutPlaintextRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairWithoutPlaintextRequest>(ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairWithoutPlaintextRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairWithoutPlaintextRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairWithoutPlaintextRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairWithoutPlaintextRequest>(Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyPairWithoutPlaintextRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairWithoutPlaintextRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGenerateDataKeyPairWithoutPlaintextRequest create(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Dafny.ISequence<char> KeyId, ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec KeyPairSpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public static _IGenerateDataKeyPairWithoutPlaintextRequest create(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Dafny.ISequence<char> KeyId, Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec KeyPairSpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       return new GenerateDataKeyPairWithoutPlaintextRequest(EncryptionContext, KeyId, KeyPairSpec, GrantTokens);
     }
     public bool is_GenerateDataKeyPairWithoutPlaintextRequest { get { return true; } }
@@ -8217,7 +8215,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec dtor_KeyPairSpec {
+    public Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec dtor_KeyPairSpec {
       get {
         return this.KeyPairSpec;
       }
@@ -8234,15 +8232,15 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_PrivateKeyCiphertextBlob { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_PublicKey { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> dtor_KeyPairSpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> dtor_KeyPairSpec { get; }
     _IGenerateDataKeyPairWithoutPlaintextResponse DowncastClone();
   }
   public class GenerateDataKeyPairWithoutPlaintextResponse : _IGenerateDataKeyPairWithoutPlaintextResponse {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> KeyPairSpec;
-    public GenerateDataKeyPairWithoutPlaintextResponse(Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> KeyPairSpec) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> KeyPairSpec;
+    public GenerateDataKeyPairWithoutPlaintextResponse(Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> KeyPairSpec) {
       this.PrivateKeyCiphertextBlob = PrivateKeyCiphertextBlob;
       this.PublicKey = PublicKey;
       this.KeyId = KeyId;
@@ -8253,7 +8251,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateDataKeyPairWithoutPlaintextResponse(PrivateKeyCiphertextBlob, PublicKey, KeyId, KeyPairSpec);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairWithoutPlaintextResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyPairWithoutPlaintextResponse;
       return oth != null && object.Equals(this.PrivateKeyCiphertextBlob, oth.PrivateKeyCiphertextBlob) && object.Equals(this.PublicKey, oth.PublicKey) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.KeyPairSpec, oth.KeyPairSpec);
     }
     public override int GetHashCode() {
@@ -8266,7 +8264,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairWithoutPlaintextResponse.GenerateDataKeyPairWithoutPlaintextResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateDataKeyPairWithoutPlaintextResponse.GenerateDataKeyPairWithoutPlaintextResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.PrivateKeyCiphertextBlob);
       s += ", ";
@@ -8278,15 +8276,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGenerateDataKeyPairWithoutPlaintextResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec>.Default());
+    private static readonly _IGenerateDataKeyPairWithoutPlaintextResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec>.Default());
     public static _IGenerateDataKeyPairWithoutPlaintextResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairWithoutPlaintextResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairWithoutPlaintextResponse>(ComAmazonawsKmsTypes_Compile.GenerateDataKeyPairWithoutPlaintextResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairWithoutPlaintextResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairWithoutPlaintextResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairWithoutPlaintextResponse>(Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyPairWithoutPlaintextResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairWithoutPlaintextResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGenerateDataKeyPairWithoutPlaintextResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> KeyPairSpec) {
+    public static _IGenerateDataKeyPairWithoutPlaintextResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> PrivateKeyCiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> KeyPairSpec) {
       return new GenerateDataKeyPairWithoutPlaintextResponse(PrivateKeyCiphertextBlob, PublicKey, KeyId, KeyPairSpec);
     }
     public bool is_GenerateDataKeyPairWithoutPlaintextResponse { get { return true; } }
@@ -8305,7 +8303,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeyPairSpec> dtor_KeyPairSpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeyPairSpec> dtor_KeyPairSpec {
       get {
         return this.KeyPairSpec;
       }
@@ -8317,7 +8315,7 @@ namespace ComAmazonawsKmsTypes_Compile {
     Dafny.ISequence<char> dtor_KeyId { get; }
     Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> dtor_EncryptionContext { get; }
     Wrappers_Compile._IOption<int> dtor_NumberOfBytes { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> dtor_KeySpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> dtor_KeySpec { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
     _IGenerateDataKeyRequest DowncastClone();
   }
@@ -8325,9 +8323,9 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Dafny.ISequence<char> KeyId;
     public readonly Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext;
     public readonly Wrappers_Compile._IOption<int> NumberOfBytes;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> KeySpec;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> KeySpec;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
-    public GenerateDataKeyRequest(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public GenerateDataKeyRequest(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       this.KeyId = KeyId;
       this.EncryptionContext = EncryptionContext;
       this.NumberOfBytes = NumberOfBytes;
@@ -8339,7 +8337,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateDataKeyRequest(KeyId, EncryptionContext, NumberOfBytes, KeySpec, GrantTokens);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateDataKeyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.EncryptionContext, oth.EncryptionContext) && object.Equals(this.NumberOfBytes, oth.NumberOfBytes) && object.Equals(this.KeySpec, oth.KeySpec) && object.Equals(this.GrantTokens, oth.GrantTokens);
     }
     public override int GetHashCode() {
@@ -8353,7 +8351,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateDataKeyRequest.GenerateDataKeyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateDataKeyRequest.GenerateDataKeyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -8367,15 +8365,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGenerateDataKeyRequest theDefault = create(Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<int>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IDataKeySpec>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
+    private static readonly _IGenerateDataKeyRequest theDefault = create(Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<int>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
     public static _IGenerateDataKeyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyRequest>(ComAmazonawsKmsTypes_Compile.GenerateDataKeyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyRequest>(Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGenerateDataKeyRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public static _IGenerateDataKeyRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       return new GenerateDataKeyRequest(KeyId, EncryptionContext, NumberOfBytes, KeySpec, GrantTokens);
     }
     public bool is_GenerateDataKeyRequest { get { return true; } }
@@ -8394,7 +8392,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.NumberOfBytes;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> dtor_KeySpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> dtor_KeySpec {
       get {
         return this.KeySpec;
       }
@@ -8427,7 +8425,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateDataKeyResponse(CiphertextBlob, Plaintext, KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateDataKeyResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyResponse;
       return oth != null && object.Equals(this.CiphertextBlob, oth.CiphertextBlob) && object.Equals(this.Plaintext, oth.Plaintext) && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -8439,7 +8437,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateDataKeyResponse.GenerateDataKeyResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateDataKeyResponse.GenerateDataKeyResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.CiphertextBlob);
       s += ", ";
@@ -8453,8 +8451,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGenerateDataKeyResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyResponse>(ComAmazonawsKmsTypes_Compile.GenerateDataKeyResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyResponse>(Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGenerateDataKeyResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Plaintext, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId) {
@@ -8482,7 +8480,7 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_GenerateDataKeyWithoutPlaintextRequest { get; }
     Dafny.ISequence<char> dtor_KeyId { get; }
     Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> dtor_EncryptionContext { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> dtor_KeySpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> dtor_KeySpec { get; }
     Wrappers_Compile._IOption<int> dtor_NumberOfBytes { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
     _IGenerateDataKeyWithoutPlaintextRequest DowncastClone();
@@ -8490,10 +8488,10 @@ namespace ComAmazonawsKmsTypes_Compile {
   public class GenerateDataKeyWithoutPlaintextRequest : _IGenerateDataKeyWithoutPlaintextRequest {
     public readonly Dafny.ISequence<char> KeyId;
     public readonly Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> KeySpec;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> KeySpec;
     public readonly Wrappers_Compile._IOption<int> NumberOfBytes;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
-    public GenerateDataKeyWithoutPlaintextRequest(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> KeySpec, Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public GenerateDataKeyWithoutPlaintextRequest(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> KeySpec, Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       this.KeyId = KeyId;
       this.EncryptionContext = EncryptionContext;
       this.KeySpec = KeySpec;
@@ -8505,7 +8503,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateDataKeyWithoutPlaintextRequest(KeyId, EncryptionContext, KeySpec, NumberOfBytes, GrantTokens);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateDataKeyWithoutPlaintextRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyWithoutPlaintextRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.EncryptionContext, oth.EncryptionContext) && object.Equals(this.KeySpec, oth.KeySpec) && object.Equals(this.NumberOfBytes, oth.NumberOfBytes) && object.Equals(this.GrantTokens, oth.GrantTokens);
     }
     public override int GetHashCode() {
@@ -8519,7 +8517,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateDataKeyWithoutPlaintextRequest.GenerateDataKeyWithoutPlaintextRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateDataKeyWithoutPlaintextRequest.GenerateDataKeyWithoutPlaintextRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -8533,15 +8531,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGenerateDataKeyWithoutPlaintextRequest theDefault = create(Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IDataKeySpec>.Default(), Wrappers_Compile.Option<int>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
+    private static readonly _IGenerateDataKeyWithoutPlaintextRequest theDefault = create(Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec>.Default(), Wrappers_Compile.Option<int>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
     public static _IGenerateDataKeyWithoutPlaintextRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyWithoutPlaintextRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyWithoutPlaintextRequest>(ComAmazonawsKmsTypes_Compile.GenerateDataKeyWithoutPlaintextRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyWithoutPlaintextRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyWithoutPlaintextRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyWithoutPlaintextRequest>(Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyWithoutPlaintextRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyWithoutPlaintextRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGenerateDataKeyWithoutPlaintextRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> KeySpec, Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public static _IGenerateDataKeyWithoutPlaintextRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContext, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> KeySpec, Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       return new GenerateDataKeyWithoutPlaintextRequest(KeyId, EncryptionContext, KeySpec, NumberOfBytes, GrantTokens);
     }
     public bool is_GenerateDataKeyWithoutPlaintextRequest { get { return true; } }
@@ -8555,7 +8553,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.EncryptionContext;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IDataKeySpec> dtor_KeySpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec> dtor_KeySpec {
       get {
         return this.KeySpec;
       }
@@ -8590,7 +8588,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateDataKeyWithoutPlaintextResponse(CiphertextBlob, KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateDataKeyWithoutPlaintextResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyWithoutPlaintextResponse;
       return oth != null && object.Equals(this.CiphertextBlob, oth.CiphertextBlob) && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -8601,7 +8599,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateDataKeyWithoutPlaintextResponse.GenerateDataKeyWithoutPlaintextResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateDataKeyWithoutPlaintextResponse.GenerateDataKeyWithoutPlaintextResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.CiphertextBlob);
       s += ", ";
@@ -8613,8 +8611,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGenerateDataKeyWithoutPlaintextResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyWithoutPlaintextResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyWithoutPlaintextResponse>(ComAmazonawsKmsTypes_Compile.GenerateDataKeyWithoutPlaintextResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyWithoutPlaintextResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyWithoutPlaintextResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyWithoutPlaintextResponse>(Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyWithoutPlaintextResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyWithoutPlaintextResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGenerateDataKeyWithoutPlaintextResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId) {
@@ -8651,7 +8649,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateRandomRequest(NumberOfBytes, CustomKeyStoreId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateRandomRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateRandomRequest;
       return oth != null && object.Equals(this.NumberOfBytes, oth.NumberOfBytes) && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId);
     }
     public override int GetHashCode() {
@@ -8662,7 +8660,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateRandomRequest.GenerateRandomRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateRandomRequest.GenerateRandomRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.NumberOfBytes);
       s += ", ";
@@ -8674,8 +8672,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGenerateRandomRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateRandomRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateRandomRequest>(ComAmazonawsKmsTypes_Compile.GenerateRandomRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateRandomRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateRandomRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateRandomRequest>(Dafny.Com.Amazonaws.Kms.Types.GenerateRandomRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateRandomRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGenerateRandomRequest create(Wrappers_Compile._IOption<int> NumberOfBytes, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId) {
@@ -8709,7 +8707,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GenerateRandomResponse(Plaintext);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GenerateRandomResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GenerateRandomResponse;
       return oth != null && object.Equals(this.Plaintext, oth.Plaintext);
     }
     public override int GetHashCode() {
@@ -8719,7 +8717,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GenerateRandomResponse.GenerateRandomResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GenerateRandomResponse.GenerateRandomResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.Plaintext);
       s += ")";
@@ -8729,8 +8727,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGenerateRandomResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateRandomResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateRandomResponse>(ComAmazonawsKmsTypes_Compile.GenerateRandomResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGenerateRandomResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateRandomResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateRandomResponse>(Dafny.Com.Amazonaws.Kms.Types.GenerateRandomResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGenerateRandomResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGenerateRandomResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> Plaintext) {
@@ -8762,7 +8760,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GetKeyPolicyRequest(KeyId, PolicyName);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GetKeyPolicyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GetKeyPolicyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.PolicyName, oth.PolicyName);
     }
     public override int GetHashCode() {
@@ -8773,7 +8771,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GetKeyPolicyRequest.GetKeyPolicyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GetKeyPolicyRequest.GetKeyPolicyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -8785,8 +8783,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGetKeyPolicyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyPolicyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyPolicyRequest>(ComAmazonawsKmsTypes_Compile.GetKeyPolicyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyPolicyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyPolicyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyPolicyRequest>(Dafny.Com.Amazonaws.Kms.Types.GetKeyPolicyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyPolicyRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGetKeyPolicyRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> PolicyName) {
@@ -8820,7 +8818,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GetKeyPolicyResponse(Policy);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GetKeyPolicyResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GetKeyPolicyResponse;
       return oth != null && object.Equals(this.Policy, oth.Policy);
     }
     public override int GetHashCode() {
@@ -8830,7 +8828,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GetKeyPolicyResponse.GetKeyPolicyResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GetKeyPolicyResponse.GetKeyPolicyResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.Policy);
       s += ")";
@@ -8840,8 +8838,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGetKeyPolicyResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyPolicyResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyPolicyResponse>(ComAmazonawsKmsTypes_Compile.GetKeyPolicyResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyPolicyResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyPolicyResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyPolicyResponse>(Dafny.Com.Amazonaws.Kms.Types.GetKeyPolicyResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyPolicyResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGetKeyPolicyResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy) {
@@ -8870,7 +8868,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GetKeyRotationStatusRequest(KeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GetKeyRotationStatusRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GetKeyRotationStatusRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId);
     }
     public override int GetHashCode() {
@@ -8880,7 +8878,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GetKeyRotationStatusRequest.GetKeyRotationStatusRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GetKeyRotationStatusRequest.GetKeyRotationStatusRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ")";
@@ -8890,8 +8888,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGetKeyRotationStatusRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyRotationStatusRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyRotationStatusRequest>(ComAmazonawsKmsTypes_Compile.GetKeyRotationStatusRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyRotationStatusRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyRotationStatusRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyRotationStatusRequest>(Dafny.Com.Amazonaws.Kms.Types.GetKeyRotationStatusRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyRotationStatusRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGetKeyRotationStatusRequest create(Dafny.ISequence<char> KeyId) {
@@ -8920,7 +8918,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GetKeyRotationStatusResponse(KeyRotationEnabled);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GetKeyRotationStatusResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GetKeyRotationStatusResponse;
       return oth != null && object.Equals(this.KeyRotationEnabled, oth.KeyRotationEnabled);
     }
     public override int GetHashCode() {
@@ -8930,7 +8928,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GetKeyRotationStatusResponse.GetKeyRotationStatusResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GetKeyRotationStatusResponse.GetKeyRotationStatusResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyRotationEnabled);
       s += ")";
@@ -8940,8 +8938,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGetKeyRotationStatusResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyRotationStatusResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyRotationStatusResponse>(ComAmazonawsKmsTypes_Compile.GetKeyRotationStatusResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetKeyRotationStatusResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyRotationStatusResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyRotationStatusResponse>(Dafny.Com.Amazonaws.Kms.Types.GetKeyRotationStatusResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetKeyRotationStatusResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGetKeyRotationStatusResponse create(Wrappers_Compile._IOption<bool> KeyRotationEnabled) {
@@ -8958,15 +8956,15 @@ namespace ComAmazonawsKmsTypes_Compile {
   public interface _IGetParametersForImportRequest {
     bool is_GetParametersForImportRequest { get; }
     Dafny.ISequence<char> dtor_KeyId { get; }
-    ComAmazonawsKmsTypes_Compile._IAlgorithmSpec dtor_WrappingAlgorithm { get; }
-    ComAmazonawsKmsTypes_Compile._IWrappingKeySpec dtor_WrappingKeySpec { get; }
+    Dafny.Com.Amazonaws.Kms.Types._IAlgorithmSpec dtor_WrappingAlgorithm { get; }
+    Dafny.Com.Amazonaws.Kms.Types._IWrappingKeySpec dtor_WrappingKeySpec { get; }
     _IGetParametersForImportRequest DowncastClone();
   }
   public class GetParametersForImportRequest : _IGetParametersForImportRequest {
     public readonly Dafny.ISequence<char> KeyId;
-    public readonly ComAmazonawsKmsTypes_Compile._IAlgorithmSpec WrappingAlgorithm;
-    public readonly ComAmazonawsKmsTypes_Compile._IWrappingKeySpec WrappingKeySpec;
-    public GetParametersForImportRequest(Dafny.ISequence<char> KeyId, ComAmazonawsKmsTypes_Compile._IAlgorithmSpec WrappingAlgorithm, ComAmazonawsKmsTypes_Compile._IWrappingKeySpec WrappingKeySpec) {
+    public readonly Dafny.Com.Amazonaws.Kms.Types._IAlgorithmSpec WrappingAlgorithm;
+    public readonly Dafny.Com.Amazonaws.Kms.Types._IWrappingKeySpec WrappingKeySpec;
+    public GetParametersForImportRequest(Dafny.ISequence<char> KeyId, Dafny.Com.Amazonaws.Kms.Types._IAlgorithmSpec WrappingAlgorithm, Dafny.Com.Amazonaws.Kms.Types._IWrappingKeySpec WrappingKeySpec) {
       this.KeyId = KeyId;
       this.WrappingAlgorithm = WrappingAlgorithm;
       this.WrappingKeySpec = WrappingKeySpec;
@@ -8976,7 +8974,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GetParametersForImportRequest(KeyId, WrappingAlgorithm, WrappingKeySpec);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GetParametersForImportRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GetParametersForImportRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.WrappingAlgorithm, oth.WrappingAlgorithm) && object.Equals(this.WrappingKeySpec, oth.WrappingKeySpec);
     }
     public override int GetHashCode() {
@@ -8988,7 +8986,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GetParametersForImportRequest.GetParametersForImportRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GetParametersForImportRequest.GetParametersForImportRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -8998,15 +8996,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGetParametersForImportRequest theDefault = create(Dafny.Sequence<char>.Empty, ComAmazonawsKmsTypes_Compile.AlgorithmSpec.Default(), ComAmazonawsKmsTypes_Compile.WrappingKeySpec.Default());
+    private static readonly _IGetParametersForImportRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Com.Amazonaws.Kms.Types.AlgorithmSpec.Default(), Dafny.Com.Amazonaws.Kms.Types.WrappingKeySpec.Default());
     public static _IGetParametersForImportRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetParametersForImportRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetParametersForImportRequest>(ComAmazonawsKmsTypes_Compile.GetParametersForImportRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetParametersForImportRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetParametersForImportRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetParametersForImportRequest>(Dafny.Com.Amazonaws.Kms.Types.GetParametersForImportRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetParametersForImportRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGetParametersForImportRequest create(Dafny.ISequence<char> KeyId, ComAmazonawsKmsTypes_Compile._IAlgorithmSpec WrappingAlgorithm, ComAmazonawsKmsTypes_Compile._IWrappingKeySpec WrappingKeySpec) {
+    public static _IGetParametersForImportRequest create(Dafny.ISequence<char> KeyId, Dafny.Com.Amazonaws.Kms.Types._IAlgorithmSpec WrappingAlgorithm, Dafny.Com.Amazonaws.Kms.Types._IWrappingKeySpec WrappingKeySpec) {
       return new GetParametersForImportRequest(KeyId, WrappingAlgorithm, WrappingKeySpec);
     }
     public bool is_GetParametersForImportRequest { get { return true; } }
@@ -9015,12 +9013,12 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public ComAmazonawsKmsTypes_Compile._IAlgorithmSpec dtor_WrappingAlgorithm {
+    public Dafny.Com.Amazonaws.Kms.Types._IAlgorithmSpec dtor_WrappingAlgorithm {
       get {
         return this.WrappingAlgorithm;
       }
     }
-    public ComAmazonawsKmsTypes_Compile._IWrappingKeySpec dtor_WrappingKeySpec {
+    public Dafny.Com.Amazonaws.Kms.Types._IWrappingKeySpec dtor_WrappingKeySpec {
       get {
         return this.WrappingKeySpec;
       }
@@ -9051,7 +9049,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GetParametersForImportResponse(KeyId, ImportToken, PublicKey, ParametersValidTo);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GetParametersForImportResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GetParametersForImportResponse;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.ImportToken, oth.ImportToken) && object.Equals(this.PublicKey, oth.PublicKey) && object.Equals(this.ParametersValidTo, oth.ParametersValidTo);
     }
     public override int GetHashCode() {
@@ -9064,7 +9062,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GetParametersForImportResponse.GetParametersForImportResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GetParametersForImportResponse.GetParametersForImportResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -9080,8 +9078,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGetParametersForImportResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetParametersForImportResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetParametersForImportResponse>(ComAmazonawsKmsTypes_Compile.GetParametersForImportResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetParametersForImportResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetParametersForImportResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetParametersForImportResponse>(Dafny.Com.Amazonaws.Kms.Types.GetParametersForImportResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetParametersForImportResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGetParametersForImportResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> ImportToken, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.ISequence<char>> ParametersValidTo) {
@@ -9128,7 +9126,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GetPublicKeyRequest(KeyId, GrantTokens);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GetPublicKeyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GetPublicKeyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.GrantTokens, oth.GrantTokens);
     }
     public override int GetHashCode() {
@@ -9139,7 +9137,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GetPublicKeyRequest.GetPublicKeyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GetPublicKeyRequest.GetPublicKeyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -9151,8 +9149,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGetPublicKeyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetPublicKeyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetPublicKeyRequest>(ComAmazonawsKmsTypes_Compile.GetPublicKeyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetPublicKeyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetPublicKeyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetPublicKeyRequest>(Dafny.Com.Amazonaws.Kms.Types.GetPublicKeyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetPublicKeyRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGetPublicKeyRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
@@ -9175,22 +9173,22 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_GetPublicKeyResponse { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_PublicKey { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> dtor_KeySpec { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> dtor_KeyUsage { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> dtor_EncryptionAlgorithms { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> dtor_SigningAlgorithms { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> dtor_KeySpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> dtor_KeyUsage { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> dtor_EncryptionAlgorithms { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> dtor_SigningAlgorithms { get; }
     _IGetPublicKeyResponse DowncastClone();
   }
   public class GetPublicKeyResponse : _IGetPublicKeyResponse {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> EncryptionAlgorithms;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> SigningAlgorithms;
-    public GetPublicKeyResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> EncryptionAlgorithms, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> SigningAlgorithms) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> EncryptionAlgorithms;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> SigningAlgorithms;
+    public GetPublicKeyResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> EncryptionAlgorithms, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> SigningAlgorithms) {
       this.KeyId = KeyId;
       this.PublicKey = PublicKey;
       this.CustomerMasterKeySpec = CustomerMasterKeySpec;
@@ -9204,7 +9202,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GetPublicKeyResponse(KeyId, PublicKey, CustomerMasterKeySpec, KeySpec, KeyUsage, EncryptionAlgorithms, SigningAlgorithms);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GetPublicKeyResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GetPublicKeyResponse;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.PublicKey, oth.PublicKey) && object.Equals(this.CustomerMasterKeySpec, oth.CustomerMasterKeySpec) && object.Equals(this.KeySpec, oth.KeySpec) && object.Equals(this.KeyUsage, oth.KeyUsage) && object.Equals(this.EncryptionAlgorithms, oth.EncryptionAlgorithms) && object.Equals(this.SigningAlgorithms, oth.SigningAlgorithms);
     }
     public override int GetHashCode() {
@@ -9220,7 +9218,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GetPublicKeyResponse.GetPublicKeyResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GetPublicKeyResponse.GetPublicKeyResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -9238,15 +9236,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGetPublicKeyResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeySpec>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyUsageType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>>.Default());
+    private static readonly _IGetPublicKeyResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeySpec>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>>.Default());
     public static _IGetPublicKeyResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetPublicKeyResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetPublicKeyResponse>(ComAmazonawsKmsTypes_Compile.GetPublicKeyResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGetPublicKeyResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetPublicKeyResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetPublicKeyResponse>(Dafny.Com.Amazonaws.Kms.Types.GetPublicKeyResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGetPublicKeyResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGetPublicKeyResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> EncryptionAlgorithms, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> SigningAlgorithms) {
+    public static _IGetPublicKeyResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> PublicKey, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> EncryptionAlgorithms, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> SigningAlgorithms) {
       return new GetPublicKeyResponse(KeyId, PublicKey, CustomerMasterKeySpec, KeySpec, KeyUsage, EncryptionAlgorithms, SigningAlgorithms);
     }
     public bool is_GetPublicKeyResponse { get { return true; } }
@@ -9260,27 +9258,27 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.PublicKey;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec {
       get {
         return this.CustomerMasterKeySpec;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> dtor_KeySpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> dtor_KeySpec {
       get {
         return this.KeySpec;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> dtor_KeyUsage {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> dtor_KeyUsage {
       get {
         return this.KeyUsage;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> dtor_EncryptionAlgorithms {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> dtor_EncryptionAlgorithms {
       get {
         return this.EncryptionAlgorithms;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> dtor_SigningAlgorithms {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> dtor_SigningAlgorithms {
       get {
         return this.SigningAlgorithms;
       }
@@ -9305,7 +9303,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantConstraints(EncryptionContextSubset, EncryptionContextEquals);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantConstraints;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantConstraints;
       return oth != null && object.Equals(this.EncryptionContextSubset, oth.EncryptionContextSubset) && object.Equals(this.EncryptionContextEquals, oth.EncryptionContextEquals);
     }
     public override int GetHashCode() {
@@ -9316,7 +9314,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantConstraints.GrantConstraints";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantConstraints.GrantConstraints";
       s += "(";
       s += Dafny.Helpers.ToString(this.EncryptionContextSubset);
       s += ", ";
@@ -9328,8 +9326,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGrantConstraints Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantConstraints> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantConstraints>(ComAmazonawsKmsTypes_Compile.GrantConstraints.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantConstraints> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints>(Dafny.Com.Amazonaws.Kms.Types.GrantConstraints.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGrantConstraints create(Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContextSubset, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> EncryptionContextEquals) {
@@ -9364,8 +9362,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_GranteePrincipal { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_RetiringPrincipal { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_IssuingAccount { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation>> dtor_Operations { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> dtor_Constraints { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation>> dtor_Operations { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> dtor_Constraints { get; }
     _IGrantListEntry DowncastClone();
   }
   public class GrantListEntry : _IGrantListEntry {
@@ -9376,9 +9374,9 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> GranteePrincipal;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> IssuingAccount;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation>> Operations;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> Constraints;
-    public GrantListEntry(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantId, Wrappers_Compile._IOption<Dafny.ISequence<char>> Name, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> GranteePrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> IssuingAccount, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation>> Operations, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> Constraints) {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation>> Operations;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> Constraints;
+    public GrantListEntry(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantId, Wrappers_Compile._IOption<Dafny.ISequence<char>> Name, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> GranteePrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> IssuingAccount, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation>> Operations, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> Constraints) {
       this.KeyId = KeyId;
       this.GrantId = GrantId;
       this.Name = Name;
@@ -9394,7 +9392,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantListEntry(KeyId, GrantId, Name, CreationDate, GranteePrincipal, RetiringPrincipal, IssuingAccount, Operations, Constraints);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantListEntry;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantListEntry;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.GrantId, oth.GrantId) && object.Equals(this.Name, oth.Name) && object.Equals(this.CreationDate, oth.CreationDate) && object.Equals(this.GranteePrincipal, oth.GranteePrincipal) && object.Equals(this.RetiringPrincipal, oth.RetiringPrincipal) && object.Equals(this.IssuingAccount, oth.IssuingAccount) && object.Equals(this.Operations, oth.Operations) && object.Equals(this.Constraints, oth.Constraints);
     }
     public override int GetHashCode() {
@@ -9412,7 +9410,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantListEntry.GrantListEntry";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantListEntry.GrantListEntry";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -9434,15 +9432,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IGrantListEntry theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IGrantConstraints>.Default());
+    private static readonly _IGrantListEntry theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints>.Default());
     public static _IGrantListEntry Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantListEntry> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantListEntry>(ComAmazonawsKmsTypes_Compile.GrantListEntry.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantListEntry> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry>(Dafny.Com.Amazonaws.Kms.Types.GrantListEntry.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IGrantListEntry create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantId, Wrappers_Compile._IOption<Dafny.ISequence<char>> Name, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> GranteePrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> IssuingAccount, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation>> Operations, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> Constraints) {
+    public static _IGrantListEntry create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantId, Wrappers_Compile._IOption<Dafny.ISequence<char>> Name, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> GranteePrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> RetiringPrincipal, Wrappers_Compile._IOption<Dafny.ISequence<char>> IssuingAccount, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation>> Operations, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> Constraints) {
       return new GrantListEntry(KeyId, GrantId, Name, CreationDate, GranteePrincipal, RetiringPrincipal, IssuingAccount, Operations, Constraints);
     }
     public bool is_GrantListEntry { get { return true; } }
@@ -9481,12 +9479,12 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.IssuingAccount;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantOperation>> dtor_Operations {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation>> dtor_Operations {
       get {
         return this.Operations;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IGrantConstraints> dtor_Constraints {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IGrantConstraints> dtor_Constraints {
       get {
         return this.Constraints;
       }
@@ -9523,8 +9521,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IGrantOperation Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantOperation> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantOperation>(ComAmazonawsKmsTypes_Compile.GrantOperation.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IGrantOperation> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation>(Dafny.Com.Amazonaws.Kms.Types.GrantOperation.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IGrantOperation> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IGrantOperation create_Decrypt() {
@@ -9611,7 +9609,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_Decrypt();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_Decrypt;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_Decrypt;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9620,7 +9618,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.Decrypt";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.Decrypt";
       return s;
     }
   }
@@ -9632,7 +9630,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_Encrypt();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_Encrypt;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_Encrypt;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9641,7 +9639,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.Encrypt";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.Encrypt";
       return s;
     }
   }
@@ -9653,7 +9651,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_GenerateDataKey();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_GenerateDataKey;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_GenerateDataKey;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9662,7 +9660,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.GenerateDataKey";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.GenerateDataKey";
       return s;
     }
   }
@@ -9674,7 +9672,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_GenerateDataKeyWithoutPlaintext();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_GenerateDataKeyWithoutPlaintext;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_GenerateDataKeyWithoutPlaintext;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9683,7 +9681,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.GenerateDataKeyWithoutPlaintext";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.GenerateDataKeyWithoutPlaintext";
       return s;
     }
   }
@@ -9695,7 +9693,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_ReEncryptFrom();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_ReEncryptFrom;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_ReEncryptFrom;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9704,7 +9702,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.ReEncryptFrom";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.ReEncryptFrom";
       return s;
     }
   }
@@ -9716,7 +9714,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_ReEncryptTo();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_ReEncryptTo;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_ReEncryptTo;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9725,7 +9723,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.ReEncryptTo";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.ReEncryptTo";
       return s;
     }
   }
@@ -9737,7 +9735,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_Sign();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_Sign;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_Sign;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9746,7 +9744,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.Sign";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.Sign";
       return s;
     }
   }
@@ -9758,7 +9756,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_Verify();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_Verify;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_Verify;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9767,7 +9765,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.Verify";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.Verify";
       return s;
     }
   }
@@ -9779,7 +9777,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_GetPublicKey();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_GetPublicKey;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_GetPublicKey;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9788,7 +9786,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.GetPublicKey";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.GetPublicKey";
       return s;
     }
   }
@@ -9800,7 +9798,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_CreateGrant();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_CreateGrant;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_CreateGrant;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9809,7 +9807,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.CreateGrant";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.CreateGrant";
       return s;
     }
   }
@@ -9821,7 +9819,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_RetireGrant();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_RetireGrant;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_RetireGrant;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9830,7 +9828,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.RetireGrant";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.RetireGrant";
       return s;
     }
   }
@@ -9842,7 +9840,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_DescribeKey();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_DescribeKey;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_DescribeKey;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9851,7 +9849,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.DescribeKey";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.DescribeKey";
       return s;
     }
   }
@@ -9863,7 +9861,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_GenerateDataKeyPair();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_GenerateDataKeyPair;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_GenerateDataKeyPair;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9872,7 +9870,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.GenerateDataKeyPair";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.GenerateDataKeyPair";
       return s;
     }
   }
@@ -9884,7 +9882,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new GrantOperation_GenerateDataKeyPairWithoutPlaintext();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.GrantOperation_GenerateDataKeyPairWithoutPlaintext;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.GrantOperation_GenerateDataKeyPairWithoutPlaintext;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -9893,7 +9891,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.GrantOperation.GenerateDataKeyPairWithoutPlaintext";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.GrantOperation.GenerateDataKeyPairWithoutPlaintext";
       return s;
     }
   }
@@ -9918,7 +9916,7 @@ namespace ComAmazonawsKmsTypes_Compile {
     Dafny.ISequence<byte> dtor_ImportToken { get; }
     Dafny.ISequence<byte> dtor_EncryptedKeyMaterial { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_ValidTo { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> dtor_ExpirationModel { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> dtor_ExpirationModel { get; }
     _IImportKeyMaterialRequest DowncastClone();
   }
   public class ImportKeyMaterialRequest : _IImportKeyMaterialRequest {
@@ -9926,8 +9924,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Dafny.ISequence<byte> ImportToken;
     public readonly Dafny.ISequence<byte> EncryptedKeyMaterial;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> ExpirationModel;
-    public ImportKeyMaterialRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> ImportToken, Dafny.ISequence<byte> EncryptedKeyMaterial, Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> ExpirationModel) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> ExpirationModel;
+    public ImportKeyMaterialRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> ImportToken, Dafny.ISequence<byte> EncryptedKeyMaterial, Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> ExpirationModel) {
       this.KeyId = KeyId;
       this.ImportToken = ImportToken;
       this.EncryptedKeyMaterial = EncryptedKeyMaterial;
@@ -9939,7 +9937,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ImportKeyMaterialRequest(KeyId, ImportToken, EncryptedKeyMaterial, ValidTo, ExpirationModel);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ImportKeyMaterialRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ImportKeyMaterialRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.ImportToken, oth.ImportToken) && object.Equals(this.EncryptedKeyMaterial, oth.EncryptedKeyMaterial) && object.Equals(this.ValidTo, oth.ValidTo) && object.Equals(this.ExpirationModel, oth.ExpirationModel);
     }
     public override int GetHashCode() {
@@ -9953,7 +9951,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ImportKeyMaterialRequest.ImportKeyMaterialRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ImportKeyMaterialRequest.ImportKeyMaterialRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -9967,15 +9965,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IImportKeyMaterialRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<byte>.Empty, Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IExpirationModelType>.Default());
+    private static readonly _IImportKeyMaterialRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<byte>.Empty, Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType>.Default());
     public static _IImportKeyMaterialRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IImportKeyMaterialRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IImportKeyMaterialRequest>(ComAmazonawsKmsTypes_Compile.ImportKeyMaterialRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IImportKeyMaterialRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IImportKeyMaterialRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IImportKeyMaterialRequest>(Dafny.Com.Amazonaws.Kms.Types.ImportKeyMaterialRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IImportKeyMaterialRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IImportKeyMaterialRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> ImportToken, Dafny.ISequence<byte> EncryptedKeyMaterial, Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> ExpirationModel) {
+    public static _IImportKeyMaterialRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> ImportToken, Dafny.ISequence<byte> EncryptedKeyMaterial, Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> ExpirationModel) {
       return new ImportKeyMaterialRequest(KeyId, ImportToken, EncryptedKeyMaterial, ValidTo, ExpirationModel);
     }
     public bool is_ImportKeyMaterialRequest { get { return true; } }
@@ -9999,7 +9997,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.ValidTo;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> dtor_ExpirationModel {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> dtor_ExpirationModel {
       get {
         return this.ExpirationModel;
       }
@@ -10018,7 +10016,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ImportKeyMaterialResponse();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ImportKeyMaterialResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ImportKeyMaterialResponse;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10027,15 +10025,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ImportKeyMaterialResponse.ImportKeyMaterialResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ImportKeyMaterialResponse.ImportKeyMaterialResponse";
       return s;
     }
     private static readonly _IImportKeyMaterialResponse theDefault = create();
     public static _IImportKeyMaterialResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IImportKeyMaterialResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IImportKeyMaterialResponse>(ComAmazonawsKmsTypes_Compile.ImportKeyMaterialResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IImportKeyMaterialResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IImportKeyMaterialResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IImportKeyMaterialResponse>(Dafny.Com.Amazonaws.Kms.Types.ImportKeyMaterialResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IImportKeyMaterialResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IImportKeyMaterialResponse create() {
@@ -10074,7 +10072,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyListEntry(KeyId, KeyArn);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyListEntry;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyListEntry;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.KeyArn, oth.KeyArn);
     }
     public override int GetHashCode() {
@@ -10085,7 +10083,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyListEntry.KeyListEntry";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyListEntry.KeyListEntry";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -10097,8 +10095,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IKeyListEntry Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyListEntry> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyListEntry>(ComAmazonawsKmsTypes_Compile.KeyListEntry.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyListEntry> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyListEntry> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyListEntry>(Dafny.Com.Amazonaws.Kms.Types.KeyListEntry.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyListEntry> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IKeyListEntry create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyArn) {
@@ -10118,52 +10116,52 @@ namespace ComAmazonawsKmsTypes_Compile {
   }
 
   public interface IKeyManagementServiceClient {
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._ICancelKeyDeletionResponse, ComAmazonawsKmsTypes_Compile._IError> CancelKeyDeletion(ComAmazonawsKmsTypes_Compile._ICancelKeyDeletionRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IConnectCustomKeyStoreResponse, ComAmazonawsKmsTypes_Compile._IError> ConnectCustomKeyStore(ComAmazonawsKmsTypes_Compile._IConnectCustomKeyStoreRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> CreateAlias(ComAmazonawsKmsTypes_Compile._ICreateAliasRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._ICreateCustomKeyStoreResponse, ComAmazonawsKmsTypes_Compile._IError> CreateCustomKeyStore(ComAmazonawsKmsTypes_Compile._ICreateCustomKeyStoreRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._ICreateGrantResponse, ComAmazonawsKmsTypes_Compile._IError> CreateGrant(ComAmazonawsKmsTypes_Compile._ICreateGrantRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._ICreateKeyResponse, ComAmazonawsKmsTypes_Compile._IError> CreateKey(ComAmazonawsKmsTypes_Compile._ICreateKeyRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IDecryptResponse, ComAmazonawsKmsTypes_Compile._IError> Decrypt(ComAmazonawsKmsTypes_Compile._IDecryptRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> DeleteAlias(ComAmazonawsKmsTypes_Compile._IDeleteAliasRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IDeleteCustomKeyStoreResponse, ComAmazonawsKmsTypes_Compile._IError> DeleteCustomKeyStore(ComAmazonawsKmsTypes_Compile._IDeleteCustomKeyStoreRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> DeleteImportedKeyMaterial(ComAmazonawsKmsTypes_Compile._IDeleteImportedKeyMaterialRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IDescribeCustomKeyStoresResponse, ComAmazonawsKmsTypes_Compile._IError> DescribeCustomKeyStores(ComAmazonawsKmsTypes_Compile._IDescribeCustomKeyStoresRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IDescribeKeyResponse, ComAmazonawsKmsTypes_Compile._IError> DescribeKey(ComAmazonawsKmsTypes_Compile._IDescribeKeyRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> DisableKey(ComAmazonawsKmsTypes_Compile._IDisableKeyRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> DisableKeyRotation(ComAmazonawsKmsTypes_Compile._IDisableKeyRotationRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IDisconnectCustomKeyStoreResponse, ComAmazonawsKmsTypes_Compile._IError> DisconnectCustomKeyStore(ComAmazonawsKmsTypes_Compile._IDisconnectCustomKeyStoreRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> EnableKey(ComAmazonawsKmsTypes_Compile._IEnableKeyRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> EnableKeyRotation(ComAmazonawsKmsTypes_Compile._IEnableKeyRotationRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IEncryptResponse, ComAmazonawsKmsTypes_Compile._IError> Encrypt(ComAmazonawsKmsTypes_Compile._IEncryptRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyResponse, ComAmazonawsKmsTypes_Compile._IError> GenerateDataKey(ComAmazonawsKmsTypes_Compile._IGenerateDataKeyRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairResponse, ComAmazonawsKmsTypes_Compile._IError> GenerateDataKeyPair(ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairWithoutPlaintextResponse, ComAmazonawsKmsTypes_Compile._IError> GenerateDataKeyPairWithoutPlaintext(ComAmazonawsKmsTypes_Compile._IGenerateDataKeyPairWithoutPlaintextRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyWithoutPlaintextResponse, ComAmazonawsKmsTypes_Compile._IError> GenerateDataKeyWithoutPlaintext(ComAmazonawsKmsTypes_Compile._IGenerateDataKeyWithoutPlaintextRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGenerateRandomResponse, ComAmazonawsKmsTypes_Compile._IError> GenerateRandom(ComAmazonawsKmsTypes_Compile._IGenerateRandomRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGetKeyPolicyResponse, ComAmazonawsKmsTypes_Compile._IError> GetKeyPolicy(ComAmazonawsKmsTypes_Compile._IGetKeyPolicyRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGetKeyRotationStatusResponse, ComAmazonawsKmsTypes_Compile._IError> GetKeyRotationStatus(ComAmazonawsKmsTypes_Compile._IGetKeyRotationStatusRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGetParametersForImportResponse, ComAmazonawsKmsTypes_Compile._IError> GetParametersForImport(ComAmazonawsKmsTypes_Compile._IGetParametersForImportRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGetPublicKeyResponse, ComAmazonawsKmsTypes_Compile._IError> GetPublicKey(ComAmazonawsKmsTypes_Compile._IGetPublicKeyRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IImportKeyMaterialResponse, ComAmazonawsKmsTypes_Compile._IError> ImportKeyMaterial(ComAmazonawsKmsTypes_Compile._IImportKeyMaterialRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IListAliasesResponse, ComAmazonawsKmsTypes_Compile._IError> ListAliases(ComAmazonawsKmsTypes_Compile._IListAliasesRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IListGrantsResponse, ComAmazonawsKmsTypes_Compile._IError> ListGrants(ComAmazonawsKmsTypes_Compile._IListGrantsRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IListKeyPoliciesResponse, ComAmazonawsKmsTypes_Compile._IError> ListKeyPolicies(ComAmazonawsKmsTypes_Compile._IListKeyPoliciesRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IListResourceTagsResponse, ComAmazonawsKmsTypes_Compile._IError> ListResourceTags(ComAmazonawsKmsTypes_Compile._IListResourceTagsRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> PutKeyPolicy(ComAmazonawsKmsTypes_Compile._IPutKeyPolicyRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IReEncryptResponse, ComAmazonawsKmsTypes_Compile._IError> ReEncrypt(ComAmazonawsKmsTypes_Compile._IReEncryptRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IReplicateKeyResponse, ComAmazonawsKmsTypes_Compile._IError> ReplicateKey(ComAmazonawsKmsTypes_Compile._IReplicateKeyRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> RetireGrant(ComAmazonawsKmsTypes_Compile._IRetireGrantRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> RevokeGrant(ComAmazonawsKmsTypes_Compile._IRevokeGrantRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IScheduleKeyDeletionResponse, ComAmazonawsKmsTypes_Compile._IError> ScheduleKeyDeletion(ComAmazonawsKmsTypes_Compile._IScheduleKeyDeletionRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._ISignResponse, ComAmazonawsKmsTypes_Compile._IError> Sign(ComAmazonawsKmsTypes_Compile._ISignRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> TagResource(ComAmazonawsKmsTypes_Compile._ITagResourceRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> UntagResource(ComAmazonawsKmsTypes_Compile._IUntagResourceRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> UpdateAlias(ComAmazonawsKmsTypes_Compile._IUpdateAliasRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IUpdateCustomKeyStoreResponse, ComAmazonawsKmsTypes_Compile._IError> UpdateCustomKeyStore(ComAmazonawsKmsTypes_Compile._IUpdateCustomKeyStoreRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> UpdateKeyDescription(ComAmazonawsKmsTypes_Compile._IUpdateKeyDescriptionRequest input);
-    Wrappers_Compile._IResult<_System._ITuple0, ComAmazonawsKmsTypes_Compile._IError> UpdatePrimaryRegion(ComAmazonawsKmsTypes_Compile._IUpdatePrimaryRegionRequest input);
-    Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IVerifyResponse, ComAmazonawsKmsTypes_Compile._IError> Verify(ComAmazonawsKmsTypes_Compile._IVerifyRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._ICancelKeyDeletionResponse, Dafny.Com.Amazonaws.Kms.Types._IError> CancelKeyDeletion(Dafny.Com.Amazonaws.Kms.Types._ICancelKeyDeletionRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IConnectCustomKeyStoreResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ConnectCustomKeyStore(Dafny.Com.Amazonaws.Kms.Types._IConnectCustomKeyStoreRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> CreateAlias(Dafny.Com.Amazonaws.Kms.Types._ICreateAliasRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._ICreateCustomKeyStoreResponse, Dafny.Com.Amazonaws.Kms.Types._IError> CreateCustomKeyStore(Dafny.Com.Amazonaws.Kms.Types._ICreateCustomKeyStoreRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._ICreateGrantResponse, Dafny.Com.Amazonaws.Kms.Types._IError> CreateGrant(Dafny.Com.Amazonaws.Kms.Types._ICreateGrantRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._ICreateKeyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> CreateKey(Dafny.Com.Amazonaws.Kms.Types._ICreateKeyRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IDecryptResponse, Dafny.Com.Amazonaws.Kms.Types._IError> Decrypt(Dafny.Com.Amazonaws.Kms.Types._IDecryptRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> DeleteAlias(Dafny.Com.Amazonaws.Kms.Types._IDeleteAliasRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IDeleteCustomKeyStoreResponse, Dafny.Com.Amazonaws.Kms.Types._IError> DeleteCustomKeyStore(Dafny.Com.Amazonaws.Kms.Types._IDeleteCustomKeyStoreRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> DeleteImportedKeyMaterial(Dafny.Com.Amazonaws.Kms.Types._IDeleteImportedKeyMaterialRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IDescribeCustomKeyStoresResponse, Dafny.Com.Amazonaws.Kms.Types._IError> DescribeCustomKeyStores(Dafny.Com.Amazonaws.Kms.Types._IDescribeCustomKeyStoresRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IDescribeKeyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> DescribeKey(Dafny.Com.Amazonaws.Kms.Types._IDescribeKeyRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> DisableKey(Dafny.Com.Amazonaws.Kms.Types._IDisableKeyRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> DisableKeyRotation(Dafny.Com.Amazonaws.Kms.Types._IDisableKeyRotationRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IDisconnectCustomKeyStoreResponse, Dafny.Com.Amazonaws.Kms.Types._IError> DisconnectCustomKeyStore(Dafny.Com.Amazonaws.Kms.Types._IDisconnectCustomKeyStoreRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> EnableKey(Dafny.Com.Amazonaws.Kms.Types._IEnableKeyRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> EnableKeyRotation(Dafny.Com.Amazonaws.Kms.Types._IEnableKeyRotationRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IEncryptResponse, Dafny.Com.Amazonaws.Kms.Types._IError> Encrypt(Dafny.Com.Amazonaws.Kms.Types._IEncryptRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GenerateDataKey(Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GenerateDataKeyPair(Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairWithoutPlaintextResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GenerateDataKeyPairWithoutPlaintext(Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyPairWithoutPlaintextRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyWithoutPlaintextResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GenerateDataKeyWithoutPlaintext(Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyWithoutPlaintextRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGenerateRandomResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GenerateRandom(Dafny.Com.Amazonaws.Kms.Types._IGenerateRandomRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGetKeyPolicyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GetKeyPolicy(Dafny.Com.Amazonaws.Kms.Types._IGetKeyPolicyRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGetKeyRotationStatusResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GetKeyRotationStatus(Dafny.Com.Amazonaws.Kms.Types._IGetKeyRotationStatusRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGetParametersForImportResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GetParametersForImport(Dafny.Com.Amazonaws.Kms.Types._IGetParametersForImportRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGetPublicKeyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> GetPublicKey(Dafny.Com.Amazonaws.Kms.Types._IGetPublicKeyRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IImportKeyMaterialResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ImportKeyMaterial(Dafny.Com.Amazonaws.Kms.Types._IImportKeyMaterialRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IListAliasesResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ListAliases(Dafny.Com.Amazonaws.Kms.Types._IListAliasesRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IListGrantsResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ListGrants(Dafny.Com.Amazonaws.Kms.Types._IListGrantsRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IListKeyPoliciesResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ListKeyPolicies(Dafny.Com.Amazonaws.Kms.Types._IListKeyPoliciesRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IListResourceTagsResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ListResourceTags(Dafny.Com.Amazonaws.Kms.Types._IListResourceTagsRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> PutKeyPolicy(Dafny.Com.Amazonaws.Kms.Types._IPutKeyPolicyRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IReEncryptResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ReEncrypt(Dafny.Com.Amazonaws.Kms.Types._IReEncryptRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IReplicateKeyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ReplicateKey(Dafny.Com.Amazonaws.Kms.Types._IReplicateKeyRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> RetireGrant(Dafny.Com.Amazonaws.Kms.Types._IRetireGrantRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> RevokeGrant(Dafny.Com.Amazonaws.Kms.Types._IRevokeGrantRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IScheduleKeyDeletionResponse, Dafny.Com.Amazonaws.Kms.Types._IError> ScheduleKeyDeletion(Dafny.Com.Amazonaws.Kms.Types._IScheduleKeyDeletionRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._ISignResponse, Dafny.Com.Amazonaws.Kms.Types._IError> Sign(Dafny.Com.Amazonaws.Kms.Types._ISignRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> TagResource(Dafny.Com.Amazonaws.Kms.Types._ITagResourceRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> UntagResource(Dafny.Com.Amazonaws.Kms.Types._IUntagResourceRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> UpdateAlias(Dafny.Com.Amazonaws.Kms.Types._IUpdateAliasRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IUpdateCustomKeyStoreResponse, Dafny.Com.Amazonaws.Kms.Types._IError> UpdateCustomKeyStore(Dafny.Com.Amazonaws.Kms.Types._IUpdateCustomKeyStoreRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> UpdateKeyDescription(Dafny.Com.Amazonaws.Kms.Types._IUpdateKeyDescriptionRequest input);
+    Wrappers_Compile._IResult<_System._ITuple0, Dafny.Com.Amazonaws.Kms.Types._IError> UpdatePrimaryRegion(Dafny.Com.Amazonaws.Kms.Types._IUpdatePrimaryRegionRequest input);
+    Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IVerifyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> Verify(Dafny.Com.Amazonaws.Kms.Types._IVerifyRequest input);
   }
   public class _Companion_IKeyManagementServiceClient {
   }
@@ -10179,8 +10177,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IKeyManagerType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyManagerType> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyManagerType>(ComAmazonawsKmsTypes_Compile.KeyManagerType.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyManagerType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType>(Dafny.Com.Amazonaws.Kms.Types.KeyManagerType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IKeyManagerType create_AWS() {
@@ -10207,7 +10205,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyManagerType_AWS();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyManagerType_AWS;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyManagerType_AWS;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10216,7 +10214,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyManagerType.AWS";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyManagerType.AWS";
       return s;
     }
   }
@@ -10228,7 +10226,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyManagerType_CUSTOMER();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyManagerType_CUSTOMER;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyManagerType_CUSTOMER;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10237,7 +10235,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyManagerType.CUSTOMER";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyManagerType.CUSTOMER";
       return s;
     }
   }
@@ -10250,21 +10248,21 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_CreationDate { get; }
     Wrappers_Compile._IOption<bool> dtor_Enabled { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_Description { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> dtor_KeyUsage { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> dtor_KeyState { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> dtor_KeyUsage { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> dtor_KeyState { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_DeletionDate { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_ValidTo { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> dtor_Origin { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> dtor_Origin { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_CustomKeyStoreId { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_CloudHsmClusterId { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> dtor_ExpirationModel { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyManagerType> dtor_KeyManager { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> dtor_KeySpec { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> dtor_EncryptionAlgorithms { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> dtor_SigningAlgorithms { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> dtor_ExpirationModel { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType> dtor_KeyManager { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> dtor_KeySpec { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> dtor_EncryptionAlgorithms { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> dtor_SigningAlgorithms { get; }
     Wrappers_Compile._IOption<bool> dtor_MultiRegion { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration> dtor_MultiRegionConfiguration { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration> dtor_MultiRegionConfiguration { get; }
     Wrappers_Compile._IOption<int> dtor_PendingDeletionWindowInDays { get; }
     _IKeyMetadata DowncastClone();
   }
@@ -10275,23 +10273,23 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate;
     public readonly Wrappers_Compile._IOption<bool> Enabled;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> Description;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> KeyState;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> KeyState;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> Origin;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> Origin;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> ExpirationModel;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyManagerType> KeyManager;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> EncryptionAlgorithms;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> SigningAlgorithms;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> ExpirationModel;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType> KeyManager;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> EncryptionAlgorithms;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> SigningAlgorithms;
     public readonly Wrappers_Compile._IOption<bool> MultiRegion;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration> MultiRegionConfiguration;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration> MultiRegionConfiguration;
     public readonly Wrappers_Compile._IOption<int> PendingDeletionWindowInDays;
-    public KeyMetadata(Wrappers_Compile._IOption<Dafny.ISequence<char>> AWSAccountId, Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> Arn, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<bool> Enabled, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> KeyState, Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> Origin, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> ExpirationModel, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyManagerType> KeyManager, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> EncryptionAlgorithms, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> SigningAlgorithms, Wrappers_Compile._IOption<bool> MultiRegion, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration> MultiRegionConfiguration, Wrappers_Compile._IOption<int> PendingDeletionWindowInDays) {
+    public KeyMetadata(Wrappers_Compile._IOption<Dafny.ISequence<char>> AWSAccountId, Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> Arn, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<bool> Enabled, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> KeyState, Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> Origin, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> ExpirationModel, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType> KeyManager, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> EncryptionAlgorithms, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> SigningAlgorithms, Wrappers_Compile._IOption<bool> MultiRegion, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration> MultiRegionConfiguration, Wrappers_Compile._IOption<int> PendingDeletionWindowInDays) {
       this.AWSAccountId = AWSAccountId;
       this.KeyId = KeyId;
       this.Arn = Arn;
@@ -10320,7 +10318,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyMetadata(AWSAccountId, KeyId, Arn, CreationDate, Enabled, Description, KeyUsage, KeyState, DeletionDate, ValidTo, Origin, CustomKeyStoreId, CloudHsmClusterId, ExpirationModel, KeyManager, CustomerMasterKeySpec, KeySpec, EncryptionAlgorithms, SigningAlgorithms, MultiRegion, MultiRegionConfiguration, PendingDeletionWindowInDays);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyMetadata;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyMetadata;
       return oth != null && object.Equals(this.AWSAccountId, oth.AWSAccountId) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Arn, oth.Arn) && object.Equals(this.CreationDate, oth.CreationDate) && object.Equals(this.Enabled, oth.Enabled) && object.Equals(this.Description, oth.Description) && object.Equals(this.KeyUsage, oth.KeyUsage) && object.Equals(this.KeyState, oth.KeyState) && object.Equals(this.DeletionDate, oth.DeletionDate) && object.Equals(this.ValidTo, oth.ValidTo) && object.Equals(this.Origin, oth.Origin) && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId) && object.Equals(this.CloudHsmClusterId, oth.CloudHsmClusterId) && object.Equals(this.ExpirationModel, oth.ExpirationModel) && object.Equals(this.KeyManager, oth.KeyManager) && object.Equals(this.CustomerMasterKeySpec, oth.CustomerMasterKeySpec) && object.Equals(this.KeySpec, oth.KeySpec) && object.Equals(this.EncryptionAlgorithms, oth.EncryptionAlgorithms) && object.Equals(this.SigningAlgorithms, oth.SigningAlgorithms) && object.Equals(this.MultiRegion, oth.MultiRegion) && object.Equals(this.MultiRegionConfiguration, oth.MultiRegionConfiguration) && object.Equals(this.PendingDeletionWindowInDays, oth.PendingDeletionWindowInDays);
     }
     public override int GetHashCode() {
@@ -10351,7 +10349,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyMetadata.KeyMetadata";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyMetadata.KeyMetadata";
       s += "(";
       s += Dafny.Helpers.ToString(this.AWSAccountId);
       s += ", ";
@@ -10399,15 +10397,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IKeyMetadata theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyUsageType>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyState>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IOriginType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IExpirationModelType>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyManagerType>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeySpec>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration>.Default(), Wrappers_Compile.Option<int>.Default());
+    private static readonly _IKeyMetadata theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyState>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IOriginType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeySpec>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration>.Default(), Wrappers_Compile.Option<int>.Default());
     public static _IKeyMetadata Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyMetadata> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyMetadata>(ComAmazonawsKmsTypes_Compile.KeyMetadata.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyMetadata> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata>(Dafny.Com.Amazonaws.Kms.Types.KeyMetadata.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IKeyMetadata create(Wrappers_Compile._IOption<Dafny.ISequence<char>> AWSAccountId, Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> Arn, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<bool> Enabled, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> KeyState, Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> Origin, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> ExpirationModel, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyManagerType> KeyManager, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> EncryptionAlgorithms, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> SigningAlgorithms, Wrappers_Compile._IOption<bool> MultiRegion, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration> MultiRegionConfiguration, Wrappers_Compile._IOption<int> PendingDeletionWindowInDays) {
+    public static _IKeyMetadata create(Wrappers_Compile._IOption<Dafny.ISequence<char>> AWSAccountId, Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> Arn, Wrappers_Compile._IOption<Dafny.ISequence<char>> CreationDate, Wrappers_Compile._IOption<bool> Enabled, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> KeyUsage, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> KeyState, Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate, Wrappers_Compile._IOption<Dafny.ISequence<char>> ValidTo, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> Origin, Wrappers_Compile._IOption<Dafny.ISequence<char>> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> ExpirationModel, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType> KeyManager, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> CustomerMasterKeySpec, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> KeySpec, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> EncryptionAlgorithms, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> SigningAlgorithms, Wrappers_Compile._IOption<bool> MultiRegion, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration> MultiRegionConfiguration, Wrappers_Compile._IOption<int> PendingDeletionWindowInDays) {
       return new KeyMetadata(AWSAccountId, KeyId, Arn, CreationDate, Enabled, Description, KeyUsage, KeyState, DeletionDate, ValidTo, Origin, CustomKeyStoreId, CloudHsmClusterId, ExpirationModel, KeyManager, CustomerMasterKeySpec, KeySpec, EncryptionAlgorithms, SigningAlgorithms, MultiRegion, MultiRegionConfiguration, PendingDeletionWindowInDays);
     }
     public bool is_KeyMetadata { get { return true; } }
@@ -10441,12 +10439,12 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.Description;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyUsageType> dtor_KeyUsage {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> dtor_KeyUsage {
       get {
         return this.KeyUsage;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> dtor_KeyState {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> dtor_KeyState {
       get {
         return this.KeyState;
       }
@@ -10461,7 +10459,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.ValidTo;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IOriginType> dtor_Origin {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IOriginType> dtor_Origin {
       get {
         return this.Origin;
       }
@@ -10476,32 +10474,32 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.CloudHsmClusterId;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IExpirationModelType> dtor_ExpirationModel {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IExpirationModelType> dtor_ExpirationModel {
       get {
         return this.ExpirationModel;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyManagerType> dtor_KeyManager {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyManagerType> dtor_KeyManager {
       get {
         return this.KeyManager;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ICustomerMasterKeySpec> dtor_CustomerMasterKeySpec {
       get {
         return this.CustomerMasterKeySpec;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeySpec> dtor_KeySpec {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> dtor_KeySpec {
       get {
         return this.KeySpec;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>> dtor_EncryptionAlgorithms {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>> dtor_EncryptionAlgorithms {
       get {
         return this.EncryptionAlgorithms;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>> dtor_SigningAlgorithms {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>> dtor_SigningAlgorithms {
       get {
         return this.SigningAlgorithms;
       }
@@ -10511,7 +10509,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.MultiRegion;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration> dtor_MultiRegionConfiguration {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration> dtor_MultiRegionConfiguration {
       get {
         return this.MultiRegionConfiguration;
       }
@@ -10540,8 +10538,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IKeySpec Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeySpec> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeySpec>(ComAmazonawsKmsTypes_Compile.KeySpec.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeySpec> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeySpec>(Dafny.Com.Amazonaws.Kms.Types.KeySpec.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeySpec> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IKeySpec create_RSA__2048() {
@@ -10598,7 +10596,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeySpec_RSA__2048();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeySpec_RSA__2048;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeySpec_RSA__2048;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10607,7 +10605,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeySpec.RSA_2048";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeySpec.RSA_2048";
       return s;
     }
   }
@@ -10619,7 +10617,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeySpec_RSA__3072();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeySpec_RSA__3072;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeySpec_RSA__3072;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10628,7 +10626,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeySpec.RSA_3072";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeySpec.RSA_3072";
       return s;
     }
   }
@@ -10640,7 +10638,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeySpec_RSA__4096();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeySpec_RSA__4096;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeySpec_RSA__4096;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10649,7 +10647,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeySpec.RSA_4096";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeySpec.RSA_4096";
       return s;
     }
   }
@@ -10661,7 +10659,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeySpec_ECC__NIST__P256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeySpec_ECC__NIST__P256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeySpec_ECC__NIST__P256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10670,7 +10668,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeySpec.ECC_NIST_P256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeySpec.ECC_NIST_P256";
       return s;
     }
   }
@@ -10682,7 +10680,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeySpec_ECC__NIST__P384();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeySpec_ECC__NIST__P384;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeySpec_ECC__NIST__P384;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10691,7 +10689,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeySpec.ECC_NIST_P384";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeySpec.ECC_NIST_P384";
       return s;
     }
   }
@@ -10703,7 +10701,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeySpec_ECC__NIST__P521();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeySpec_ECC__NIST__P521;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeySpec_ECC__NIST__P521;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10712,7 +10710,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeySpec.ECC_NIST_P521";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeySpec.ECC_NIST_P521";
       return s;
     }
   }
@@ -10724,7 +10722,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeySpec_ECC__SECG__P256K1();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeySpec_ECC__SECG__P256K1;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeySpec_ECC__SECG__P256K1;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10733,7 +10731,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeySpec.ECC_SECG_P256K1";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeySpec.ECC_SECG_P256K1";
       return s;
     }
   }
@@ -10745,7 +10743,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeySpec_SYMMETRIC__DEFAULT();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeySpec_SYMMETRIC__DEFAULT;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeySpec_SYMMETRIC__DEFAULT;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10754,7 +10752,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeySpec.SYMMETRIC_DEFAULT";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeySpec.SYMMETRIC_DEFAULT";
       return s;
     }
   }
@@ -10776,8 +10774,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IKeyState Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyState> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyState>(ComAmazonawsKmsTypes_Compile.KeyState.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyState> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyState> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyState>(Dafny.Com.Amazonaws.Kms.Types.KeyState.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyState> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IKeyState create_Creating() {
@@ -10834,7 +10832,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyState_Creating();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyState_Creating;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyState_Creating;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10843,7 +10841,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyState.Creating";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyState.Creating";
       return s;
     }
   }
@@ -10855,7 +10853,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyState_Enabled();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyState_Enabled;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyState_Enabled;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10864,7 +10862,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyState.Enabled";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyState.Enabled";
       return s;
     }
   }
@@ -10876,7 +10874,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyState_Disabled();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyState_Disabled;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyState_Disabled;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10885,7 +10883,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyState.Disabled";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyState.Disabled";
       return s;
     }
   }
@@ -10897,7 +10895,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyState_PendingDeletion();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyState_PendingDeletion;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyState_PendingDeletion;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10906,7 +10904,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyState.PendingDeletion";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyState.PendingDeletion";
       return s;
     }
   }
@@ -10918,7 +10916,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyState_PendingImport();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyState_PendingImport;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyState_PendingImport;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10927,7 +10925,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyState.PendingImport";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyState.PendingImport";
       return s;
     }
   }
@@ -10939,7 +10937,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyState_PendingReplicaDeletion();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyState_PendingReplicaDeletion;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyState_PendingReplicaDeletion;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10948,7 +10946,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyState.PendingReplicaDeletion";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyState.PendingReplicaDeletion";
       return s;
     }
   }
@@ -10960,7 +10958,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyState_Unavailable();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyState_Unavailable;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyState_Unavailable;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10969,7 +10967,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyState.Unavailable";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyState.Unavailable";
       return s;
     }
   }
@@ -10981,7 +10979,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyState_Updating();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyState_Updating;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyState_Updating;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -10990,7 +10988,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyState.Updating";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyState.Updating";
       return s;
     }
   }
@@ -11013,8 +11011,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IKeyUsageType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyUsageType> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyUsageType>(ComAmazonawsKmsTypes_Compile.KeyUsageType.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IKeyUsageType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType>(Dafny.Com.Amazonaws.Kms.Types.KeyUsageType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IKeyUsageType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IKeyUsageType create_SIGN__VERIFY() {
@@ -11041,7 +11039,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyUsageType_SIGN__VERIFY();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyUsageType_SIGN__VERIFY;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyUsageType_SIGN__VERIFY;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -11050,7 +11048,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyUsageType.SIGN_VERIFY";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyUsageType.SIGN_VERIFY";
       return s;
     }
   }
@@ -11062,7 +11060,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new KeyUsageType_ENCRYPT__DECRYPT();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.KeyUsageType_ENCRYPT__DECRYPT;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.KeyUsageType_ENCRYPT__DECRYPT;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -11071,7 +11069,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.KeyUsageType.ENCRYPT_DECRYPT";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.KeyUsageType.ENCRYPT_DECRYPT";
       return s;
     }
   }
@@ -11104,7 +11102,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListAliasesRequest(KeyId, Limit, Marker);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListAliasesRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListAliasesRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Limit, oth.Limit) && object.Equals(this.Marker, oth.Marker);
     }
     public override int GetHashCode() {
@@ -11116,7 +11114,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListAliasesRequest.ListAliasesRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListAliasesRequest.ListAliasesRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -11130,8 +11128,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IListAliasesRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListAliasesRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListAliasesRequest>(ComAmazonawsKmsTypes_Compile.ListAliasesRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListAliasesRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListAliasesRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListAliasesRequest>(Dafny.Com.Amazonaws.Kms.Types.ListAliasesRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListAliasesRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IListAliasesRequest create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<int> Limit, Wrappers_Compile._IOption<Dafny.ISequence<char>> Marker) {
@@ -11157,16 +11155,16 @@ namespace ComAmazonawsKmsTypes_Compile {
 
   public interface _IListAliasesResponse {
     bool is_ListAliasesResponse { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IAliasListEntry>> dtor_Aliases { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry>> dtor_Aliases { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_NextMarker { get; }
     Wrappers_Compile._IOption<bool> dtor_Truncated { get; }
     _IListAliasesResponse DowncastClone();
   }
   public class ListAliasesResponse : _IListAliasesResponse {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IAliasListEntry>> Aliases;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry>> Aliases;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker;
     public readonly Wrappers_Compile._IOption<bool> Truncated;
-    public ListAliasesResponse(Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IAliasListEntry>> Aliases, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
+    public ListAliasesResponse(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry>> Aliases, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
       this.Aliases = Aliases;
       this.NextMarker = NextMarker;
       this.Truncated = Truncated;
@@ -11176,7 +11174,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListAliasesResponse(Aliases, NextMarker, Truncated);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListAliasesResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListAliasesResponse;
       return oth != null && object.Equals(this.Aliases, oth.Aliases) && object.Equals(this.NextMarker, oth.NextMarker) && object.Equals(this.Truncated, oth.Truncated);
     }
     public override int GetHashCode() {
@@ -11188,7 +11186,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListAliasesResponse.ListAliasesResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListAliasesResponse.ListAliasesResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.Aliases);
       s += ", ";
@@ -11198,19 +11196,19 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IListAliasesResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IAliasListEntry>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default());
+    private static readonly _IListAliasesResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default());
     public static _IListAliasesResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListAliasesResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListAliasesResponse>(ComAmazonawsKmsTypes_Compile.ListAliasesResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListAliasesResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListAliasesResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListAliasesResponse>(Dafny.Com.Amazonaws.Kms.Types.ListAliasesResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListAliasesResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IListAliasesResponse create(Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IAliasListEntry>> Aliases, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
+    public static _IListAliasesResponse create(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry>> Aliases, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
       return new ListAliasesResponse(Aliases, NextMarker, Truncated);
     }
     public bool is_ListAliasesResponse { get { return true; } }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IAliasListEntry>> dtor_Aliases {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IAliasListEntry>> dtor_Aliases {
       get {
         return this.Aliases;
       }
@@ -11254,7 +11252,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListGrantsRequest(Limit, Marker, KeyId, GrantId, GranteePrincipal);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListGrantsRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListGrantsRequest;
       return oth != null && object.Equals(this.Limit, oth.Limit) && object.Equals(this.Marker, oth.Marker) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.GrantId, oth.GrantId) && object.Equals(this.GranteePrincipal, oth.GranteePrincipal);
     }
     public override int GetHashCode() {
@@ -11268,7 +11266,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListGrantsRequest.ListGrantsRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListGrantsRequest.ListGrantsRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.Limit);
       s += ", ";
@@ -11286,8 +11284,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IListGrantsRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListGrantsRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListGrantsRequest>(ComAmazonawsKmsTypes_Compile.ListGrantsRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListGrantsRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListGrantsRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListGrantsRequest>(Dafny.Com.Amazonaws.Kms.Types.ListGrantsRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListGrantsRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IListGrantsRequest create(Wrappers_Compile._IOption<int> Limit, Wrappers_Compile._IOption<Dafny.ISequence<char>> Marker, Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantId, Wrappers_Compile._IOption<Dafny.ISequence<char>> GranteePrincipal) {
@@ -11323,16 +11321,16 @@ namespace ComAmazonawsKmsTypes_Compile {
 
   public interface _IListGrantsResponse {
     bool is_ListGrantsResponse { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantListEntry>> dtor_Grants { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry>> dtor_Grants { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_NextMarker { get; }
     Wrappers_Compile._IOption<bool> dtor_Truncated { get; }
     _IListGrantsResponse DowncastClone();
   }
   public class ListGrantsResponse : _IListGrantsResponse {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantListEntry>> Grants;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry>> Grants;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker;
     public readonly Wrappers_Compile._IOption<bool> Truncated;
-    public ListGrantsResponse(Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantListEntry>> Grants, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
+    public ListGrantsResponse(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry>> Grants, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
       this.Grants = Grants;
       this.NextMarker = NextMarker;
       this.Truncated = Truncated;
@@ -11342,7 +11340,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListGrantsResponse(Grants, NextMarker, Truncated);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListGrantsResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListGrantsResponse;
       return oth != null && object.Equals(this.Grants, oth.Grants) && object.Equals(this.NextMarker, oth.NextMarker) && object.Equals(this.Truncated, oth.Truncated);
     }
     public override int GetHashCode() {
@@ -11354,7 +11352,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListGrantsResponse.ListGrantsResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListGrantsResponse.ListGrantsResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.Grants);
       s += ", ";
@@ -11364,19 +11362,19 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IListGrantsResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantListEntry>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default());
+    private static readonly _IListGrantsResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default());
     public static _IListGrantsResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListGrantsResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListGrantsResponse>(ComAmazonawsKmsTypes_Compile.ListGrantsResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListGrantsResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListGrantsResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListGrantsResponse>(Dafny.Com.Amazonaws.Kms.Types.ListGrantsResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListGrantsResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IListGrantsResponse create(Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantListEntry>> Grants, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
+    public static _IListGrantsResponse create(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry>> Grants, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
       return new ListGrantsResponse(Grants, NextMarker, Truncated);
     }
     public bool is_ListGrantsResponse { get { return true; } }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IGrantListEntry>> dtor_Grants {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IGrantListEntry>> dtor_Grants {
       get {
         return this.Grants;
       }
@@ -11414,7 +11412,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListKeyPoliciesRequest(KeyId, Limit, Marker);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListKeyPoliciesRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListKeyPoliciesRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Limit, oth.Limit) && object.Equals(this.Marker, oth.Marker);
     }
     public override int GetHashCode() {
@@ -11426,7 +11424,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListKeyPoliciesRequest.ListKeyPoliciesRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListKeyPoliciesRequest.ListKeyPoliciesRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -11440,8 +11438,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IListKeyPoliciesRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeyPoliciesRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeyPoliciesRequest>(ComAmazonawsKmsTypes_Compile.ListKeyPoliciesRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeyPoliciesRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeyPoliciesRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeyPoliciesRequest>(Dafny.Com.Amazonaws.Kms.Types.ListKeyPoliciesRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeyPoliciesRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IListKeyPoliciesRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<int> Limit, Wrappers_Compile._IOption<Dafny.ISequence<char>> Marker) {
@@ -11486,7 +11484,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListKeyPoliciesResponse(PolicyNames, NextMarker, Truncated);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListKeyPoliciesResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListKeyPoliciesResponse;
       return oth != null && object.Equals(this.PolicyNames, oth.PolicyNames) && object.Equals(this.NextMarker, oth.NextMarker) && object.Equals(this.Truncated, oth.Truncated);
     }
     public override int GetHashCode() {
@@ -11498,7 +11496,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListKeyPoliciesResponse.ListKeyPoliciesResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListKeyPoliciesResponse.ListKeyPoliciesResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.PolicyNames);
       s += ", ";
@@ -11512,8 +11510,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IListKeyPoliciesResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeyPoliciesResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeyPoliciesResponse>(ComAmazonawsKmsTypes_Compile.ListKeyPoliciesResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeyPoliciesResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeyPoliciesResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeyPoliciesResponse>(Dafny.Com.Amazonaws.Kms.Types.ListKeyPoliciesResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeyPoliciesResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IListKeyPoliciesResponse create(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> PolicyNames, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
@@ -11555,7 +11553,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListKeysRequest(Limit, Marker);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListKeysRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListKeysRequest;
       return oth != null && object.Equals(this.Limit, oth.Limit) && object.Equals(this.Marker, oth.Marker);
     }
     public override int GetHashCode() {
@@ -11566,7 +11564,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListKeysRequest.ListKeysRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListKeysRequest.ListKeysRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.Limit);
       s += ", ";
@@ -11578,8 +11576,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IListKeysRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeysRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeysRequest>(ComAmazonawsKmsTypes_Compile.ListKeysRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListKeysRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeysRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeysRequest>(Dafny.Com.Amazonaws.Kms.Types.ListKeysRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListKeysRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IListKeysRequest create(Wrappers_Compile._IOption<int> Limit, Wrappers_Compile._IOption<Dafny.ISequence<char>> Marker) {
@@ -11619,7 +11617,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListResourceTagsRequest(KeyId, Limit, Marker);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListResourceTagsRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListResourceTagsRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Limit, oth.Limit) && object.Equals(this.Marker, oth.Marker);
     }
     public override int GetHashCode() {
@@ -11631,7 +11629,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListResourceTagsRequest.ListResourceTagsRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListResourceTagsRequest.ListResourceTagsRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -11645,8 +11643,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IListResourceTagsRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListResourceTagsRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListResourceTagsRequest>(ComAmazonawsKmsTypes_Compile.ListResourceTagsRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListResourceTagsRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListResourceTagsRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListResourceTagsRequest>(Dafny.Com.Amazonaws.Kms.Types.ListResourceTagsRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListResourceTagsRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IListResourceTagsRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<int> Limit, Wrappers_Compile._IOption<Dafny.ISequence<char>> Marker) {
@@ -11672,16 +11670,16 @@ namespace ComAmazonawsKmsTypes_Compile {
 
   public interface _IListResourceTagsResponse {
     bool is_ListResourceTagsResponse { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> dtor_Tags { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> dtor_Tags { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_NextMarker { get; }
     Wrappers_Compile._IOption<bool> dtor_Truncated { get; }
     _IListResourceTagsResponse DowncastClone();
   }
   public class ListResourceTagsResponse : _IListResourceTagsResponse {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker;
     public readonly Wrappers_Compile._IOption<bool> Truncated;
-    public ListResourceTagsResponse(Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
+    public ListResourceTagsResponse(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
       this.Tags = Tags;
       this.NextMarker = NextMarker;
       this.Truncated = Truncated;
@@ -11691,7 +11689,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListResourceTagsResponse(Tags, NextMarker, Truncated);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListResourceTagsResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListResourceTagsResponse;
       return oth != null && object.Equals(this.Tags, oth.Tags) && object.Equals(this.NextMarker, oth.NextMarker) && object.Equals(this.Truncated, oth.Truncated);
     }
     public override int GetHashCode() {
@@ -11703,7 +11701,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListResourceTagsResponse.ListResourceTagsResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListResourceTagsResponse.ListResourceTagsResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.Tags);
       s += ", ";
@@ -11713,19 +11711,19 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IListResourceTagsResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default());
+    private static readonly _IListResourceTagsResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default());
     public static _IListResourceTagsResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListResourceTagsResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListResourceTagsResponse>(ComAmazonawsKmsTypes_Compile.ListResourceTagsResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListResourceTagsResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListResourceTagsResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListResourceTagsResponse>(Dafny.Com.Amazonaws.Kms.Types.ListResourceTagsResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListResourceTagsResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IListResourceTagsResponse create(Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
+    public static _IListResourceTagsResponse create(Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags, Wrappers_Compile._IOption<Dafny.ISequence<char>> NextMarker, Wrappers_Compile._IOption<bool> Truncated) {
       return new ListResourceTagsResponse(Tags, NextMarker, Truncated);
     }
     public bool is_ListResourceTagsResponse { get { return true; } }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> dtor_Tags {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> dtor_Tags {
       get {
         return this.Tags;
       }
@@ -11763,7 +11761,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ListRetirableGrantsRequest(Limit, Marker, RetiringPrincipal);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ListRetirableGrantsRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ListRetirableGrantsRequest;
       return oth != null && object.Equals(this.Limit, oth.Limit) && object.Equals(this.Marker, oth.Marker) && object.Equals(this.RetiringPrincipal, oth.RetiringPrincipal);
     }
     public override int GetHashCode() {
@@ -11775,7 +11773,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ListRetirableGrantsRequest.ListRetirableGrantsRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ListRetirableGrantsRequest.ListRetirableGrantsRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.Limit);
       s += ", ";
@@ -11789,8 +11787,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IListRetirableGrantsRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListRetirableGrantsRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListRetirableGrantsRequest>(ComAmazonawsKmsTypes_Compile.ListRetirableGrantsRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IListRetirableGrantsRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListRetirableGrantsRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListRetirableGrantsRequest>(Dafny.Com.Amazonaws.Kms.Types.ListRetirableGrantsRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IListRetirableGrantsRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IListRetirableGrantsRequest create(Wrappers_Compile._IOption<int> Limit, Wrappers_Compile._IOption<Dafny.ISequence<char>> Marker, Dafny.ISequence<char> RetiringPrincipal) {
@@ -11832,8 +11830,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IMessageType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMessageType> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMessageType>(ComAmazonawsKmsTypes_Compile.MessageType.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMessageType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMessageType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMessageType>(Dafny.Com.Amazonaws.Kms.Types.MessageType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMessageType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IMessageType create_RAW() {
@@ -11860,7 +11858,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new MessageType_RAW();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.MessageType_RAW;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.MessageType_RAW;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -11869,7 +11867,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.MessageType.RAW";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.MessageType.RAW";
       return s;
     }
   }
@@ -11881,7 +11879,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new MessageType_DIGEST();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.MessageType_DIGEST;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.MessageType_DIGEST;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -11890,23 +11888,23 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.MessageType.DIGEST";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.MessageType.DIGEST";
       return s;
     }
   }
 
   public interface _IMultiRegionConfiguration {
     bool is_MultiRegionConfiguration { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType> dtor_MultiRegionKeyType { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKey> dtor_PrimaryKey { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IMultiRegionKey>> dtor_ReplicaKeys { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType> dtor_MultiRegionKeyType { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey> dtor_PrimaryKey { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey>> dtor_ReplicaKeys { get; }
     _IMultiRegionConfiguration DowncastClone();
   }
   public class MultiRegionConfiguration : _IMultiRegionConfiguration {
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType> MultiRegionKeyType;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKey> PrimaryKey;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IMultiRegionKey>> ReplicaKeys;
-    public MultiRegionConfiguration(Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType> MultiRegionKeyType, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKey> PrimaryKey, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IMultiRegionKey>> ReplicaKeys) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType> MultiRegionKeyType;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey> PrimaryKey;
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey>> ReplicaKeys;
+    public MultiRegionConfiguration(Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType> MultiRegionKeyType, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey> PrimaryKey, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey>> ReplicaKeys) {
       this.MultiRegionKeyType = MultiRegionKeyType;
       this.PrimaryKey = PrimaryKey;
       this.ReplicaKeys = ReplicaKeys;
@@ -11916,7 +11914,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new MultiRegionConfiguration(MultiRegionKeyType, PrimaryKey, ReplicaKeys);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.MultiRegionConfiguration;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.MultiRegionConfiguration;
       return oth != null && object.Equals(this.MultiRegionKeyType, oth.MultiRegionKeyType) && object.Equals(this.PrimaryKey, oth.PrimaryKey) && object.Equals(this.ReplicaKeys, oth.ReplicaKeys);
     }
     public override int GetHashCode() {
@@ -11928,7 +11926,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.MultiRegionConfiguration.MultiRegionConfiguration";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.MultiRegionConfiguration.MultiRegionConfiguration";
       s += "(";
       s += Dafny.Helpers.ToString(this.MultiRegionKeyType);
       s += ", ";
@@ -11938,29 +11936,29 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IMultiRegionConfiguration theDefault = create(Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IMultiRegionKey>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IMultiRegionKey>>.Default());
+    private static readonly _IMultiRegionConfiguration theDefault = create(Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey>>.Default());
     public static _IMultiRegionConfiguration Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration>(ComAmazonawsKmsTypes_Compile.MultiRegionConfiguration.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionConfiguration> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration>(Dafny.Com.Amazonaws.Kms.Types.MultiRegionConfiguration.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionConfiguration> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IMultiRegionConfiguration create(Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType> MultiRegionKeyType, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKey> PrimaryKey, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IMultiRegionKey>> ReplicaKeys) {
+    public static _IMultiRegionConfiguration create(Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType> MultiRegionKeyType, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey> PrimaryKey, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey>> ReplicaKeys) {
       return new MultiRegionConfiguration(MultiRegionKeyType, PrimaryKey, ReplicaKeys);
     }
     public bool is_MultiRegionConfiguration { get { return true; } }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType> dtor_MultiRegionKeyType {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType> dtor_MultiRegionKeyType {
       get {
         return this.MultiRegionKeyType;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMultiRegionKey> dtor_PrimaryKey {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey> dtor_PrimaryKey {
       get {
         return this.PrimaryKey;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._IMultiRegionKey>> dtor_ReplicaKeys {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey>> dtor_ReplicaKeys {
       get {
         return this.ReplicaKeys;
       }
@@ -11985,7 +11983,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new MultiRegionKey(Arn, Region);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.MultiRegionKey;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.MultiRegionKey;
       return oth != null && object.Equals(this.Arn, oth.Arn) && object.Equals(this.Region, oth.Region);
     }
     public override int GetHashCode() {
@@ -11996,7 +11994,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.MultiRegionKey.MultiRegionKey";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.MultiRegionKey.MultiRegionKey";
       s += "(";
       s += Dafny.Helpers.ToString(this.Arn);
       s += ", ";
@@ -12008,8 +12006,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IMultiRegionKey Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionKey> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionKey>(ComAmazonawsKmsTypes_Compile.MultiRegionKey.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionKey> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey>(Dafny.Com.Amazonaws.Kms.Types.MultiRegionKey.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKey> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IMultiRegionKey create(Wrappers_Compile._IOption<Dafny.ISequence<char>> Arn, Wrappers_Compile._IOption<Dafny.ISequence<char>> Region) {
@@ -12039,8 +12037,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IMultiRegionKeyType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType>(ComAmazonawsKmsTypes_Compile.MultiRegionKeyType.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IMultiRegionKeyType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType>(Dafny.Com.Amazonaws.Kms.Types.MultiRegionKeyType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IMultiRegionKeyType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IMultiRegionKeyType create_PRIMARY() {
@@ -12067,7 +12065,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new MultiRegionKeyType_PRIMARY();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.MultiRegionKeyType_PRIMARY;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.MultiRegionKeyType_PRIMARY;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -12076,7 +12074,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.MultiRegionKeyType.PRIMARY";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.MultiRegionKeyType.PRIMARY";
       return s;
     }
   }
@@ -12088,7 +12086,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new MultiRegionKeyType_REPLICA();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.MultiRegionKeyType_REPLICA;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.MultiRegionKeyType_REPLICA;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -12097,7 +12095,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.MultiRegionKeyType.REPLICA";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.MultiRegionKeyType.REPLICA";
       return s;
     }
   }
@@ -12121,8 +12119,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IOriginType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IOriginType> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IOriginType>(ComAmazonawsKmsTypes_Compile.OriginType.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IOriginType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IOriginType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IOriginType>(Dafny.Com.Amazonaws.Kms.Types.OriginType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IOriginType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IOriginType create_AWS__KMS() {
@@ -12154,7 +12152,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new OriginType_AWS__KMS();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.OriginType_AWS__KMS;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.OriginType_AWS__KMS;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -12163,7 +12161,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.OriginType.AWS_KMS";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.OriginType.AWS_KMS";
       return s;
     }
   }
@@ -12175,7 +12173,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new OriginType_EXTERNAL();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.OriginType_EXTERNAL;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.OriginType_EXTERNAL;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -12184,7 +12182,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.OriginType.EXTERNAL";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.OriginType.EXTERNAL";
       return s;
     }
   }
@@ -12196,7 +12194,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new OriginType_AWS__CLOUDHSM();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.OriginType_AWS__CLOUDHSM;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.OriginType_AWS__CLOUDHSM;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -12205,7 +12203,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.OriginType.AWS_CLOUDHSM";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.OriginType.AWS_CLOUDHSM";
       return s;
     }
   }
@@ -12276,7 +12274,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new PutKeyPolicyRequest(KeyId, PolicyName, Policy, BypassPolicyLockoutSafetyCheck);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.PutKeyPolicyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.PutKeyPolicyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.PolicyName, oth.PolicyName) && object.Equals(this.Policy, oth.Policy) && object.Equals(this.BypassPolicyLockoutSafetyCheck, oth.BypassPolicyLockoutSafetyCheck);
     }
     public override int GetHashCode() {
@@ -12289,7 +12287,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.PutKeyPolicyRequest.PutKeyPolicyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.PutKeyPolicyRequest.PutKeyPolicyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -12305,8 +12303,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IPutKeyPolicyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IPutKeyPolicyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IPutKeyPolicyRequest>(ComAmazonawsKmsTypes_Compile.PutKeyPolicyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IPutKeyPolicyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IPutKeyPolicyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IPutKeyPolicyRequest>(Dafny.Com.Amazonaws.Kms.Types.PutKeyPolicyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IPutKeyPolicyRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IPutKeyPolicyRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> PolicyName, Dafny.ISequence<char> Policy, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck) {
@@ -12342,8 +12340,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_SourceKeyId { get; }
     Dafny.ISequence<char> dtor_DestinationKeyId { get; }
     Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> dtor_DestinationEncryptionContext { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_SourceEncryptionAlgorithm { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_DestinationEncryptionAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_SourceEncryptionAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_DestinationEncryptionAlgorithm { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
     _IReEncryptRequest DowncastClone();
   }
@@ -12353,10 +12351,10 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId;
     public readonly Dafny.ISequence<char> DestinationKeyId;
     public readonly Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> DestinationEncryptionContext;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
-    public ReEncryptRequest(Dafny.ISequence<byte> CiphertextBlob, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> SourceEncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId, Dafny.ISequence<char> DestinationKeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> DestinationEncryptionContext, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public ReEncryptRequest(Dafny.ISequence<byte> CiphertextBlob, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> SourceEncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId, Dafny.ISequence<char> DestinationKeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> DestinationEncryptionContext, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       this.CiphertextBlob = CiphertextBlob;
       this.SourceEncryptionContext = SourceEncryptionContext;
       this.SourceKeyId = SourceKeyId;
@@ -12371,7 +12369,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ReEncryptRequest(CiphertextBlob, SourceEncryptionContext, SourceKeyId, DestinationKeyId, DestinationEncryptionContext, SourceEncryptionAlgorithm, DestinationEncryptionAlgorithm, GrantTokens);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ReEncryptRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ReEncryptRequest;
       return oth != null && object.Equals(this.CiphertextBlob, oth.CiphertextBlob) && object.Equals(this.SourceEncryptionContext, oth.SourceEncryptionContext) && object.Equals(this.SourceKeyId, oth.SourceKeyId) && object.Equals(this.DestinationKeyId, oth.DestinationKeyId) && object.Equals(this.DestinationEncryptionContext, oth.DestinationEncryptionContext) && object.Equals(this.SourceEncryptionAlgorithm, oth.SourceEncryptionAlgorithm) && object.Equals(this.DestinationEncryptionAlgorithm, oth.DestinationEncryptionAlgorithm) && object.Equals(this.GrantTokens, oth.GrantTokens);
     }
     public override int GetHashCode() {
@@ -12388,7 +12386,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ReEncryptRequest.ReEncryptRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ReEncryptRequest.ReEncryptRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.CiphertextBlob);
       s += ", ";
@@ -12408,15 +12406,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IReEncryptRequest theDefault = create(Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
+    private static readonly _IReEncryptRequest theDefault = create(Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
     public static _IReEncryptRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReEncryptRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReEncryptRequest>(ComAmazonawsKmsTypes_Compile.ReEncryptRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReEncryptRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReEncryptRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReEncryptRequest>(Dafny.Com.Amazonaws.Kms.Types.ReEncryptRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReEncryptRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IReEncryptRequest create(Dafny.ISequence<byte> CiphertextBlob, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> SourceEncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId, Dafny.ISequence<char> DestinationKeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> DestinationEncryptionContext, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public static _IReEncryptRequest create(Dafny.ISequence<byte> CiphertextBlob, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> SourceEncryptionContext, Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId, Dafny.ISequence<char> DestinationKeyId, Wrappers_Compile._IOption<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>> DestinationEncryptionContext, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       return new ReEncryptRequest(CiphertextBlob, SourceEncryptionContext, SourceKeyId, DestinationKeyId, DestinationEncryptionContext, SourceEncryptionAlgorithm, DestinationEncryptionAlgorithm, GrantTokens);
     }
     public bool is_ReEncryptRequest { get { return true; } }
@@ -12445,12 +12443,12 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.DestinationEncryptionContext;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_SourceEncryptionAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_SourceEncryptionAlgorithm {
       get {
         return this.SourceEncryptionAlgorithm;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_DestinationEncryptionAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_DestinationEncryptionAlgorithm {
       get {
         return this.DestinationEncryptionAlgorithm;
       }
@@ -12467,17 +12465,17 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_CiphertextBlob { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_SourceKeyId { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_SourceEncryptionAlgorithm { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_DestinationEncryptionAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_SourceEncryptionAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_DestinationEncryptionAlgorithm { get; }
     _IReEncryptResponse DowncastClone();
   }
   public class ReEncryptResponse : _IReEncryptResponse {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm;
-    public ReEncryptResponse(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm;
+    public ReEncryptResponse(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm) {
       this.CiphertextBlob = CiphertextBlob;
       this.SourceKeyId = SourceKeyId;
       this.KeyId = KeyId;
@@ -12489,7 +12487,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ReEncryptResponse(CiphertextBlob, SourceKeyId, KeyId, SourceEncryptionAlgorithm, DestinationEncryptionAlgorithm);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ReEncryptResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ReEncryptResponse;
       return oth != null && object.Equals(this.CiphertextBlob, oth.CiphertextBlob) && object.Equals(this.SourceKeyId, oth.SourceKeyId) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.SourceEncryptionAlgorithm, oth.SourceEncryptionAlgorithm) && object.Equals(this.DestinationEncryptionAlgorithm, oth.DestinationEncryptionAlgorithm);
     }
     public override int GetHashCode() {
@@ -12503,7 +12501,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ReEncryptResponse.ReEncryptResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ReEncryptResponse.ReEncryptResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.CiphertextBlob);
       s += ", ";
@@ -12517,15 +12515,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IReEncryptResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec>.Default());
+    private static readonly _IReEncryptResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec>.Default());
     public static _IReEncryptResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReEncryptResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReEncryptResponse>(ComAmazonawsKmsTypes_Compile.ReEncryptResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReEncryptResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReEncryptResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReEncryptResponse>(Dafny.Com.Amazonaws.Kms.Types.ReEncryptResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReEncryptResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IReEncryptResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm) {
+    public static _IReEncryptResponse create(Wrappers_Compile._IOption<Dafny.ISequence<byte>> CiphertextBlob, Wrappers_Compile._IOption<Dafny.ISequence<char>> SourceKeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> SourceEncryptionAlgorithm, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> DestinationEncryptionAlgorithm) {
       return new ReEncryptResponse(CiphertextBlob, SourceKeyId, KeyId, SourceEncryptionAlgorithm, DestinationEncryptionAlgorithm);
     }
     public bool is_ReEncryptResponse { get { return true; } }
@@ -12544,12 +12542,12 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_SourceEncryptionAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_SourceEncryptionAlgorithm {
       get {
         return this.SourceEncryptionAlgorithm;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IEncryptionAlgorithmSpec> dtor_DestinationEncryptionAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IEncryptionAlgorithmSpec> dtor_DestinationEncryptionAlgorithm {
       get {
         return this.DestinationEncryptionAlgorithm;
       }
@@ -12570,7 +12568,7 @@ namespace ComAmazonawsKmsTypes_Compile {
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_Policy { get; }
     Wrappers_Compile._IOption<bool> dtor_BypassPolicyLockoutSafetyCheck { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_Description { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> dtor_Tags { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> dtor_Tags { get; }
     _IReplicateKeyRequest DowncastClone();
   }
   public class ReplicateKeyRequest : _IReplicateKeyRequest {
@@ -12579,8 +12577,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy;
     public readonly Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> Description;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags;
-    public ReplicateKeyRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> ReplicaRegion, Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags) {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags;
+    public ReplicateKeyRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> ReplicaRegion, Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags) {
       this.KeyId = KeyId;
       this.ReplicaRegion = ReplicaRegion;
       this.Policy = Policy;
@@ -12593,7 +12591,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ReplicateKeyRequest(KeyId, ReplicaRegion, Policy, BypassPolicyLockoutSafetyCheck, Description, Tags);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ReplicateKeyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ReplicateKeyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.ReplicaRegion, oth.ReplicaRegion) && object.Equals(this.Policy, oth.Policy) && object.Equals(this.BypassPolicyLockoutSafetyCheck, oth.BypassPolicyLockoutSafetyCheck) && object.Equals(this.Description, oth.Description) && object.Equals(this.Tags, oth.Tags);
     }
     public override int GetHashCode() {
@@ -12608,7 +12606,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ReplicateKeyRequest.ReplicateKeyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ReplicateKeyRequest.ReplicateKeyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -12624,15 +12622,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IReplicateKeyRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>>.Default());
+    private static readonly _IReplicateKeyRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<char>.Empty, Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>>.Default());
     public static _IReplicateKeyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReplicateKeyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReplicateKeyRequest>(ComAmazonawsKmsTypes_Compile.ReplicateKeyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReplicateKeyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReplicateKeyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReplicateKeyRequest>(Dafny.Com.Amazonaws.Kms.Types.ReplicateKeyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReplicateKeyRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IReplicateKeyRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> ReplicaRegion, Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> Tags) {
+    public static _IReplicateKeyRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> ReplicaRegion, Wrappers_Compile._IOption<Dafny.ISequence<char>> Policy, Wrappers_Compile._IOption<bool> BypassPolicyLockoutSafetyCheck, Wrappers_Compile._IOption<Dafny.ISequence<char>> Description, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> Tags) {
       return new ReplicateKeyRequest(KeyId, ReplicaRegion, Policy, BypassPolicyLockoutSafetyCheck, Description, Tags);
     }
     public bool is_ReplicateKeyRequest { get { return true; } }
@@ -12661,7 +12659,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.Description;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> dtor_Tags {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> dtor_Tags {
       get {
         return this.Tags;
       }
@@ -12670,16 +12668,16 @@ namespace ComAmazonawsKmsTypes_Compile {
 
   public interface _IReplicateKeyResponse {
     bool is_ReplicateKeyResponse { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> dtor_ReplicaKeyMetadata { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> dtor_ReplicaKeyMetadata { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_ReplicaPolicy { get; }
-    Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> dtor_ReplicaTags { get; }
+    Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> dtor_ReplicaTags { get; }
     _IReplicateKeyResponse DowncastClone();
   }
   public class ReplicateKeyResponse : _IReplicateKeyResponse {
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> ReplicaKeyMetadata;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> ReplicaKeyMetadata;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> ReplicaPolicy;
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> ReplicaTags;
-    public ReplicateKeyResponse(Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> ReplicaKeyMetadata, Wrappers_Compile._IOption<Dafny.ISequence<char>> ReplicaPolicy, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> ReplicaTags) {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> ReplicaTags;
+    public ReplicateKeyResponse(Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> ReplicaKeyMetadata, Wrappers_Compile._IOption<Dafny.ISequence<char>> ReplicaPolicy, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> ReplicaTags) {
       this.ReplicaKeyMetadata = ReplicaKeyMetadata;
       this.ReplicaPolicy = ReplicaPolicy;
       this.ReplicaTags = ReplicaTags;
@@ -12689,7 +12687,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ReplicateKeyResponse(ReplicaKeyMetadata, ReplicaPolicy, ReplicaTags);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ReplicateKeyResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ReplicateKeyResponse;
       return oth != null && object.Equals(this.ReplicaKeyMetadata, oth.ReplicaKeyMetadata) && object.Equals(this.ReplicaPolicy, oth.ReplicaPolicy) && object.Equals(this.ReplicaTags, oth.ReplicaTags);
     }
     public override int GetHashCode() {
@@ -12701,7 +12699,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ReplicateKeyResponse.ReplicateKeyResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ReplicateKeyResponse.ReplicateKeyResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.ReplicaKeyMetadata);
       s += ", ";
@@ -12711,19 +12709,19 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IReplicateKeyResponse theDefault = create(Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyMetadata>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>>.Default());
+    private static readonly _IReplicateKeyResponse theDefault = create(Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>>.Default());
     public static _IReplicateKeyResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReplicateKeyResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReplicateKeyResponse>(ComAmazonawsKmsTypes_Compile.ReplicateKeyResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IReplicateKeyResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReplicateKeyResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReplicateKeyResponse>(Dafny.Com.Amazonaws.Kms.Types.ReplicateKeyResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IReplicateKeyResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IReplicateKeyResponse create(Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> ReplicaKeyMetadata, Wrappers_Compile._IOption<Dafny.ISequence<char>> ReplicaPolicy, Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> ReplicaTags) {
+    public static _IReplicateKeyResponse create(Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> ReplicaKeyMetadata, Wrappers_Compile._IOption<Dafny.ISequence<char>> ReplicaPolicy, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> ReplicaTags) {
       return new ReplicateKeyResponse(ReplicaKeyMetadata, ReplicaPolicy, ReplicaTags);
     }
     public bool is_ReplicateKeyResponse { get { return true; } }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyMetadata> dtor_ReplicaKeyMetadata {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyMetadata> dtor_ReplicaKeyMetadata {
       get {
         return this.ReplicaKeyMetadata;
       }
@@ -12733,7 +12731,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.ReplicaPolicy;
       }
     }
-    public Wrappers_Compile._IOption<Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag>> dtor_ReplicaTags {
+    public Wrappers_Compile._IOption<Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag>> dtor_ReplicaTags {
       get {
         return this.ReplicaTags;
       }
@@ -12761,7 +12759,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new RetireGrantRequest(GrantToken, KeyId, GrantId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.RetireGrantRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.RetireGrantRequest;
       return oth != null && object.Equals(this.GrantToken, oth.GrantToken) && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.GrantId, oth.GrantId);
     }
     public override int GetHashCode() {
@@ -12773,7 +12771,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.RetireGrantRequest.RetireGrantRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.RetireGrantRequest.RetireGrantRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.GrantToken);
       s += ", ";
@@ -12787,8 +12785,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IRetireGrantRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IRetireGrantRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IRetireGrantRequest>(ComAmazonawsKmsTypes_Compile.RetireGrantRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IRetireGrantRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IRetireGrantRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IRetireGrantRequest>(Dafny.Com.Amazonaws.Kms.Types.RetireGrantRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IRetireGrantRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IRetireGrantRequest create(Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantToken, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> GrantId) {
@@ -12830,7 +12828,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new RevokeGrantRequest(KeyId, GrantId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.RevokeGrantRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.RevokeGrantRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.GrantId, oth.GrantId);
     }
     public override int GetHashCode() {
@@ -12841,7 +12839,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.RevokeGrantRequest.RevokeGrantRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.RevokeGrantRequest.RevokeGrantRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -12853,8 +12851,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IRevokeGrantRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IRevokeGrantRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IRevokeGrantRequest>(ComAmazonawsKmsTypes_Compile.RevokeGrantRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IRevokeGrantRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IRevokeGrantRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IRevokeGrantRequest>(Dafny.Com.Amazonaws.Kms.Types.RevokeGrantRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IRevokeGrantRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IRevokeGrantRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> GrantId) {
@@ -12891,7 +12889,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ScheduleKeyDeletionRequest(KeyId, PendingWindowInDays);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ScheduleKeyDeletionRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ScheduleKeyDeletionRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.PendingWindowInDays, oth.PendingWindowInDays);
     }
     public override int GetHashCode() {
@@ -12902,7 +12900,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ScheduleKeyDeletionRequest.ScheduleKeyDeletionRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ScheduleKeyDeletionRequest.ScheduleKeyDeletionRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -12914,8 +12912,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IScheduleKeyDeletionRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IScheduleKeyDeletionRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IScheduleKeyDeletionRequest>(ComAmazonawsKmsTypes_Compile.ScheduleKeyDeletionRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IScheduleKeyDeletionRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IScheduleKeyDeletionRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IScheduleKeyDeletionRequest>(Dafny.Com.Amazonaws.Kms.Types.ScheduleKeyDeletionRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IScheduleKeyDeletionRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IScheduleKeyDeletionRequest create(Dafny.ISequence<char> KeyId, Wrappers_Compile._IOption<int> PendingWindowInDays) {
@@ -12938,16 +12936,16 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_ScheduleKeyDeletionResponse { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_DeletionDate { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> dtor_KeyState { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> dtor_KeyState { get; }
     Wrappers_Compile._IOption<int> dtor_PendingWindowInDays { get; }
     _IScheduleKeyDeletionResponse DowncastClone();
   }
   public class ScheduleKeyDeletionResponse : _IScheduleKeyDeletionResponse {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> KeyState;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> KeyState;
     public readonly Wrappers_Compile._IOption<int> PendingWindowInDays;
-    public ScheduleKeyDeletionResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> KeyState, Wrappers_Compile._IOption<int> PendingWindowInDays) {
+    public ScheduleKeyDeletionResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> KeyState, Wrappers_Compile._IOption<int> PendingWindowInDays) {
       this.KeyId = KeyId;
       this.DeletionDate = DeletionDate;
       this.KeyState = KeyState;
@@ -12958,7 +12956,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new ScheduleKeyDeletionResponse(KeyId, DeletionDate, KeyState, PendingWindowInDays);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.ScheduleKeyDeletionResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.ScheduleKeyDeletionResponse;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.DeletionDate, oth.DeletionDate) && object.Equals(this.KeyState, oth.KeyState) && object.Equals(this.PendingWindowInDays, oth.PendingWindowInDays);
     }
     public override int GetHashCode() {
@@ -12971,7 +12969,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.ScheduleKeyDeletionResponse.ScheduleKeyDeletionResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.ScheduleKeyDeletionResponse.ScheduleKeyDeletionResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -12983,15 +12981,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IScheduleKeyDeletionResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IKeyState>.Default(), Wrappers_Compile.Option<int>.Default());
+    private static readonly _IScheduleKeyDeletionResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IKeyState>.Default(), Wrappers_Compile.Option<int>.Default());
     public static _IScheduleKeyDeletionResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IScheduleKeyDeletionResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IScheduleKeyDeletionResponse>(ComAmazonawsKmsTypes_Compile.ScheduleKeyDeletionResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IScheduleKeyDeletionResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IScheduleKeyDeletionResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IScheduleKeyDeletionResponse>(Dafny.Com.Amazonaws.Kms.Types.ScheduleKeyDeletionResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IScheduleKeyDeletionResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IScheduleKeyDeletionResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> KeyState, Wrappers_Compile._IOption<int> PendingWindowInDays) {
+    public static _IScheduleKeyDeletionResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<char>> DeletionDate, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> KeyState, Wrappers_Compile._IOption<int> PendingWindowInDays) {
       return new ScheduleKeyDeletionResponse(KeyId, DeletionDate, KeyState, PendingWindowInDays);
     }
     public bool is_ScheduleKeyDeletionResponse { get { return true; } }
@@ -13005,7 +13003,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.DeletionDate;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IKeyState> dtor_KeyState {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IKeyState> dtor_KeyState {
       get {
         return this.KeyState;
       }
@@ -13035,8 +13033,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ISigningAlgorithmSpec Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>(ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>(Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ISigningAlgorithmSpec create_RSASSA__PSS__SHA__256() {
@@ -13098,7 +13096,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_RSASSA__PSS__SHA__256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_RSASSA__PSS__SHA__256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_RSASSA__PSS__SHA__256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13107,7 +13105,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.RSASSA_PSS_SHA_256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.RSASSA_PSS_SHA_256";
       return s;
     }
   }
@@ -13119,7 +13117,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_RSASSA__PSS__SHA__384();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_RSASSA__PSS__SHA__384;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_RSASSA__PSS__SHA__384;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13128,7 +13126,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.RSASSA_PSS_SHA_384";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.RSASSA_PSS_SHA_384";
       return s;
     }
   }
@@ -13140,7 +13138,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_RSASSA__PSS__SHA__512();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_RSASSA__PSS__SHA__512;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_RSASSA__PSS__SHA__512;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13149,7 +13147,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.RSASSA_PSS_SHA_512";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.RSASSA_PSS_SHA_512";
       return s;
     }
   }
@@ -13161,7 +13159,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13170,7 +13168,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.RSASSA_PKCS1_V1_5_SHA_256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.RSASSA_PKCS1_V1_5_SHA_256";
       return s;
     }
   }
@@ -13182,7 +13180,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__384();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__384;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__384;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13191,7 +13189,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.RSASSA_PKCS1_V1_5_SHA_384";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.RSASSA_PKCS1_V1_5_SHA_384";
       return s;
     }
   }
@@ -13203,7 +13201,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__512();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__512;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_RSASSA__PKCS1__V1__5__SHA__512;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13212,7 +13210,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.RSASSA_PKCS1_V1_5_SHA_512";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.RSASSA_PKCS1_V1_5_SHA_512";
       return s;
     }
   }
@@ -13224,7 +13222,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_ECDSA__SHA__256();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_ECDSA__SHA__256;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_ECDSA__SHA__256;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13233,7 +13231,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.ECDSA_SHA_256";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.ECDSA_SHA_256";
       return s;
     }
   }
@@ -13245,7 +13243,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_ECDSA__SHA__384();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_ECDSA__SHA__384;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_ECDSA__SHA__384;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13254,7 +13252,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.ECDSA_SHA_384";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.ECDSA_SHA_384";
       return s;
     }
   }
@@ -13266,7 +13264,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SigningAlgorithmSpec_ECDSA__SHA__512();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec_ECDSA__SHA__512;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec_ECDSA__SHA__512;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13275,7 +13273,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.ECDSA_SHA_512";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SigningAlgorithmSpec.ECDSA_SHA_512";
       return s;
     }
   }
@@ -13284,18 +13282,18 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_SignRequest { get; }
     Dafny.ISequence<char> dtor_KeyId { get; }
     Dafny.ISequence<byte> dtor_Message { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> dtor_MessageType { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> dtor_MessageType { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
-    ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec dtor_SigningAlgorithm { get; }
+    Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec dtor_SigningAlgorithm { get; }
     _ISignRequest DowncastClone();
   }
   public class SignRequest : _ISignRequest {
     public readonly Dafny.ISequence<char> KeyId;
     public readonly Dafny.ISequence<byte> Message;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> MessageType;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> MessageType;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
-    public readonly ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec SigningAlgorithm;
-    public SignRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Message, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> MessageType, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec SigningAlgorithm) {
+    public readonly Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec SigningAlgorithm;
+    public SignRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Message, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> MessageType, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec SigningAlgorithm) {
       this.KeyId = KeyId;
       this.Message = Message;
       this.MessageType = MessageType;
@@ -13307,7 +13305,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SignRequest(KeyId, Message, MessageType, GrantTokens, SigningAlgorithm);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SignRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SignRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Message, oth.Message) && object.Equals(this.MessageType, oth.MessageType) && object.Equals(this.GrantTokens, oth.GrantTokens) && object.Equals(this.SigningAlgorithm, oth.SigningAlgorithm);
     }
     public override int GetHashCode() {
@@ -13321,7 +13319,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SignRequest.SignRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SignRequest.SignRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -13335,15 +13333,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _ISignRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IMessageType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default(), ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.Default());
+    private static readonly _ISignRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IMessageType>.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default(), Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec.Default());
     public static _ISignRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISignRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISignRequest>(ComAmazonawsKmsTypes_Compile.SignRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISignRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISignRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISignRequest>(Dafny.Com.Amazonaws.Kms.Types.SignRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISignRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _ISignRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Message, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> MessageType, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec SigningAlgorithm) {
+    public static _ISignRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Message, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> MessageType, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens, Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec SigningAlgorithm) {
       return new SignRequest(KeyId, Message, MessageType, GrantTokens, SigningAlgorithm);
     }
     public bool is_SignRequest { get { return true; } }
@@ -13357,7 +13355,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.Message;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> dtor_MessageType {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> dtor_MessageType {
       get {
         return this.MessageType;
       }
@@ -13367,7 +13365,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.GrantTokens;
       }
     }
-    public ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec dtor_SigningAlgorithm {
+    public Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec dtor_SigningAlgorithm {
       get {
         return this.SigningAlgorithm;
       }
@@ -13378,14 +13376,14 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_SignResponse { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<byte>> dtor_Signature { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> dtor_SigningAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> dtor_SigningAlgorithm { get; }
     _ISignResponse DowncastClone();
   }
   public class SignResponse : _ISignResponse {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<byte>> Signature;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> SigningAlgorithm;
-    public SignResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Signature, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> SigningAlgorithm) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> SigningAlgorithm;
+    public SignResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Signature, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> SigningAlgorithm) {
       this.KeyId = KeyId;
       this.Signature = Signature;
       this.SigningAlgorithm = SigningAlgorithm;
@@ -13395,7 +13393,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new SignResponse(KeyId, Signature, SigningAlgorithm);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.SignResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.SignResponse;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Signature, oth.Signature) && object.Equals(this.SigningAlgorithm, oth.SigningAlgorithm);
     }
     public override int GetHashCode() {
@@ -13407,7 +13405,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.SignResponse.SignResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.SignResponse.SignResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -13417,15 +13415,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _ISignResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>.Default());
+    private static readonly _ISignResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<Dafny.ISequence<byte>>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>.Default());
     public static _ISignResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISignResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISignResponse>(ComAmazonawsKmsTypes_Compile.SignResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ISignResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISignResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISignResponse>(Dafny.Com.Amazonaws.Kms.Types.SignResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ISignResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _ISignResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Signature, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> SigningAlgorithm) {
+    public static _ISignResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<Dafny.ISequence<byte>> Signature, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> SigningAlgorithm) {
       return new SignResponse(KeyId, Signature, SigningAlgorithm);
     }
     public bool is_SignResponse { get { return true; } }
@@ -13439,7 +13437,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.Signature;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> dtor_SigningAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> dtor_SigningAlgorithm {
       get {
         return this.SigningAlgorithm;
       }
@@ -13464,7 +13462,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new Tag(TagKey, TagValue);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Tag;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Tag;
       return oth != null && object.Equals(this.TagKey, oth.TagKey) && object.Equals(this.TagValue, oth.TagValue);
     }
     public override int GetHashCode() {
@@ -13475,7 +13473,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Tag.Tag";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Tag.Tag";
       s += "(";
       s += Dafny.Helpers.ToString(this.TagKey);
       s += ", ";
@@ -13487,8 +13485,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _ITag Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ITag> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ITag>(ComAmazonawsKmsTypes_Compile.Tag.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ITag> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ITag> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ITag>(Dafny.Com.Amazonaws.Kms.Types.Tag.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ITag> _TypeDescriptor() {
       return _TYPE;
     }
     public static _ITag create(Dafny.ISequence<char> TagKey, Dafny.ISequence<char> TagValue) {
@@ -13517,13 +13515,13 @@ namespace ComAmazonawsKmsTypes_Compile {
   public interface _ITagResourceRequest {
     bool is_TagResourceRequest { get; }
     Dafny.ISequence<char> dtor_KeyId { get; }
-    Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag> dtor_Tags { get; }
+    Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag> dtor_Tags { get; }
     _ITagResourceRequest DowncastClone();
   }
   public class TagResourceRequest : _ITagResourceRequest {
     public readonly Dafny.ISequence<char> KeyId;
-    public readonly Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag> Tags;
-    public TagResourceRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag> Tags) {
+    public readonly Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag> Tags;
+    public TagResourceRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag> Tags) {
       this.KeyId = KeyId;
       this.Tags = Tags;
     }
@@ -13532,7 +13530,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new TagResourceRequest(KeyId, Tags);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.TagResourceRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.TagResourceRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Tags, oth.Tags);
     }
     public override int GetHashCode() {
@@ -13543,7 +13541,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.TagResourceRequest.TagResourceRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.TagResourceRequest.TagResourceRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -13551,15 +13549,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _ITagResourceRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<ComAmazonawsKmsTypes_Compile._ITag>.Empty);
+    private static readonly _ITagResourceRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<Dafny.Com.Amazonaws.Kms.Types._ITag>.Empty);
     public static _ITagResourceRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ITagResourceRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ITagResourceRequest>(ComAmazonawsKmsTypes_Compile.TagResourceRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._ITagResourceRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ITagResourceRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ITagResourceRequest>(Dafny.Com.Amazonaws.Kms.Types.TagResourceRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._ITagResourceRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _ITagResourceRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag> Tags) {
+    public static _ITagResourceRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag> Tags) {
       return new TagResourceRequest(KeyId, Tags);
     }
     public bool is_TagResourceRequest { get { return true; } }
@@ -13568,7 +13566,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.KeyId;
       }
     }
-    public Dafny.ISequence<ComAmazonawsKmsTypes_Compile._ITag> dtor_Tags {
+    public Dafny.ISequence<Dafny.Com.Amazonaws.Kms.Types._ITag> dtor_Tags {
       get {
         return this.Tags;
       }
@@ -13607,7 +13605,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new UntagResourceRequest(KeyId, TagKeys);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.UntagResourceRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.UntagResourceRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.TagKeys, oth.TagKeys);
     }
     public override int GetHashCode() {
@@ -13618,7 +13616,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.UntagResourceRequest.UntagResourceRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.UntagResourceRequest.UntagResourceRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -13630,8 +13628,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IUntagResourceRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUntagResourceRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUntagResourceRequest>(ComAmazonawsKmsTypes_Compile.UntagResourceRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUntagResourceRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUntagResourceRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUntagResourceRequest>(Dafny.Com.Amazonaws.Kms.Types.UntagResourceRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUntagResourceRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IUntagResourceRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<Dafny.ISequence<char>> TagKeys) {
@@ -13668,7 +13666,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new UpdateAliasRequest(AliasName, TargetKeyId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.UpdateAliasRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.UpdateAliasRequest;
       return oth != null && object.Equals(this.AliasName, oth.AliasName) && object.Equals(this.TargetKeyId, oth.TargetKeyId);
     }
     public override int GetHashCode() {
@@ -13679,7 +13677,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.UpdateAliasRequest.UpdateAliasRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.UpdateAliasRequest.UpdateAliasRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.AliasName);
       s += ", ";
@@ -13691,8 +13689,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IUpdateAliasRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateAliasRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateAliasRequest>(ComAmazonawsKmsTypes_Compile.UpdateAliasRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateAliasRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateAliasRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateAliasRequest>(Dafny.Com.Amazonaws.Kms.Types.UpdateAliasRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateAliasRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IUpdateAliasRequest create(Dafny.ISequence<char> AliasName, Dafny.ISequence<char> TargetKeyId) {
@@ -13735,7 +13733,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new UpdateCustomKeyStoreRequest(CustomKeyStoreId, NewCustomKeyStoreName, KeyStorePassword, CloudHsmClusterId);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.UpdateCustomKeyStoreRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.UpdateCustomKeyStoreRequest;
       return oth != null && object.Equals(this.CustomKeyStoreId, oth.CustomKeyStoreId) && object.Equals(this.NewCustomKeyStoreName, oth.NewCustomKeyStoreName) && object.Equals(this.KeyStorePassword, oth.KeyStorePassword) && object.Equals(this.CloudHsmClusterId, oth.CloudHsmClusterId);
     }
     public override int GetHashCode() {
@@ -13748,7 +13746,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.UpdateCustomKeyStoreRequest.UpdateCustomKeyStoreRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.UpdateCustomKeyStoreRequest.UpdateCustomKeyStoreRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.CustomKeyStoreId);
       s += ", ";
@@ -13764,8 +13762,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IUpdateCustomKeyStoreRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateCustomKeyStoreRequest>(ComAmazonawsKmsTypes_Compile.UpdateCustomKeyStoreRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateCustomKeyStoreRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateCustomKeyStoreRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateCustomKeyStoreRequest>(Dafny.Com.Amazonaws.Kms.Types.UpdateCustomKeyStoreRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateCustomKeyStoreRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IUpdateCustomKeyStoreRequest create(Dafny.ISequence<char> CustomKeyStoreId, Wrappers_Compile._IOption<Dafny.ISequence<char>> NewCustomKeyStoreName, Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyStorePassword, Wrappers_Compile._IOption<Dafny.ISequence<char>> CloudHsmClusterId) {
@@ -13806,7 +13804,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new UpdateCustomKeyStoreResponse();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.UpdateCustomKeyStoreResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.UpdateCustomKeyStoreResponse;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -13815,15 +13813,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.UpdateCustomKeyStoreResponse.UpdateCustomKeyStoreResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.UpdateCustomKeyStoreResponse.UpdateCustomKeyStoreResponse";
       return s;
     }
     private static readonly _IUpdateCustomKeyStoreResponse theDefault = create();
     public static _IUpdateCustomKeyStoreResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateCustomKeyStoreResponse>(ComAmazonawsKmsTypes_Compile.UpdateCustomKeyStoreResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateCustomKeyStoreResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateCustomKeyStoreResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateCustomKeyStoreResponse>(Dafny.Com.Amazonaws.Kms.Types.UpdateCustomKeyStoreResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateCustomKeyStoreResponse> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IUpdateCustomKeyStoreResponse create() {
@@ -13855,7 +13853,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new UpdateKeyDescriptionRequest(KeyId, Description);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.UpdateKeyDescriptionRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.UpdateKeyDescriptionRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Description, oth.Description);
     }
     public override int GetHashCode() {
@@ -13866,7 +13864,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.UpdateKeyDescriptionRequest.UpdateKeyDescriptionRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.UpdateKeyDescriptionRequest.UpdateKeyDescriptionRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -13878,8 +13876,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IUpdateKeyDescriptionRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateKeyDescriptionRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateKeyDescriptionRequest>(ComAmazonawsKmsTypes_Compile.UpdateKeyDescriptionRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdateKeyDescriptionRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateKeyDescriptionRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateKeyDescriptionRequest>(Dafny.Com.Amazonaws.Kms.Types.UpdateKeyDescriptionRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdateKeyDescriptionRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IUpdateKeyDescriptionRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> Description) {
@@ -13916,7 +13914,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new UpdatePrimaryRegionRequest(KeyId, PrimaryRegion);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.UpdatePrimaryRegionRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.UpdatePrimaryRegionRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.PrimaryRegion, oth.PrimaryRegion);
     }
     public override int GetHashCode() {
@@ -13927,7 +13925,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.UpdatePrimaryRegionRequest.UpdatePrimaryRegionRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.UpdatePrimaryRegionRequest.UpdatePrimaryRegionRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -13939,8 +13937,8 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IUpdatePrimaryRegionRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdatePrimaryRegionRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdatePrimaryRegionRequest>(ComAmazonawsKmsTypes_Compile.UpdatePrimaryRegionRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IUpdatePrimaryRegionRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdatePrimaryRegionRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdatePrimaryRegionRequest>(Dafny.Com.Amazonaws.Kms.Types.UpdatePrimaryRegionRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IUpdatePrimaryRegionRequest> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IUpdatePrimaryRegionRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<char> PrimaryRegion) {
@@ -13963,20 +13961,20 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_VerifyRequest { get; }
     Dafny.ISequence<char> dtor_KeyId { get; }
     Dafny.ISequence<byte> dtor_Message { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> dtor_MessageType { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> dtor_MessageType { get; }
     Dafny.ISequence<byte> dtor_Signature { get; }
-    ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec dtor_SigningAlgorithm { get; }
+    Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec dtor_SigningAlgorithm { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> dtor_GrantTokens { get; }
     _IVerifyRequest DowncastClone();
   }
   public class VerifyRequest : _IVerifyRequest {
     public readonly Dafny.ISequence<char> KeyId;
     public readonly Dafny.ISequence<byte> Message;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> MessageType;
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> MessageType;
     public readonly Dafny.ISequence<byte> Signature;
-    public readonly ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec SigningAlgorithm;
+    public readonly Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec SigningAlgorithm;
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens;
-    public VerifyRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Message, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> MessageType, Dafny.ISequence<byte> Signature, ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec SigningAlgorithm, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public VerifyRequest(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Message, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> MessageType, Dafny.ISequence<byte> Signature, Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec SigningAlgorithm, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       this.KeyId = KeyId;
       this.Message = Message;
       this.MessageType = MessageType;
@@ -13989,7 +13987,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new VerifyRequest(KeyId, Message, MessageType, Signature, SigningAlgorithm, GrantTokens);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.VerifyRequest;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.VerifyRequest;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.Message, oth.Message) && object.Equals(this.MessageType, oth.MessageType) && object.Equals(this.Signature, oth.Signature) && object.Equals(this.SigningAlgorithm, oth.SigningAlgorithm) && object.Equals(this.GrantTokens, oth.GrantTokens);
     }
     public override int GetHashCode() {
@@ -14004,7 +14002,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.VerifyRequest.VerifyRequest";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.VerifyRequest.VerifyRequest";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -14020,15 +14018,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IVerifyRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IMessageType>.Default(), Dafny.Sequence<byte>.Empty, ComAmazonawsKmsTypes_Compile.SigningAlgorithmSpec.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
+    private static readonly _IVerifyRequest theDefault = create(Dafny.Sequence<char>.Empty, Dafny.Sequence<byte>.Empty, Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IMessageType>.Default(), Dafny.Sequence<byte>.Empty, Dafny.Com.Amazonaws.Kms.Types.SigningAlgorithmSpec.Default(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.Default());
     public static _IVerifyRequest Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IVerifyRequest> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IVerifyRequest>(ComAmazonawsKmsTypes_Compile.VerifyRequest.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IVerifyRequest> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IVerifyRequest> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IVerifyRequest>(Dafny.Com.Amazonaws.Kms.Types.VerifyRequest.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IVerifyRequest> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IVerifyRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Message, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> MessageType, Dafny.ISequence<byte> Signature, ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec SigningAlgorithm, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
+    public static _IVerifyRequest create(Dafny.ISequence<char> KeyId, Dafny.ISequence<byte> Message, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> MessageType, Dafny.ISequence<byte> Signature, Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec SigningAlgorithm, Wrappers_Compile._IOption<Dafny.ISequence<Dafny.ISequence<char>>> GrantTokens) {
       return new VerifyRequest(KeyId, Message, MessageType, Signature, SigningAlgorithm, GrantTokens);
     }
     public bool is_VerifyRequest { get { return true; } }
@@ -14042,7 +14040,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.Message;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._IMessageType> dtor_MessageType {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._IMessageType> dtor_MessageType {
       get {
         return this.MessageType;
       }
@@ -14052,7 +14050,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.Signature;
       }
     }
-    public ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec dtor_SigningAlgorithm {
+    public Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec dtor_SigningAlgorithm {
       get {
         return this.SigningAlgorithm;
       }
@@ -14068,14 +14066,14 @@ namespace ComAmazonawsKmsTypes_Compile {
     bool is_VerifyResponse { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_KeyId { get; }
     Wrappers_Compile._IOption<bool> dtor_SignatureValid { get; }
-    Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> dtor_SigningAlgorithm { get; }
+    Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> dtor_SigningAlgorithm { get; }
     _IVerifyResponse DowncastClone();
   }
   public class VerifyResponse : _IVerifyResponse {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId;
     public readonly Wrappers_Compile._IOption<bool> SignatureValid;
-    public readonly Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> SigningAlgorithm;
-    public VerifyResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<bool> SignatureValid, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> SigningAlgorithm) {
+    public readonly Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> SigningAlgorithm;
+    public VerifyResponse(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<bool> SignatureValid, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> SigningAlgorithm) {
       this.KeyId = KeyId;
       this.SignatureValid = SignatureValid;
       this.SigningAlgorithm = SigningAlgorithm;
@@ -14085,7 +14083,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new VerifyResponse(KeyId, SignatureValid, SigningAlgorithm);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.VerifyResponse;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.VerifyResponse;
       return oth != null && object.Equals(this.KeyId, oth.KeyId) && object.Equals(this.SignatureValid, oth.SignatureValid) && object.Equals(this.SigningAlgorithm, oth.SigningAlgorithm);
     }
     public override int GetHashCode() {
@@ -14097,7 +14095,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.VerifyResponse.VerifyResponse";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.VerifyResponse.VerifyResponse";
       s += "(";
       s += Dafny.Helpers.ToString(this.KeyId);
       s += ", ";
@@ -14107,15 +14105,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       s += ")";
       return s;
     }
-    private static readonly _IVerifyResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec>.Default());
+    private static readonly _IVerifyResponse theDefault = create(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default(), Wrappers_Compile.Option<bool>.Default(), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec>.Default());
     public static _IVerifyResponse Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IVerifyResponse> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IVerifyResponse>(ComAmazonawsKmsTypes_Compile.VerifyResponse.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IVerifyResponse> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IVerifyResponse> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IVerifyResponse>(Dafny.Com.Amazonaws.Kms.Types.VerifyResponse.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IVerifyResponse> _TypeDescriptor() {
       return _TYPE;
     }
-    public static _IVerifyResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<bool> SignatureValid, Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> SigningAlgorithm) {
+    public static _IVerifyResponse create(Wrappers_Compile._IOption<Dafny.ISequence<char>> KeyId, Wrappers_Compile._IOption<bool> SignatureValid, Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> SigningAlgorithm) {
       return new VerifyResponse(KeyId, SignatureValid, SigningAlgorithm);
     }
     public bool is_VerifyResponse { get { return true; } }
@@ -14129,7 +14127,7 @@ namespace ComAmazonawsKmsTypes_Compile {
         return this.SignatureValid;
       }
     }
-    public Wrappers_Compile._IOption<ComAmazonawsKmsTypes_Compile._ISigningAlgorithmSpec> dtor_SigningAlgorithm {
+    public Wrappers_Compile._IOption<Dafny.Com.Amazonaws.Kms.Types._ISigningAlgorithmSpec> dtor_SigningAlgorithm {
       get {
         return this.SigningAlgorithm;
       }
@@ -14148,7 +14146,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new WrappingKeySpec();
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.WrappingKeySpec;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.WrappingKeySpec;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -14157,15 +14155,15 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.WrappingKeySpec.RSA_2048";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.WrappingKeySpec.RSA_2048";
       return s;
     }
     private static readonly _IWrappingKeySpec theDefault = create();
     public static _IWrappingKeySpec Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IWrappingKeySpec> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IWrappingKeySpec>(ComAmazonawsKmsTypes_Compile.WrappingKeySpec.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IWrappingKeySpec> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IWrappingKeySpec> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IWrappingKeySpec>(Dafny.Com.Amazonaws.Kms.Types.WrappingKeySpec.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IWrappingKeySpec> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IWrappingKeySpec create() {
@@ -14180,39 +14178,39 @@ namespace ComAmazonawsKmsTypes_Compile {
   }
 
   public interface _IError {
-    bool is_CloudHsmClusterNotFoundException { get; }
-    bool is_CustomKeyStoreHasCMKsException { get; }
-    bool is_TagException { get; }
-    bool is_InvalidImportTokenException { get; }
-    bool is_CloudHsmClusterNotRelatedException { get; }
-    bool is_DependencyTimeoutException { get; }
-    bool is_InvalidGrantIdException { get; }
-    bool is_MalformedPolicyDocumentException { get; }
-    bool is_ExpiredImportTokenException { get; }
-    bool is_UnsupportedOperationException { get; }
     bool is_InvalidGrantTokenException { get; }
-    bool is_KeyUnavailableException { get; }
-    bool is_KMSInternalException { get; }
+    bool is_CloudHsmClusterNotActiveException { get; }
     bool is_IncorrectKeyMaterialException { get; }
-    bool is_InvalidCiphertextException { get; }
-    bool is_IncorrectTrustAnchorException { get; }
-    bool is_InvalidMarkerException { get; }
-    bool is_LimitExceededException { get; }
-    bool is_InvalidKeyUsageException { get; }
-    bool is_AlreadyExistsException { get; }
-    bool is_InvalidArnException { get; }
-    bool is_CustomKeyStoreNotFoundException { get; }
+    bool is_InvalidImportTokenException { get; }
     bool is_InvalidAliasNameException { get; }
-    bool is_CloudHsmClusterInUseException { get; }
+    bool is_InvalidKeyUsageException { get; }
+    bool is_CloudHsmClusterNotFoundException { get; }
+    bool is_TagException { get; }
+    bool is_CustomKeyStoreNotFoundException { get; }
+    bool is_InvalidArnException { get; }
+    bool is_CloudHsmClusterNotRelatedException { get; }
+    bool is_NotFoundException { get; }
     bool is_CloudHsmClusterInvalidConfigurationException { get; }
     bool is_CustomKeyStoreNameInUseException { get; }
-    bool is_KMSInvalidSignatureException { get; }
-    bool is_KMSInvalidStateException { get; }
-    bool is_IncorrectKeyException { get; }
-    bool is_CloudHsmClusterNotActiveException { get; }
-    bool is_CustomKeyStoreInvalidStateException { get; }
+    bool is_UnsupportedOperationException { get; }
+    bool is_DependencyTimeoutException { get; }
+    bool is_CloudHsmClusterInUseException { get; }
     bool is_DisabledException { get; }
-    bool is_NotFoundException { get; }
+    bool is_KeyUnavailableException { get; }
+    bool is_KMSInvalidSignatureException { get; }
+    bool is_IncorrectKeyException { get; }
+    bool is_CustomKeyStoreInvalidStateException { get; }
+    bool is_ExpiredImportTokenException { get; }
+    bool is_KMSInvalidStateException { get; }
+    bool is_InvalidMarkerException { get; }
+    bool is_InvalidGrantIdException { get; }
+    bool is_AlreadyExistsException { get; }
+    bool is_MalformedPolicyDocumentException { get; }
+    bool is_LimitExceededException { get; }
+    bool is_CustomKeyStoreHasCMKsException { get; }
+    bool is_IncorrectTrustAnchorException { get; }
+    bool is_InvalidCiphertextException { get; }
+    bool is_KMSInternalException { get; }
     bool is_Opaque { get; }
     Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_message { get; }
     object dtor_obj { get; }
@@ -14220,85 +14218,49 @@ namespace ComAmazonawsKmsTypes_Compile {
   }
   public abstract class Error : _IError {
     public Error() { }
-    private static readonly _IError theDefault = create_CloudHsmClusterNotFoundException(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default());
+    private static readonly _IError theDefault = create_InvalidGrantTokenException(Wrappers_Compile.Option<Dafny.ISequence<char>>.Default());
     public static _IError Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IError> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IError>(ComAmazonawsKmsTypes_Compile.Error.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IError> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IError> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IError>(Dafny.Com.Amazonaws.Kms.Types.Error.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IError> _TypeDescriptor() {
       return _TYPE;
-    }
-    public static _IError create_CloudHsmClusterNotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_CloudHsmClusterNotFoundException(message);
-    }
-    public static _IError create_CustomKeyStoreHasCMKsException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_CustomKeyStoreHasCMKsException(message);
-    }
-    public static _IError create_TagException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_TagException(message);
-    }
-    public static _IError create_InvalidImportTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_InvalidImportTokenException(message);
-    }
-    public static _IError create_CloudHsmClusterNotRelatedException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_CloudHsmClusterNotRelatedException(message);
-    }
-    public static _IError create_DependencyTimeoutException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_DependencyTimeoutException(message);
-    }
-    public static _IError create_InvalidGrantIdException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_InvalidGrantIdException(message);
-    }
-    public static _IError create_MalformedPolicyDocumentException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_MalformedPolicyDocumentException(message);
-    }
-    public static _IError create_ExpiredImportTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_ExpiredImportTokenException(message);
-    }
-    public static _IError create_UnsupportedOperationException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_UnsupportedOperationException(message);
     }
     public static _IError create_InvalidGrantTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
       return new Error_InvalidGrantTokenException(message);
     }
-    public static _IError create_KeyUnavailableException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_KeyUnavailableException(message);
-    }
-    public static _IError create_KMSInternalException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_KMSInternalException(message);
+    public static _IError create_CloudHsmClusterNotActiveException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_CloudHsmClusterNotActiveException(message);
     }
     public static _IError create_IncorrectKeyMaterialException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
       return new Error_IncorrectKeyMaterialException(message);
     }
-    public static _IError create_InvalidCiphertextException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_InvalidCiphertextException(message);
-    }
-    public static _IError create_IncorrectTrustAnchorException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_IncorrectTrustAnchorException(message);
-    }
-    public static _IError create_InvalidMarkerException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_InvalidMarkerException(message);
-    }
-    public static _IError create_LimitExceededException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_LimitExceededException(message);
-    }
-    public static _IError create_InvalidKeyUsageException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_InvalidKeyUsageException(message);
-    }
-    public static _IError create_AlreadyExistsException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_AlreadyExistsException(message);
-    }
-    public static _IError create_InvalidArnException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_InvalidArnException(message);
-    }
-    public static _IError create_CustomKeyStoreNotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_CustomKeyStoreNotFoundException(message);
+    public static _IError create_InvalidImportTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_InvalidImportTokenException(message);
     }
     public static _IError create_InvalidAliasNameException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
       return new Error_InvalidAliasNameException(message);
     }
-    public static _IError create_CloudHsmClusterInUseException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_CloudHsmClusterInUseException(message);
+    public static _IError create_InvalidKeyUsageException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_InvalidKeyUsageException(message);
+    }
+    public static _IError create_CloudHsmClusterNotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_CloudHsmClusterNotFoundException(message);
+    }
+    public static _IError create_TagException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_TagException(message);
+    }
+    public static _IError create_CustomKeyStoreNotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_CustomKeyStoreNotFoundException(message);
+    }
+    public static _IError create_InvalidArnException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_InvalidArnException(message);
+    }
+    public static _IError create_CloudHsmClusterNotRelatedException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_CloudHsmClusterNotRelatedException(message);
+    }
+    public static _IError create_NotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_NotFoundException(message);
     }
     public static _IError create_CloudHsmClusterInvalidConfigurationException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
       return new Error_CloudHsmClusterInvalidConfigurationException(message);
@@ -14306,100 +14268,136 @@ namespace ComAmazonawsKmsTypes_Compile {
     public static _IError create_CustomKeyStoreNameInUseException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
       return new Error_CustomKeyStoreNameInUseException(message);
     }
-    public static _IError create_KMSInvalidSignatureException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_KMSInvalidSignatureException(message);
+    public static _IError create_UnsupportedOperationException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_UnsupportedOperationException(message);
     }
-    public static _IError create_KMSInvalidStateException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_KMSInvalidStateException(message);
+    public static _IError create_DependencyTimeoutException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_DependencyTimeoutException(message);
     }
-    public static _IError create_IncorrectKeyException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_IncorrectKeyException(message);
-    }
-    public static _IError create_CloudHsmClusterNotActiveException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_CloudHsmClusterNotActiveException(message);
-    }
-    public static _IError create_CustomKeyStoreInvalidStateException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_CustomKeyStoreInvalidStateException(message);
+    public static _IError create_CloudHsmClusterInUseException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_CloudHsmClusterInUseException(message);
     }
     public static _IError create_DisabledException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
       return new Error_DisabledException(message);
     }
-    public static _IError create_NotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      return new Error_NotFoundException(message);
+    public static _IError create_KeyUnavailableException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_KeyUnavailableException(message);
+    }
+    public static _IError create_KMSInvalidSignatureException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_KMSInvalidSignatureException(message);
+    }
+    public static _IError create_IncorrectKeyException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_IncorrectKeyException(message);
+    }
+    public static _IError create_CustomKeyStoreInvalidStateException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_CustomKeyStoreInvalidStateException(message);
+    }
+    public static _IError create_ExpiredImportTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_ExpiredImportTokenException(message);
+    }
+    public static _IError create_KMSInvalidStateException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_KMSInvalidStateException(message);
+    }
+    public static _IError create_InvalidMarkerException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_InvalidMarkerException(message);
+    }
+    public static _IError create_InvalidGrantIdException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_InvalidGrantIdException(message);
+    }
+    public static _IError create_AlreadyExistsException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_AlreadyExistsException(message);
+    }
+    public static _IError create_MalformedPolicyDocumentException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_MalformedPolicyDocumentException(message);
+    }
+    public static _IError create_LimitExceededException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_LimitExceededException(message);
+    }
+    public static _IError create_CustomKeyStoreHasCMKsException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_CustomKeyStoreHasCMKsException(message);
+    }
+    public static _IError create_IncorrectTrustAnchorException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_IncorrectTrustAnchorException(message);
+    }
+    public static _IError create_InvalidCiphertextException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_InvalidCiphertextException(message);
+    }
+    public static _IError create_KMSInternalException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      return new Error_KMSInternalException(message);
     }
     public static _IError create_Opaque(object obj) {
       return new Error_Opaque(obj);
     }
-    public bool is_CloudHsmClusterNotFoundException { get { return this is Error_CloudHsmClusterNotFoundException; } }
-    public bool is_CustomKeyStoreHasCMKsException { get { return this is Error_CustomKeyStoreHasCMKsException; } }
-    public bool is_TagException { get { return this is Error_TagException; } }
-    public bool is_InvalidImportTokenException { get { return this is Error_InvalidImportTokenException; } }
-    public bool is_CloudHsmClusterNotRelatedException { get { return this is Error_CloudHsmClusterNotRelatedException; } }
-    public bool is_DependencyTimeoutException { get { return this is Error_DependencyTimeoutException; } }
-    public bool is_InvalidGrantIdException { get { return this is Error_InvalidGrantIdException; } }
-    public bool is_MalformedPolicyDocumentException { get { return this is Error_MalformedPolicyDocumentException; } }
-    public bool is_ExpiredImportTokenException { get { return this is Error_ExpiredImportTokenException; } }
-    public bool is_UnsupportedOperationException { get { return this is Error_UnsupportedOperationException; } }
     public bool is_InvalidGrantTokenException { get { return this is Error_InvalidGrantTokenException; } }
-    public bool is_KeyUnavailableException { get { return this is Error_KeyUnavailableException; } }
-    public bool is_KMSInternalException { get { return this is Error_KMSInternalException; } }
+    public bool is_CloudHsmClusterNotActiveException { get { return this is Error_CloudHsmClusterNotActiveException; } }
     public bool is_IncorrectKeyMaterialException { get { return this is Error_IncorrectKeyMaterialException; } }
-    public bool is_InvalidCiphertextException { get { return this is Error_InvalidCiphertextException; } }
-    public bool is_IncorrectTrustAnchorException { get { return this is Error_IncorrectTrustAnchorException; } }
-    public bool is_InvalidMarkerException { get { return this is Error_InvalidMarkerException; } }
-    public bool is_LimitExceededException { get { return this is Error_LimitExceededException; } }
-    public bool is_InvalidKeyUsageException { get { return this is Error_InvalidKeyUsageException; } }
-    public bool is_AlreadyExistsException { get { return this is Error_AlreadyExistsException; } }
-    public bool is_InvalidArnException { get { return this is Error_InvalidArnException; } }
-    public bool is_CustomKeyStoreNotFoundException { get { return this is Error_CustomKeyStoreNotFoundException; } }
+    public bool is_InvalidImportTokenException { get { return this is Error_InvalidImportTokenException; } }
     public bool is_InvalidAliasNameException { get { return this is Error_InvalidAliasNameException; } }
-    public bool is_CloudHsmClusterInUseException { get { return this is Error_CloudHsmClusterInUseException; } }
+    public bool is_InvalidKeyUsageException { get { return this is Error_InvalidKeyUsageException; } }
+    public bool is_CloudHsmClusterNotFoundException { get { return this is Error_CloudHsmClusterNotFoundException; } }
+    public bool is_TagException { get { return this is Error_TagException; } }
+    public bool is_CustomKeyStoreNotFoundException { get { return this is Error_CustomKeyStoreNotFoundException; } }
+    public bool is_InvalidArnException { get { return this is Error_InvalidArnException; } }
+    public bool is_CloudHsmClusterNotRelatedException { get { return this is Error_CloudHsmClusterNotRelatedException; } }
+    public bool is_NotFoundException { get { return this is Error_NotFoundException; } }
     public bool is_CloudHsmClusterInvalidConfigurationException { get { return this is Error_CloudHsmClusterInvalidConfigurationException; } }
     public bool is_CustomKeyStoreNameInUseException { get { return this is Error_CustomKeyStoreNameInUseException; } }
-    public bool is_KMSInvalidSignatureException { get { return this is Error_KMSInvalidSignatureException; } }
-    public bool is_KMSInvalidStateException { get { return this is Error_KMSInvalidStateException; } }
-    public bool is_IncorrectKeyException { get { return this is Error_IncorrectKeyException; } }
-    public bool is_CloudHsmClusterNotActiveException { get { return this is Error_CloudHsmClusterNotActiveException; } }
-    public bool is_CustomKeyStoreInvalidStateException { get { return this is Error_CustomKeyStoreInvalidStateException; } }
+    public bool is_UnsupportedOperationException { get { return this is Error_UnsupportedOperationException; } }
+    public bool is_DependencyTimeoutException { get { return this is Error_DependencyTimeoutException; } }
+    public bool is_CloudHsmClusterInUseException { get { return this is Error_CloudHsmClusterInUseException; } }
     public bool is_DisabledException { get { return this is Error_DisabledException; } }
-    public bool is_NotFoundException { get { return this is Error_NotFoundException; } }
+    public bool is_KeyUnavailableException { get { return this is Error_KeyUnavailableException; } }
+    public bool is_KMSInvalidSignatureException { get { return this is Error_KMSInvalidSignatureException; } }
+    public bool is_IncorrectKeyException { get { return this is Error_IncorrectKeyException; } }
+    public bool is_CustomKeyStoreInvalidStateException { get { return this is Error_CustomKeyStoreInvalidStateException; } }
+    public bool is_ExpiredImportTokenException { get { return this is Error_ExpiredImportTokenException; } }
+    public bool is_KMSInvalidStateException { get { return this is Error_KMSInvalidStateException; } }
+    public bool is_InvalidMarkerException { get { return this is Error_InvalidMarkerException; } }
+    public bool is_InvalidGrantIdException { get { return this is Error_InvalidGrantIdException; } }
+    public bool is_AlreadyExistsException { get { return this is Error_AlreadyExistsException; } }
+    public bool is_MalformedPolicyDocumentException { get { return this is Error_MalformedPolicyDocumentException; } }
+    public bool is_LimitExceededException { get { return this is Error_LimitExceededException; } }
+    public bool is_CustomKeyStoreHasCMKsException { get { return this is Error_CustomKeyStoreHasCMKsException; } }
+    public bool is_IncorrectTrustAnchorException { get { return this is Error_IncorrectTrustAnchorException; } }
+    public bool is_InvalidCiphertextException { get { return this is Error_InvalidCiphertextException; } }
+    public bool is_KMSInternalException { get { return this is Error_KMSInternalException; } }
     public bool is_Opaque { get { return this is Error_Opaque; } }
     public Wrappers_Compile._IOption<Dafny.ISequence<char>> dtor_message {
       get {
         var d = this;
-        if (d is Error_CloudHsmClusterNotFoundException) { return ((Error_CloudHsmClusterNotFoundException)d).message; }
-        if (d is Error_CustomKeyStoreHasCMKsException) { return ((Error_CustomKeyStoreHasCMKsException)d).message; }
-        if (d is Error_TagException) { return ((Error_TagException)d).message; }
-        if (d is Error_InvalidImportTokenException) { return ((Error_InvalidImportTokenException)d).message; }
-        if (d is Error_CloudHsmClusterNotRelatedException) { return ((Error_CloudHsmClusterNotRelatedException)d).message; }
-        if (d is Error_DependencyTimeoutException) { return ((Error_DependencyTimeoutException)d).message; }
-        if (d is Error_InvalidGrantIdException) { return ((Error_InvalidGrantIdException)d).message; }
-        if (d is Error_MalformedPolicyDocumentException) { return ((Error_MalformedPolicyDocumentException)d).message; }
-        if (d is Error_ExpiredImportTokenException) { return ((Error_ExpiredImportTokenException)d).message; }
-        if (d is Error_UnsupportedOperationException) { return ((Error_UnsupportedOperationException)d).message; }
         if (d is Error_InvalidGrantTokenException) { return ((Error_InvalidGrantTokenException)d).message; }
-        if (d is Error_KeyUnavailableException) { return ((Error_KeyUnavailableException)d).message; }
-        if (d is Error_KMSInternalException) { return ((Error_KMSInternalException)d).message; }
+        if (d is Error_CloudHsmClusterNotActiveException) { return ((Error_CloudHsmClusterNotActiveException)d).message; }
         if (d is Error_IncorrectKeyMaterialException) { return ((Error_IncorrectKeyMaterialException)d).message; }
-        if (d is Error_InvalidCiphertextException) { return ((Error_InvalidCiphertextException)d).message; }
-        if (d is Error_IncorrectTrustAnchorException) { return ((Error_IncorrectTrustAnchorException)d).message; }
-        if (d is Error_InvalidMarkerException) { return ((Error_InvalidMarkerException)d).message; }
-        if (d is Error_LimitExceededException) { return ((Error_LimitExceededException)d).message; }
-        if (d is Error_InvalidKeyUsageException) { return ((Error_InvalidKeyUsageException)d).message; }
-        if (d is Error_AlreadyExistsException) { return ((Error_AlreadyExistsException)d).message; }
-        if (d is Error_InvalidArnException) { return ((Error_InvalidArnException)d).message; }
-        if (d is Error_CustomKeyStoreNotFoundException) { return ((Error_CustomKeyStoreNotFoundException)d).message; }
+        if (d is Error_InvalidImportTokenException) { return ((Error_InvalidImportTokenException)d).message; }
         if (d is Error_InvalidAliasNameException) { return ((Error_InvalidAliasNameException)d).message; }
-        if (d is Error_CloudHsmClusterInUseException) { return ((Error_CloudHsmClusterInUseException)d).message; }
+        if (d is Error_InvalidKeyUsageException) { return ((Error_InvalidKeyUsageException)d).message; }
+        if (d is Error_CloudHsmClusterNotFoundException) { return ((Error_CloudHsmClusterNotFoundException)d).message; }
+        if (d is Error_TagException) { return ((Error_TagException)d).message; }
+        if (d is Error_CustomKeyStoreNotFoundException) { return ((Error_CustomKeyStoreNotFoundException)d).message; }
+        if (d is Error_InvalidArnException) { return ((Error_InvalidArnException)d).message; }
+        if (d is Error_CloudHsmClusterNotRelatedException) { return ((Error_CloudHsmClusterNotRelatedException)d).message; }
+        if (d is Error_NotFoundException) { return ((Error_NotFoundException)d).message; }
         if (d is Error_CloudHsmClusterInvalidConfigurationException) { return ((Error_CloudHsmClusterInvalidConfigurationException)d).message; }
         if (d is Error_CustomKeyStoreNameInUseException) { return ((Error_CustomKeyStoreNameInUseException)d).message; }
-        if (d is Error_KMSInvalidSignatureException) { return ((Error_KMSInvalidSignatureException)d).message; }
-        if (d is Error_KMSInvalidStateException) { return ((Error_KMSInvalidStateException)d).message; }
-        if (d is Error_IncorrectKeyException) { return ((Error_IncorrectKeyException)d).message; }
-        if (d is Error_CloudHsmClusterNotActiveException) { return ((Error_CloudHsmClusterNotActiveException)d).message; }
-        if (d is Error_CustomKeyStoreInvalidStateException) { return ((Error_CustomKeyStoreInvalidStateException)d).message; }
+        if (d is Error_UnsupportedOperationException) { return ((Error_UnsupportedOperationException)d).message; }
+        if (d is Error_DependencyTimeoutException) { return ((Error_DependencyTimeoutException)d).message; }
+        if (d is Error_CloudHsmClusterInUseException) { return ((Error_CloudHsmClusterInUseException)d).message; }
         if (d is Error_DisabledException) { return ((Error_DisabledException)d).message; }
-        return ((Error_NotFoundException)d).message;
+        if (d is Error_KeyUnavailableException) { return ((Error_KeyUnavailableException)d).message; }
+        if (d is Error_KMSInvalidSignatureException) { return ((Error_KMSInvalidSignatureException)d).message; }
+        if (d is Error_IncorrectKeyException) { return ((Error_IncorrectKeyException)d).message; }
+        if (d is Error_CustomKeyStoreInvalidStateException) { return ((Error_CustomKeyStoreInvalidStateException)d).message; }
+        if (d is Error_ExpiredImportTokenException) { return ((Error_ExpiredImportTokenException)d).message; }
+        if (d is Error_KMSInvalidStateException) { return ((Error_KMSInvalidStateException)d).message; }
+        if (d is Error_InvalidMarkerException) { return ((Error_InvalidMarkerException)d).message; }
+        if (d is Error_InvalidGrantIdException) { return ((Error_InvalidGrantIdException)d).message; }
+        if (d is Error_AlreadyExistsException) { return ((Error_AlreadyExistsException)d).message; }
+        if (d is Error_MalformedPolicyDocumentException) { return ((Error_MalformedPolicyDocumentException)d).message; }
+        if (d is Error_LimitExceededException) { return ((Error_LimitExceededException)d).message; }
+        if (d is Error_CustomKeyStoreHasCMKsException) { return ((Error_CustomKeyStoreHasCMKsException)d).message; }
+        if (d is Error_IncorrectTrustAnchorException) { return ((Error_IncorrectTrustAnchorException)d).message; }
+        if (d is Error_InvalidCiphertextException) { return ((Error_InvalidCiphertextException)d).message; }
+        return ((Error_KMSInternalException)d).message;
       }
     }
     public object dtor_obj {
@@ -14409,276 +14407,6 @@ namespace ComAmazonawsKmsTypes_Compile {
       }
     }
     public abstract _IError DowncastClone();
-  }
-  public class Error_CloudHsmClusterNotFoundException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_CloudHsmClusterNotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_CloudHsmClusterNotFoundException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CloudHsmClusterNotFoundException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 0;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CloudHsmClusterNotFoundException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_CustomKeyStoreHasCMKsException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_CustomKeyStoreHasCMKsException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_CustomKeyStoreHasCMKsException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CustomKeyStoreHasCMKsException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 1;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CustomKeyStoreHasCMKsException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_TagException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_TagException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_TagException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_TagException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 2;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.TagException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_InvalidImportTokenException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_InvalidImportTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_InvalidImportTokenException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_InvalidImportTokenException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 3;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.InvalidImportTokenException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_CloudHsmClusterNotRelatedException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_CloudHsmClusterNotRelatedException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_CloudHsmClusterNotRelatedException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CloudHsmClusterNotRelatedException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 4;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CloudHsmClusterNotRelatedException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_DependencyTimeoutException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_DependencyTimeoutException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_DependencyTimeoutException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_DependencyTimeoutException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 5;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.DependencyTimeoutException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_InvalidGrantIdException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_InvalidGrantIdException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_InvalidGrantIdException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_InvalidGrantIdException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 6;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.InvalidGrantIdException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_MalformedPolicyDocumentException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_MalformedPolicyDocumentException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_MalformedPolicyDocumentException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_MalformedPolicyDocumentException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 7;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.MalformedPolicyDocumentException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_ExpiredImportTokenException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_ExpiredImportTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_ExpiredImportTokenException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_ExpiredImportTokenException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 8;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.ExpiredImportTokenException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_UnsupportedOperationException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_UnsupportedOperationException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_UnsupportedOperationException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_UnsupportedOperationException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 9;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.UnsupportedOperationException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
   }
   public class Error_InvalidGrantTokenException : Error {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
@@ -14690,503 +14418,17 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new Error_InvalidGrantTokenException(message);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_InvalidGrantTokenException;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_InvalidGrantTokenException;
       return oth != null && object.Equals(this.message, oth.message);
     }
     public override int GetHashCode() {
       ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 10;
+      hash = ((hash << 5) + hash) + 0;
       hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.InvalidGrantTokenException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_KeyUnavailableException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_KeyUnavailableException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_KeyUnavailableException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_KeyUnavailableException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 11;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.KeyUnavailableException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_KMSInternalException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_KMSInternalException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_KMSInternalException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_KMSInternalException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 12;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.KMSInternalException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_IncorrectKeyMaterialException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_IncorrectKeyMaterialException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_IncorrectKeyMaterialException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_IncorrectKeyMaterialException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 13;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.IncorrectKeyMaterialException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_InvalidCiphertextException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_InvalidCiphertextException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_InvalidCiphertextException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_InvalidCiphertextException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 14;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.InvalidCiphertextException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_IncorrectTrustAnchorException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_IncorrectTrustAnchorException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_IncorrectTrustAnchorException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_IncorrectTrustAnchorException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 15;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.IncorrectTrustAnchorException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_InvalidMarkerException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_InvalidMarkerException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_InvalidMarkerException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_InvalidMarkerException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 16;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.InvalidMarkerException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_LimitExceededException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_LimitExceededException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_LimitExceededException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_LimitExceededException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 17;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.LimitExceededException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_InvalidKeyUsageException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_InvalidKeyUsageException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_InvalidKeyUsageException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_InvalidKeyUsageException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 18;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.InvalidKeyUsageException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_AlreadyExistsException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_AlreadyExistsException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_AlreadyExistsException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_AlreadyExistsException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 19;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.AlreadyExistsException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_InvalidArnException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_InvalidArnException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_InvalidArnException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_InvalidArnException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 20;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.InvalidArnException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_CustomKeyStoreNotFoundException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_CustomKeyStoreNotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_CustomKeyStoreNotFoundException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CustomKeyStoreNotFoundException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 21;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CustomKeyStoreNotFoundException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_InvalidAliasNameException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_InvalidAliasNameException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_InvalidAliasNameException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_InvalidAliasNameException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 22;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.InvalidAliasNameException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_CloudHsmClusterInUseException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_CloudHsmClusterInUseException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_CloudHsmClusterInUseException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CloudHsmClusterInUseException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 23;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CloudHsmClusterInUseException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_CloudHsmClusterInvalidConfigurationException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_CloudHsmClusterInvalidConfigurationException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_CloudHsmClusterInvalidConfigurationException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CloudHsmClusterInvalidConfigurationException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 24;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CloudHsmClusterInvalidConfigurationException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_CustomKeyStoreNameInUseException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_CustomKeyStoreNameInUseException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_CustomKeyStoreNameInUseException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CustomKeyStoreNameInUseException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 25;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CustomKeyStoreNameInUseException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_KMSInvalidSignatureException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_KMSInvalidSignatureException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_KMSInvalidSignatureException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_KMSInvalidSignatureException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 26;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.KMSInvalidSignatureException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_KMSInvalidStateException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_KMSInvalidStateException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_KMSInvalidStateException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_KMSInvalidStateException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 27;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.KMSInvalidStateException";
-      s += "(";
-      s += Dafny.Helpers.ToString(this.message);
-      s += ")";
-      return s;
-    }
-  }
-  public class Error_IncorrectKeyException : Error {
-    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_IncorrectKeyException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
-      this.message = message;
-    }
-    public override _IError DowncastClone() {
-      if (this is _IError dt) { return dt; }
-      return new Error_IncorrectKeyException(message);
-    }
-    public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_IncorrectKeyException;
-      return oth != null && object.Equals(this.message, oth.message);
-    }
-    public override int GetHashCode() {
-      ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 28;
-      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
-      return (int) hash;
-    }
-    public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.IncorrectKeyException";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.InvalidGrantTokenException";
       s += "(";
       s += Dafny.Helpers.ToString(this.message);
       s += ")";
@@ -15203,71 +14445,260 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new Error_CloudHsmClusterNotActiveException(message);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CloudHsmClusterNotActiveException;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CloudHsmClusterNotActiveException;
       return oth != null && object.Equals(this.message, oth.message);
     }
     public override int GetHashCode() {
       ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 29;
+      hash = ((hash << 5) + hash) + 1;
       hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CloudHsmClusterNotActiveException";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CloudHsmClusterNotActiveException";
       s += "(";
       s += Dafny.Helpers.ToString(this.message);
       s += ")";
       return s;
     }
   }
-  public class Error_CustomKeyStoreInvalidStateException : Error {
+  public class Error_IncorrectKeyMaterialException : Error {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_CustomKeyStoreInvalidStateException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+    public Error_IncorrectKeyMaterialException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
       this.message = message;
     }
     public override _IError DowncastClone() {
       if (this is _IError dt) { return dt; }
-      return new Error_CustomKeyStoreInvalidStateException(message);
+      return new Error_IncorrectKeyMaterialException(message);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_CustomKeyStoreInvalidStateException;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_IncorrectKeyMaterialException;
       return oth != null && object.Equals(this.message, oth.message);
     }
     public override int GetHashCode() {
       ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 30;
+      hash = ((hash << 5) + hash) + 2;
       hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.CustomKeyStoreInvalidStateException";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.IncorrectKeyMaterialException";
       s += "(";
       s += Dafny.Helpers.ToString(this.message);
       s += ")";
       return s;
     }
   }
-  public class Error_DisabledException : Error {
+  public class Error_InvalidImportTokenException : Error {
     public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
-    public Error_DisabledException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+    public Error_InvalidImportTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
       this.message = message;
     }
     public override _IError DowncastClone() {
       if (this is _IError dt) { return dt; }
-      return new Error_DisabledException(message);
+      return new Error_InvalidImportTokenException(message);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_DisabledException;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_InvalidImportTokenException;
       return oth != null && object.Equals(this.message, oth.message);
     }
     public override int GetHashCode() {
       ulong hash = 5381;
-      hash = ((hash << 5) + hash) + 31;
+      hash = ((hash << 5) + hash) + 3;
       hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.DisabledException";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.InvalidImportTokenException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_InvalidAliasNameException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_InvalidAliasNameException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_InvalidAliasNameException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_InvalidAliasNameException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 4;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.InvalidAliasNameException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_InvalidKeyUsageException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_InvalidKeyUsageException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_InvalidKeyUsageException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_InvalidKeyUsageException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 5;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.InvalidKeyUsageException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_CloudHsmClusterNotFoundException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_CloudHsmClusterNotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_CloudHsmClusterNotFoundException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CloudHsmClusterNotFoundException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 6;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CloudHsmClusterNotFoundException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_TagException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_TagException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_TagException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_TagException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 7;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.TagException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_CustomKeyStoreNotFoundException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_CustomKeyStoreNotFoundException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_CustomKeyStoreNotFoundException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CustomKeyStoreNotFoundException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 8;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CustomKeyStoreNotFoundException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_InvalidArnException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_InvalidArnException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_InvalidArnException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_InvalidArnException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 9;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.InvalidArnException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_CloudHsmClusterNotRelatedException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_CloudHsmClusterNotRelatedException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_CloudHsmClusterNotRelatedException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CloudHsmClusterNotRelatedException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 10;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CloudHsmClusterNotRelatedException";
       s += "(";
       s += Dafny.Helpers.ToString(this.message);
       s += ")";
@@ -15284,7 +14715,574 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new Error_NotFoundException(message);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_NotFoundException;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_NotFoundException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 11;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.NotFoundException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_CloudHsmClusterInvalidConfigurationException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_CloudHsmClusterInvalidConfigurationException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_CloudHsmClusterInvalidConfigurationException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CloudHsmClusterInvalidConfigurationException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 12;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CloudHsmClusterInvalidConfigurationException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_CustomKeyStoreNameInUseException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_CustomKeyStoreNameInUseException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_CustomKeyStoreNameInUseException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CustomKeyStoreNameInUseException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 13;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CustomKeyStoreNameInUseException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_UnsupportedOperationException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_UnsupportedOperationException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_UnsupportedOperationException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_UnsupportedOperationException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 14;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.UnsupportedOperationException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_DependencyTimeoutException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_DependencyTimeoutException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_DependencyTimeoutException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_DependencyTimeoutException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 15;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.DependencyTimeoutException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_CloudHsmClusterInUseException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_CloudHsmClusterInUseException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_CloudHsmClusterInUseException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CloudHsmClusterInUseException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 16;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CloudHsmClusterInUseException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_DisabledException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_DisabledException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_DisabledException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_DisabledException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 17;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.DisabledException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_KeyUnavailableException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_KeyUnavailableException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_KeyUnavailableException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_KeyUnavailableException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 18;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.KeyUnavailableException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_KMSInvalidSignatureException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_KMSInvalidSignatureException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_KMSInvalidSignatureException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_KMSInvalidSignatureException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 19;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.KMSInvalidSignatureException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_IncorrectKeyException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_IncorrectKeyException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_IncorrectKeyException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_IncorrectKeyException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 20;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.IncorrectKeyException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_CustomKeyStoreInvalidStateException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_CustomKeyStoreInvalidStateException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_CustomKeyStoreInvalidStateException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CustomKeyStoreInvalidStateException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 21;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CustomKeyStoreInvalidStateException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_ExpiredImportTokenException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_ExpiredImportTokenException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_ExpiredImportTokenException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_ExpiredImportTokenException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 22;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.ExpiredImportTokenException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_KMSInvalidStateException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_KMSInvalidStateException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_KMSInvalidStateException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_KMSInvalidStateException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 23;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.KMSInvalidStateException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_InvalidMarkerException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_InvalidMarkerException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_InvalidMarkerException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_InvalidMarkerException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 24;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.InvalidMarkerException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_InvalidGrantIdException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_InvalidGrantIdException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_InvalidGrantIdException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_InvalidGrantIdException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 25;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.InvalidGrantIdException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_AlreadyExistsException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_AlreadyExistsException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_AlreadyExistsException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_AlreadyExistsException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 26;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.AlreadyExistsException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_MalformedPolicyDocumentException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_MalformedPolicyDocumentException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_MalformedPolicyDocumentException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_MalformedPolicyDocumentException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 27;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.MalformedPolicyDocumentException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_LimitExceededException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_LimitExceededException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_LimitExceededException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_LimitExceededException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 28;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.LimitExceededException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_CustomKeyStoreHasCMKsException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_CustomKeyStoreHasCMKsException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_CustomKeyStoreHasCMKsException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_CustomKeyStoreHasCMKsException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 29;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.CustomKeyStoreHasCMKsException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_IncorrectTrustAnchorException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_IncorrectTrustAnchorException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_IncorrectTrustAnchorException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_IncorrectTrustAnchorException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 30;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.IncorrectTrustAnchorException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_InvalidCiphertextException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_InvalidCiphertextException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_InvalidCiphertextException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_InvalidCiphertextException;
+      return oth != null && object.Equals(this.message, oth.message);
+    }
+    public override int GetHashCode() {
+      ulong hash = 5381;
+      hash = ((hash << 5) + hash) + 31;
+      hash = ((hash << 5) + hash) + ((ulong)Dafny.Helpers.GetHashCode(this.message));
+      return (int) hash;
+    }
+    public override string ToString() {
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.InvalidCiphertextException";
+      s += "(";
+      s += Dafny.Helpers.ToString(this.message);
+      s += ")";
+      return s;
+    }
+  }
+  public class Error_KMSInternalException : Error {
+    public readonly Wrappers_Compile._IOption<Dafny.ISequence<char>> message;
+    public Error_KMSInternalException(Wrappers_Compile._IOption<Dafny.ISequence<char>> message) {
+      this.message = message;
+    }
+    public override _IError DowncastClone() {
+      if (this is _IError dt) { return dt; }
+      return new Error_KMSInternalException(message);
+    }
+    public override bool Equals(object other) {
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_KMSInternalException;
       return oth != null && object.Equals(this.message, oth.message);
     }
     public override int GetHashCode() {
@@ -15294,7 +15292,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.NotFoundException";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.KMSInternalException";
       s += "(";
       s += Dafny.Helpers.ToString(this.message);
       s += ")";
@@ -15311,7 +15309,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return new Error_Opaque(obj);
     }
     public override bool Equals(object other) {
-      var oth = other as ComAmazonawsKmsTypes_Compile.Error_Opaque;
+      var oth = other as Dafny.Com.Amazonaws.Kms.Types.Error_Opaque;
       return oth != null && this.obj == oth.obj;
     }
     public override int GetHashCode() {
@@ -15321,7 +15319,7 @@ namespace ComAmazonawsKmsTypes_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "ComAmazonawsKmsTypes_Compile.Error.Opaque";
+      string s = "Dafny.Com.Amazonaws.Kms.Types_Compile.Error.Opaque";
       s += "(";
       s += Dafny.Helpers.ToString(this.obj);
       s += ")";
@@ -15330,8 +15328,8 @@ namespace ComAmazonawsKmsTypes_Compile {
   }
 
   public partial class OpaqueError {
-    private static readonly Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IError> _TYPE = new Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IError>(ComAmazonawsKmsTypes_Compile.Error.Default());
-    public static Dafny.TypeDescriptor<ComAmazonawsKmsTypes_Compile._IError> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IError> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IError>(Dafny.Com.Amazonaws.Kms.Types.Error.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms.Types._IError> _TypeDescriptor() {
       return _TYPE;
     }
   }
@@ -15416,12 +15414,12 @@ namespace ComAmazonawsKmsTypes_Compile {
       return ((BigInteger.One) <= (new BigInteger((x).Count))) && ((new BigInteger((x).Count)) <= (new BigInteger(5000)));
     }
   }
-} // end of namespace ComAmazonawsKmsTypes_Compile
-namespace Com_mAmazonaws_mKms_Compile {
+} // end of namespace Dafny.Com.Amazonaws.Kms.Types
+namespace Dafny.Com.Amazonaws.Kms {
 
   public partial class __default {
-    public static Com_mAmazonaws_mKms_Compile._IKMSClientConfigType DefaultKMSClientConfigType() {
-      return Com_mAmazonaws_mKms_Compile.KMSClientConfigType.create();
+    public static Dafny.Com.Amazonaws.Kms._IKMSClientConfigType DefaultKMSClientConfigType() {
+      return Dafny.Com.Amazonaws.Kms.KMSClientConfigType.create();
     }
   }
 
@@ -15437,7 +15435,7 @@ namespace Com_mAmazonaws_mKms_Compile {
       return new KMSClientConfigType();
     }
     public override bool Equals(object other) {
-      var oth = other as Com_mAmazonaws_mKms_Compile.KMSClientConfigType;
+      var oth = other as Dafny.Com.Amazonaws.Kms.KMSClientConfigType;
       return oth != null;
     }
     public override int GetHashCode() {
@@ -15446,15 +15444,15 @@ namespace Com_mAmazonaws_mKms_Compile {
       return (int) hash;
     }
     public override string ToString() {
-      string s = "Com_mAmazonaws_mKms_Compile.KMSClientConfigType.KMSClientConfigType";
+      string s = "Dafny.Com.Amazonaws.Kms_Compile.KMSClientConfigType.KMSClientConfigType";
       return s;
     }
     private static readonly _IKMSClientConfigType theDefault = create();
     public static _IKMSClientConfigType Default() {
       return theDefault;
     }
-    private static readonly Dafny.TypeDescriptor<Com_mAmazonaws_mKms_Compile._IKMSClientConfigType> _TYPE = new Dafny.TypeDescriptor<Com_mAmazonaws_mKms_Compile._IKMSClientConfigType>(Com_mAmazonaws_mKms_Compile.KMSClientConfigType.Default());
-    public static Dafny.TypeDescriptor<Com_mAmazonaws_mKms_Compile._IKMSClientConfigType> _TypeDescriptor() {
+    private static readonly Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms._IKMSClientConfigType> _TYPE = new Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms._IKMSClientConfigType>(Dafny.Com.Amazonaws.Kms.KMSClientConfigType.Default());
+    public static Dafny.TypeDescriptor<Dafny.Com.Amazonaws.Kms._IKMSClientConfigType> _TypeDescriptor() {
       return _TYPE;
     }
     public static _IKMSClientConfigType create() {
@@ -15467,7 +15465,7 @@ namespace Com_mAmazonaws_mKms_Compile {
       }
     }
   }
-} // end of namespace Com_mAmazonaws_mKms_Compile
+} // end of namespace Dafny.Com.Amazonaws.Kms
 namespace Com_mAmazonaws_Compile {
 
 } // end of namespace Com_mAmazonaws_Compile
@@ -15481,10 +15479,10 @@ namespace TestComAmazonawsKms_Compile {
     {
       Dafny.ISequence<char> _76_keyId;
       _76_keyId = Dafny.Sequence<char>.FromString("arn:aws:kms:us-west-2:658956600833:key/b3537ef1-d8dc-4780-9f5a-55776cbb2f7f");
-      ComAmazonawsKmsTypes_Compile.IKeyManagementServiceClient _77_client;
-      Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile.IKeyManagementServiceClient, ComAmazonawsKmsTypes_Compile._IError> _78_valueOrError0;
-      Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile.IKeyManagementServiceClient, ComAmazonawsKmsTypes_Compile._IError> _out0;
-      _out0 = Com_mAmazonaws_mKms_Compile.__default.KMSClient(Com_mAmazonaws_mKms_Compile.__default.DefaultKMSClientConfigType());
+      Dafny.Com.Amazonaws.Kms.Types.IKeyManagementServiceClient _77_client;
+      Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types.IKeyManagementServiceClient, Dafny.Com.Amazonaws.Kms.Types._IError> _78_valueOrError0;
+      Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types.IKeyManagementServiceClient, Dafny.Com.Amazonaws.Kms.Types._IError> _out0;
+      _out0 = Dafny.Com.Amazonaws.Kms.__default.KMSClient();
       _78_valueOrError0 = _out0;
       if (!(!((_78_valueOrError0).IsFailure()))) {
         throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/AWS-KMS/test/BasicGenerate.dfy(12,15): " + _78_valueOrError0);
@@ -15492,16 +15490,16 @@ namespace TestComAmazonawsKms_Compile {
       _77_client = (_78_valueOrError0).Extract();
       BigInteger _79_keyLength;
       _79_keyLength = new BigInteger(32);
-      ComAmazonawsKmsTypes_Compile._IGenerateDataKeyRequest _80_request;
-      _80_request = ComAmazonawsKmsTypes_Compile.GenerateDataKeyRequest.create(_76_keyId, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.create_None(), Wrappers_Compile.Option<int>.create_Some((int)(_79_keyLength)), Wrappers_Compile.Option<ComAmazonawsKmsTypes_Compile._IDataKeySpec>.create_None(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.create_None());
-      Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyResponse, ComAmazonawsKmsTypes_Compile._IError> _81_ret;
-      Wrappers_Compile._IResult<ComAmazonawsKmsTypes_Compile._IGenerateDataKeyResponse, ComAmazonawsKmsTypes_Compile._IError> _out1;
+      Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyRequest _80_request;
+      _80_request = Dafny.Com.Amazonaws.Kms.Types.GenerateDataKeyRequest.create(_76_keyId, Wrappers_Compile.Option<Dafny.IMap<Dafny.ISequence<char>,Dafny.ISequence<char>>>.create_None(), Wrappers_Compile.Option<int>.create_Some((int)(_79_keyLength)), Wrappers_Compile.Option<Dafny.Com.Amazonaws.Kms.Types._IDataKeySpec>.create_None(), Wrappers_Compile.Option<Dafny.ISequence<Dafny.ISequence<char>>>.create_None());
+      Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> _81_ret;
+      Wrappers_Compile._IResult<Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyResponse, Dafny.Com.Amazonaws.Kms.Types._IError> _out1;
       _out1 = (_77_client).GenerateDataKey(_80_request);
       _81_ret = _out1;
       if (!((_81_ret).is_Success)) {
         throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/AWS-KMS/test/BasicGenerate.dfy(26,4): " + Dafny.Sequence<char>.FromString("expectation violation"));
       }
-      ComAmazonawsKmsTypes_Compile._IGenerateDataKeyResponse _let_tmp_rhs0 = (_81_ret).dtor_value;
+      Dafny.Com.Amazonaws.Kms.Types._IGenerateDataKeyResponse _let_tmp_rhs0 = (_81_ret).dtor_value;
       Wrappers_Compile._IOption<Dafny.ISequence<byte>> _82_CiphertextBlob = _let_tmp_rhs0.dtor_CiphertextBlob;
       Wrappers_Compile._IOption<Dafny.ISequence<byte>> _83_Plaintext = _let_tmp_rhs0.dtor_Plaintext;
       Wrappers_Compile._IOption<Dafny.ISequence<char>> _84_KeyId = _let_tmp_rhs0.dtor_KeyId;
