@@ -3,8 +3,7 @@
 
 include "HMAC.dfy"
 include "../Digest.dfy"
-include "../../StandardLibrary/StandardLibrary.dfy"
-include "../Model/AwsCryptographyPrimitivesTypes.dfy"
+include "../../Model/AwsCryptographyPrimitivesTypes.dfy"
 
 /*
  * Implementation of the https://tools.ietf.org/html/rfc5869 HMAC-based key derivation function

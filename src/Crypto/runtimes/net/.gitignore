@@ -1,0 +1,7 @@
+.idea/*
+
+Source/bin
+Source/obj
+
+Test/bin
+Test/obj

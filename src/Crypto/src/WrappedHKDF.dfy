@@ -3,7 +3,7 @@
 
 include "HKDF/HKDF.dfy"
 include "HKDF/HMAC.dfy"
-include "Model/AwsCryptographyPrimitivesTypes.dfy"
+include "../Model/AwsCryptographyPrimitivesTypes.dfy"
 
 /*
  * Implementation of the https://tools.ietf.org/html/rfc5869 HMAC-based key derivation function

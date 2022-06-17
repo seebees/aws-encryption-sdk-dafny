@@ -1,7 +1,7 @@
 // Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-include "Model/AwsCryptographyPrimitivesTypes.dfy"
+include "../Model/AwsCryptographyPrimitivesTypes.dfy"
 include "HKDF/HMAC.dfy"
 
 module WrappedHMAC {

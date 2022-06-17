@@ -1,8 +1,7 @@
 // Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-include "../StandardLibrary/StandardLibrary.dfy"
-include "Model/AwsCryptographyPrimitivesTypes.dfy"
+include "../Model/AwsCryptographyPrimitivesTypes.dfy"
 
 module Digest {
   import opened Wrappers

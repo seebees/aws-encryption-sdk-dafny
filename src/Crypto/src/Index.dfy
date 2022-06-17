@@ -1,7 +1,7 @@
 // Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-include "Model/AwsCryptographyPrimitivesTypes.dfy"
+include "../Model/AwsCryptographyPrimitivesTypes.dfy"
 include "Random.dfy"
 include "WrappedHMAC.dfy"
 include "WrappedHKDF.dfy"
@@ -10,7 +10,7 @@ include "Digest.dfy"
 include "RSAEncryption.dfy"
 include "Signature.dfy"
 
-module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesService {
+module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
   import Random
   import AESEncryption
   import D = Digest

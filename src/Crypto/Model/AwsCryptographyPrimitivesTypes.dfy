@@ -3,7 +3,7 @@
 // Do not modify this file. This file is machine generated, and any changes to it will be overwritten.
 include "../../StandardLibrary/StandardLibrary.dfy"
  include "../../Util/UTF8.dfy"
- module AwsCryptographyPrimitivesTypes
+ module {:extern "Dafny.Aws.Cryptography.Primitives.Types" } AwsCryptographyPrimitivesTypes
  {
  import opened Wrappers
  import opened StandardLibrary.UInt
