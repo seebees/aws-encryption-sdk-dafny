@@ -1,7 +1,7 @@
 // Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 // Do not modify this file. This file is machine generated, and any changes to it will be overwritten.
-using System.Linq; namespace Dafny.Com.Amazonaws.Kms {
+using System.Linq; namespace Com.Amazonaws.Kms {
  internal static class TypeConversion {
  public static string FromDafny_N3_com__N9_amazonaws__N3_kms__S12_TagValueType (Dafny.ISequence<char> value) {
  return new string(value.Elements);

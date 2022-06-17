@@ -3,7 +3,7 @@
 // Do not modify this file. This file is machine generated, and any changes to it will be overwritten.
 using System;
  using System.IO;
- using System.Collections.Generic; namespace Dafny.Com.Amazonaws.Kms {
+ using System.Collections.Generic; namespace Com.Amazonaws.Kms {
  internal class KeyManagementServiceShim : Dafny.Com.Amazonaws.Kms.Types.IKeyManagementServiceClient {
  internal Amazon.KeyManagementService.AmazonKeyManagementServiceClient _impl;
  internal KeyManagementServiceShim(Amazon.KeyManagementService.AmazonKeyManagementServiceClient impl) {

@@ -1,27 +1,28 @@
 using Amazon.KeyManagementService;
 using Wrappers_Compile;
 using Amazon.Runtime;
+using Com.Amazonaws.Kms;
 
+// This extern is identified in Dafny code
+// that refines the AWS SDK KMS Model
 namespace Dafny.Com.Amazonaws.Kms
 {
     public partial class __default
     {
         public static
             _IResult<
-                Dafny.Com.Amazonaws.Kms.Types.IKeyManagementServiceClient,
-                Dafny.Com.Amazonaws.Kms.Types._IError
+                Types.IKeyManagementServiceClient,
+                Types._IError
             >
             KMSClient()
         {
-            var asdf = new EnvironmentVariablesAWSCredentials();
-            var client = new AmazonKeyManagementServiceClient(
-                asdf
-                );
+            var client = new AmazonKeyManagementServiceClient();
 
             return Result<
-                Dafny.Com.Amazonaws.Kms.Types.IKeyManagementServiceClient,
-                Dafny.Com.Amazonaws.Kms.Types._IError>
-                .create_Success(new Kms.KeyManagementServiceShim(client));
+                Types.IKeyManagementServiceClient,
+                Types._IError
+            >
+                .create_Success(new KeyManagementServiceShim(client));
         }
     }
 }
