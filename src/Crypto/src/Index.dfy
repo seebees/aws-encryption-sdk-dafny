@@ -10,25 +10,25 @@ include "Digest.dfy"
 include "RSAEncryption.dfy"
 include "Signature.dfy"
 
-module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
+module {:extern "Dafny.Aws.Cryptography.Primitives" } Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
   import Random
   import AESEncryption
   import D = Digest
   import WrappedHMAC
   import WrappedHKDF
 
-  function method DefaultConfig(): CryptoConfig {
+  function method DefaultCryptoConfig(): CryptoConfig {
     CryptoConfig()
   }
 
-  method AtomicPrimitives(config: CryptoConfig)
+  method Crypto(config: CryptoConfig)
 		returns (res: Result<IAwsCryptographicPrimitivesClient,Error>)
   {
-    var client := new AtomicPrimitivesServiceThing(config);
+    var client := new AtomicPrimitivesClient(config);
     return Success(client);
   }
 
-  class AtomicPrimitivesServiceThing extends IAwsCryptographicPrimitivesClient {
+  class AtomicPrimitivesClient extends IAwsCryptographicPrimitivesClient {
 
     const config: CryptoConfig
     constructor(config: CryptoConfig)
@@ -38,10 +38,13 @@ module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
 
     method GenerateRandomBytes ( input: GenerateRandomBytesInput )
       returns  ( output: Result<seq<uint8>, Error> )
-	    ensures GenerateRandomBytesCalledWith (  input )
-	    ensures output.Success? ==> GenerateRandomBytesSucceededWith (  input , output.value )
+      ensures GenerateRandomBytesCalledWith (  input )
+      ensures output.Success? ==> GenerateRandomBytesSucceededWith (  input , output.value )
     {
-      output := Random.GenerateBytes(input.length);
+      AssumeGenerateRandomBytesCalledWith(input);
+      var value :- Random.GenerateBytes(input.length);
+      AssumeGenerateRandomBytesSucceededWith(input , value);
+      output := Success(value);
     }
 
     method Digest ( input: DigestInput )
@@ -49,7 +52,10 @@ module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
       ensures DigestCalledWith (  input )
       ensures output.Success? ==> DigestSucceededWith (  input , output.value )
     {
-      output := D.Digest(input);
+      AssumeDigestCalledWith(input);
+      var value :- D.Digest(input);
+      AssumeDigestSucceededWith(input, value);
+      output := Success(value);
     }
 
     method HMac ( input: HMacInput )
@@ -57,15 +63,10 @@ module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
       ensures HMacCalledWith (  input )
       ensures output.Success? ==> HMacSucceededWith (  input , output.value )
     {
-      output := WrappedHMAC.Digest(input);
-    }
-
-    method HkdfExpand ( input: HkdfExpandInput )
-      returns  ( output: Result<seq<uint8>, Error> )
-      ensures HkdfExpandCalledWith (  input )
-      ensures output.Success? ==> HkdfExpandSucceededWith (  input , output.value )
-    {
-
+      AssumeHMacCalledWith(input);
+      var value :- WrappedHMAC.Digest(input);
+      AssumeHMacSucceededWith(input, value);
+      output := Success(value);
     }
 
     method HkdfExtract ( input: HkdfExtractInput )
@@ -74,6 +75,36 @@ module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
       ensures output.Success? ==> HkdfExtractSucceededWith (  input , output.value )
     {
 
+      AssumeHkdfExtractCalledWith(input);
+
+      :- Need(
+        && (input.salt.None? || |input.salt.value| != 0)
+        && |input.ikm| < INT32_MAX_LIMIT,
+        Types.AwsCryptographicPrimitivesError(message := "No.")
+      );
+
+      var value := WrappedHKDF.Extract(input);
+      AssumeHkdfExtractSucceededWith(input, value);
+      output := Success(value);
+    }
+
+    method HkdfExpand ( input: HkdfExpandInput )
+      returns  ( output: Result<seq<uint8>, Error> )
+      ensures HkdfExpandCalledWith (  input )
+      ensures output.Success? ==> HkdfExpandSucceededWith (  input , output.value )
+    {
+      AssumeHkdfExpandCalledWith(input);
+
+      :- Need(
+        && 1 <= input.expectedLength as int <= 255 * D.Length(input.digestAlgorithm)
+        && |input.info| < INT32_MAX_LIMIT
+        && D.Length(input.digestAlgorithm) == |input.prk|,
+        Types.AwsCryptographicPrimitivesError(message := "No.")
+      );
+
+      var value := WrappedHKDF.Expand(input);
+      AssumeHkdfExpandSucceededWith(input, value);
+      output := Success(value);
     }
 
     method Hkdf ( input: HkdfInput )
@@ -81,7 +112,19 @@ module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
       ensures HkdfCalledWith (  input )
       ensures output.Success? ==> HkdfSucceededWith (  input , output.value )
     {
+      AssumeHkdfCalledWith(input);
 
+      :- Need(
+        && 0 <= input.expectedLength as int <= 255 * D.Length(input.digestAlgorithm)
+        && (input.salt.None? || |input.salt.value| != 0)
+        && |input.info| < INT32_MAX_LIMIT
+        && |input.ikm| < INT32_MAX_LIMIT,
+        Types.AwsCryptographicPrimitivesError(message := "No.")
+      );
+
+      var value := WrappedHKDF.Hkdf(input);
+      AssumeHkdfSucceededWith(input, value);
+      output := Success(value);
     }
 
     method AESDecrypt ( input: AESDecryptInput )
@@ -89,7 +132,17 @@ module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
       ensures AESDecryptCalledWith (  input )
       ensures output.Success? ==> AESDecryptSucceededWith (  input , output.value )
     {
-      output := AESEncryption.AESDecrypt(input);
+      AssumeAESDecryptCalledWith(input);
+      :- Need(
+        && |input.key| == input.encAlg.keyLength as int
+        && |input.iv| == input.encAlg.ivLength as int
+        && |input.authTag| == input.encAlg.tagLength as int,
+        Types.AwsCryptographicPrimitivesError(message := "Request does not match algorithm.")
+      );
+
+      var value :- AESEncryption.AESDecrypt(input);
+      AssumeAESDecryptSucceededWith(input, value);
+      output := Success(value);
     }
 
     method AESEncrypt ( input: AESEncryptInput )
@@ -98,7 +151,16 @@ module Aws.Cryptography.Primitives refines AwsCryptographyPrimitivesAbstract {
       ensures output.Success? ==> AESEncryptSucceededWith (  input , output.value )
       ensures output.Success? ==> AESEncryption.EncryptionOutputEncryptedWithAAD(output.value, input.aad)
     {
-      output := AESEncryption.AESEncrypt(input);
+      AssumeAESEncryptCalledWith(input);
+      :- Need(
+        && |input.iv| == input.encAlg.ivLength as int
+        && |input.key| == input.encAlg.keyLength as int,
+        Types.AwsCryptographicPrimitivesError(message := "Request does not match algorithm.")
+      );
+
+      var value :- AESEncryption.AESEncrypt(input);
+      AssumeAESEncryptSucceededWith(input, value);
+      output := Success(value);
     }
   }
 }

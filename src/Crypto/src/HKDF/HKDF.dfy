@@ -65,11 +65,9 @@ module HKDF {
     exists prev | Ti(hmac, info, nMinusOne, prev) :: res == prev + info + [(n as uint8)]
   }
 
-  method Expand(hmac: HMac, prk: seq<uint8>, info: seq<uint8>, expectedLength: int, digest: Types.DigestAlgorithm, ghost salt: seq<uint8>) returns (okm: seq<uint8>, ghost okmUnabridged: seq<uint8>)
+  method Expand(hmac: HMac, prk: seq<uint8>, info: seq<uint8>, expectedLength: int, digest: Types.DigestAlgorithm) returns (okm: seq<uint8>, ghost okmUnabridged: seq<uint8>)
     requires hmac.GetDigest() == digest
     requires 1 <= expectedLength <= 255 * Digest.Length(hmac.GetDigest())
-    requires |salt| != 0
-    requires hmac.GetKey() == salt
     requires |info| < INT32_MAX_LIMIT
     requires Digest.Length(hmac.GetDigest()) == |prk|
     modifies hmac
@@ -159,6 +157,6 @@ module HKDF {
 
     var prk := Extract(hmac, nonEmptySalt, ikm, digest);
     ghost var okmUnabridged;
-    okm, okmUnabridged := Expand(hmac, prk, info, L, digest, nonEmptySalt);
+    okm, okmUnabridged := Expand(hmac, prk, info, L, digest);
   }
 }

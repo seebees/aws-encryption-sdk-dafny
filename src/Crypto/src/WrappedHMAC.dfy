@@ -16,12 +16,13 @@ module WrappedHMAC {
   {
     var HMacInput(digestAlgorithm, key, message) := input;
 
+    :- Need(0 < |key|, Types.AwsCryptographicPrimitivesError(message := "Key MUST NOT be 0 bytes."));
+    :- Need(|message| < INT32_MAX_LIMIT, Types.AwsCryptographicPrimitivesError(message := "Message over INT32_MAX_LIMIT"));
+
     var hmac := new HMAC.HMac(digestAlgorithm);
     hmac.Init(key);
     hmac.Update(message);
     var value := hmac.GetResult();
-
-    // Any runtime Need check go here
 
     return Success(value);
   }

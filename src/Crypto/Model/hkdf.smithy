@@ -15,7 +15,7 @@ operation Hkdf {
 
 structure HkdfExtractInput {
   @required
-  digest: DigestAlgorithm,
+  digestAlgorithm: DigestAlgorithm,
   salt: Blob,
   @required
   ikm: Blob,
@@ -31,9 +31,10 @@ structure HkdfExpandInput {
   digestAlgorithm: DigestAlgorithm,
   @required
   prk: Blob,
+  @required
   info: Blob,
   @required
-  expectedLength: Integer
+  expectedLength: PositiveInteger
 }
 
 @aws.polymorph#positional
@@ -43,13 +44,14 @@ structure HkdfExpandOutput {
 
 structure HkdfInput {
   @required
-  digest: DigestAlgorithm,
+  digestAlgorithm: DigestAlgorithm,
   salt: Blob,
   @required
   ikm: Blob,
+  @required
   info: Blob,
   @required
-  expectedLength: Long
+  expectedLength: PositiveInteger
 }
 
 @aws.polymorph#positional

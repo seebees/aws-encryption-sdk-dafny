@@ -625,99 +625,287 @@ include "../../StandardLibrary/StandardLibrary.dfy"
   ensures VerifyCalledWith (  input )
  ensures output.Success? ==> VerifySucceededWith (  input , output.value )
 }
- // Predicates are separated from the trait. This is temporary.
- predicate {:opaque} CancelKeyDeletionCalledWith ( input: CancelKeyDeletionRequest ) {true}
- predicate {:opaque} CancelKeyDeletionSucceededWith (  input: CancelKeyDeletionRequest , output: CancelKeyDeletionResponse ) {true}
- predicate {:opaque} ConnectCustomKeyStoreCalledWith ( input: ConnectCustomKeyStoreRequest ) {true}
- predicate {:opaque} ConnectCustomKeyStoreSucceededWith (  input: ConnectCustomKeyStoreRequest , output: ConnectCustomKeyStoreResponse ) {true}
- predicate {:opaque} CreateAliasCalledWith ( input: CreateAliasRequest ) {true}
- predicate {:opaque} CreateAliasSucceededWith (  input: CreateAliasRequest ) {true}
- predicate {:opaque} CreateCustomKeyStoreCalledWith ( input: CreateCustomKeyStoreRequest ) {true}
- predicate {:opaque} CreateCustomKeyStoreSucceededWith (  input: CreateCustomKeyStoreRequest , output: CreateCustomKeyStoreResponse ) {true}
- predicate {:opaque} CreateGrantCalledWith ( input: CreateGrantRequest ) {true}
- predicate {:opaque} CreateGrantSucceededWith (  input: CreateGrantRequest , output: CreateGrantResponse ) {true}
- predicate {:opaque} CreateKeyCalledWith ( input: CreateKeyRequest ) {true}
- predicate {:opaque} CreateKeySucceededWith (  input: CreateKeyRequest , output: CreateKeyResponse ) {true}
- predicate {:opaque} DecryptCalledWith ( input: DecryptRequest ) {true}
- predicate {:opaque} DecryptSucceededWith (  input: DecryptRequest , output: DecryptResponse ) {true}
- predicate {:opaque} DeleteAliasCalledWith ( input: DeleteAliasRequest ) {true}
- predicate {:opaque} DeleteAliasSucceededWith (  input: DeleteAliasRequest ) {true}
- predicate {:opaque} DeleteCustomKeyStoreCalledWith ( input: DeleteCustomKeyStoreRequest ) {true}
- predicate {:opaque} DeleteCustomKeyStoreSucceededWith (  input: DeleteCustomKeyStoreRequest , output: DeleteCustomKeyStoreResponse ) {true}
- predicate {:opaque} DeleteImportedKeyMaterialCalledWith ( input: DeleteImportedKeyMaterialRequest ) {true}
- predicate {:opaque} DeleteImportedKeyMaterialSucceededWith (  input: DeleteImportedKeyMaterialRequest ) {true}
- predicate {:opaque} DescribeCustomKeyStoresCalledWith ( input: DescribeCustomKeyStoresRequest ) {true}
- predicate {:opaque} DescribeCustomKeyStoresSucceededWith (  input: DescribeCustomKeyStoresRequest , output: DescribeCustomKeyStoresResponse ) {true}
- predicate {:opaque} DescribeKeyCalledWith ( input: DescribeKeyRequest ) {true}
- predicate {:opaque} DescribeKeySucceededWith (  input: DescribeKeyRequest , output: DescribeKeyResponse ) {true}
- predicate {:opaque} DisableKeyCalledWith ( input: DisableKeyRequest ) {true}
- predicate {:opaque} DisableKeySucceededWith (  input: DisableKeyRequest ) {true}
- predicate {:opaque} DisableKeyRotationCalledWith ( input: DisableKeyRotationRequest ) {true}
- predicate {:opaque} DisableKeyRotationSucceededWith (  input: DisableKeyRotationRequest ) {true}
- predicate {:opaque} DisconnectCustomKeyStoreCalledWith ( input: DisconnectCustomKeyStoreRequest ) {true}
- predicate {:opaque} DisconnectCustomKeyStoreSucceededWith (  input: DisconnectCustomKeyStoreRequest , output: DisconnectCustomKeyStoreResponse ) {true}
- predicate {:opaque} EnableKeyCalledWith ( input: EnableKeyRequest ) {true}
- predicate {:opaque} EnableKeySucceededWith (  input: EnableKeyRequest ) {true}
- predicate {:opaque} EnableKeyRotationCalledWith ( input: EnableKeyRotationRequest ) {true}
- predicate {:opaque} EnableKeyRotationSucceededWith (  input: EnableKeyRotationRequest ) {true}
- predicate {:opaque} EncryptCalledWith ( input: EncryptRequest ) {true}
- predicate {:opaque} EncryptSucceededWith (  input: EncryptRequest , output: EncryptResponse ) {true}
- predicate {:opaque} GenerateDataKeyCalledWith ( input: GenerateDataKeyRequest ) {true}
- predicate {:opaque} GenerateDataKeySucceededWith (  input: GenerateDataKeyRequest , output: GenerateDataKeyResponse ) {true}
- predicate {:opaque} GenerateDataKeyPairCalledWith ( input: GenerateDataKeyPairRequest ) {true}
- predicate {:opaque} GenerateDataKeyPairSucceededWith (  input: GenerateDataKeyPairRequest , output: GenerateDataKeyPairResponse ) {true}
- predicate {:opaque} GenerateDataKeyPairWithoutPlaintextCalledWith ( input: GenerateDataKeyPairWithoutPlaintextRequest ) {true}
- predicate {:opaque} GenerateDataKeyPairWithoutPlaintextSucceededWith (  input: GenerateDataKeyPairWithoutPlaintextRequest , output: GenerateDataKeyPairWithoutPlaintextResponse ) {true}
- predicate {:opaque} GenerateDataKeyWithoutPlaintextCalledWith ( input: GenerateDataKeyWithoutPlaintextRequest ) {true}
- predicate {:opaque} GenerateDataKeyWithoutPlaintextSucceededWith (  input: GenerateDataKeyWithoutPlaintextRequest , output: GenerateDataKeyWithoutPlaintextResponse ) {true}
- predicate {:opaque} GenerateRandomCalledWith ( input: GenerateRandomRequest ) {true}
- predicate {:opaque} GenerateRandomSucceededWith (  input: GenerateRandomRequest , output: GenerateRandomResponse ) {true}
- predicate {:opaque} GetKeyPolicyCalledWith ( input: GetKeyPolicyRequest ) {true}
- predicate {:opaque} GetKeyPolicySucceededWith (  input: GetKeyPolicyRequest , output: GetKeyPolicyResponse ) {true}
- predicate {:opaque} GetKeyRotationStatusCalledWith ( input: GetKeyRotationStatusRequest ) {true}
- predicate {:opaque} GetKeyRotationStatusSucceededWith (  input: GetKeyRotationStatusRequest , output: GetKeyRotationStatusResponse ) {true}
- predicate {:opaque} GetParametersForImportCalledWith ( input: GetParametersForImportRequest ) {true}
- predicate {:opaque} GetParametersForImportSucceededWith (  input: GetParametersForImportRequest , output: GetParametersForImportResponse ) {true}
- predicate {:opaque} GetPublicKeyCalledWith ( input: GetPublicKeyRequest ) {true}
- predicate {:opaque} GetPublicKeySucceededWith (  input: GetPublicKeyRequest , output: GetPublicKeyResponse ) {true}
- predicate {:opaque} ImportKeyMaterialCalledWith ( input: ImportKeyMaterialRequest ) {true}
- predicate {:opaque} ImportKeyMaterialSucceededWith (  input: ImportKeyMaterialRequest , output: ImportKeyMaterialResponse ) {true}
- predicate {:opaque} ListAliasesCalledWith ( input: ListAliasesRequest ) {true}
- predicate {:opaque} ListAliasesSucceededWith (  input: ListAliasesRequest , output: ListAliasesResponse ) {true}
- predicate {:opaque} ListGrantsCalledWith ( input: ListGrantsRequest ) {true}
- predicate {:opaque} ListGrantsSucceededWith (  input: ListGrantsRequest , output: ListGrantsResponse ) {true}
- predicate {:opaque} ListKeyPoliciesCalledWith ( input: ListKeyPoliciesRequest ) {true}
- predicate {:opaque} ListKeyPoliciesSucceededWith (  input: ListKeyPoliciesRequest , output: ListKeyPoliciesResponse ) {true}
- predicate {:opaque} ListResourceTagsCalledWith ( input: ListResourceTagsRequest ) {true}
- predicate {:opaque} ListResourceTagsSucceededWith (  input: ListResourceTagsRequest , output: ListResourceTagsResponse ) {true}
- predicate {:opaque} PutKeyPolicyCalledWith ( input: PutKeyPolicyRequest ) {true}
- predicate {:opaque} PutKeyPolicySucceededWith (  input: PutKeyPolicyRequest ) {true}
- predicate {:opaque} ReEncryptCalledWith ( input: ReEncryptRequest ) {true}
- predicate {:opaque} ReEncryptSucceededWith (  input: ReEncryptRequest , output: ReEncryptResponse ) {true}
- predicate {:opaque} ReplicateKeyCalledWith ( input: ReplicateKeyRequest ) {true}
- predicate {:opaque} ReplicateKeySucceededWith (  input: ReplicateKeyRequest , output: ReplicateKeyResponse ) {true}
- predicate {:opaque} RetireGrantCalledWith ( input: RetireGrantRequest ) {true}
- predicate {:opaque} RetireGrantSucceededWith (  input: RetireGrantRequest ) {true}
- predicate {:opaque} RevokeGrantCalledWith ( input: RevokeGrantRequest ) {true}
- predicate {:opaque} RevokeGrantSucceededWith (  input: RevokeGrantRequest ) {true}
- predicate {:opaque} ScheduleKeyDeletionCalledWith ( input: ScheduleKeyDeletionRequest ) {true}
- predicate {:opaque} ScheduleKeyDeletionSucceededWith (  input: ScheduleKeyDeletionRequest , output: ScheduleKeyDeletionResponse ) {true}
- predicate {:opaque} SignCalledWith ( input: SignRequest ) {true}
- predicate {:opaque} SignSucceededWith (  input: SignRequest , output: SignResponse ) {true}
- predicate {:opaque} TagResourceCalledWith ( input: TagResourceRequest ) {true}
- predicate {:opaque} TagResourceSucceededWith (  input: TagResourceRequest ) {true}
- predicate {:opaque} UntagResourceCalledWith ( input: UntagResourceRequest ) {true}
- predicate {:opaque} UntagResourceSucceededWith (  input: UntagResourceRequest ) {true}
- predicate {:opaque} UpdateAliasCalledWith ( input: UpdateAliasRequest ) {true}
- predicate {:opaque} UpdateAliasSucceededWith (  input: UpdateAliasRequest ) {true}
- predicate {:opaque} UpdateCustomKeyStoreCalledWith ( input: UpdateCustomKeyStoreRequest ) {true}
- predicate {:opaque} UpdateCustomKeyStoreSucceededWith (  input: UpdateCustomKeyStoreRequest , output: UpdateCustomKeyStoreResponse ) {true}
- predicate {:opaque} UpdateKeyDescriptionCalledWith ( input: UpdateKeyDescriptionRequest ) {true}
- predicate {:opaque} UpdateKeyDescriptionSucceededWith (  input: UpdateKeyDescriptionRequest ) {true}
- predicate {:opaque} UpdatePrimaryRegionCalledWith ( input: UpdatePrimaryRegionRequest ) {true}
- predicate {:opaque} UpdatePrimaryRegionSucceededWith (  input: UpdatePrimaryRegionRequest ) {true}
- predicate {:opaque} VerifyCalledWith ( input: VerifyRequest ) {true}
- predicate {:opaque} VerifySucceededWith (  input: VerifyRequest , output: VerifyResponse ) {true}
+ // Predicates are separated from the trait.
+ // This is intentional, otherwise they would need to be reDefined in the concrete class.
+ // In the concrete method you MUST use `assume` for the `ensures` clause to verify.
+ // However you MUST NOT use `assume` anywhere else.
+ // Otherwise any such proof will be unsound.
+ predicate {:axiom} CancelKeyDeletionCalledWith ( input: CancelKeyDeletionRequest )
+ lemma {:axiom} AssumeCancelKeyDeletionCalledWith ( input: CancelKeyDeletionRequest )
+ ensures CancelKeyDeletionCalledWith ( input )
+ predicate {:axiom} CancelKeyDeletionSucceededWith ( input: CancelKeyDeletionRequest , output: CancelKeyDeletionResponse )
+ lemma {:axiom} AssumeCancelKeyDeletionSucceededWith ( input: CancelKeyDeletionRequest , output: CancelKeyDeletionResponse )
+ ensures CancelKeyDeletionSucceededWith ( input , output )
+ predicate {:axiom} ConnectCustomKeyStoreCalledWith ( input: ConnectCustomKeyStoreRequest )
+ lemma {:axiom} AssumeConnectCustomKeyStoreCalledWith ( input: ConnectCustomKeyStoreRequest )
+ ensures ConnectCustomKeyStoreCalledWith ( input )
+ predicate {:axiom} ConnectCustomKeyStoreSucceededWith ( input: ConnectCustomKeyStoreRequest , output: ConnectCustomKeyStoreResponse )
+ lemma {:axiom} AssumeConnectCustomKeyStoreSucceededWith ( input: ConnectCustomKeyStoreRequest , output: ConnectCustomKeyStoreResponse )
+ ensures ConnectCustomKeyStoreSucceededWith ( input , output )
+ predicate {:axiom} CreateAliasCalledWith ( input: CreateAliasRequest )
+ lemma {:axiom} AssumeCreateAliasCalledWith ( input: CreateAliasRequest )
+ ensures CreateAliasCalledWith ( input )
+ predicate {:axiom} CreateAliasSucceededWith ( input: CreateAliasRequest ,  )
+ lemma {:axiom} AssumeCreateAliasSucceededWith ( input: CreateAliasRequest ,  )
+ ensures CreateAliasSucceededWith ( input ,  )
+ predicate {:axiom} CreateCustomKeyStoreCalledWith ( input: CreateCustomKeyStoreRequest )
+ lemma {:axiom} AssumeCreateCustomKeyStoreCalledWith ( input: CreateCustomKeyStoreRequest )
+ ensures CreateCustomKeyStoreCalledWith ( input )
+ predicate {:axiom} CreateCustomKeyStoreSucceededWith ( input: CreateCustomKeyStoreRequest , output: CreateCustomKeyStoreResponse )
+ lemma {:axiom} AssumeCreateCustomKeyStoreSucceededWith ( input: CreateCustomKeyStoreRequest , output: CreateCustomKeyStoreResponse )
+ ensures CreateCustomKeyStoreSucceededWith ( input , output )
+ predicate {:axiom} CreateGrantCalledWith ( input: CreateGrantRequest )
+ lemma {:axiom} AssumeCreateGrantCalledWith ( input: CreateGrantRequest )
+ ensures CreateGrantCalledWith ( input )
+ predicate {:axiom} CreateGrantSucceededWith ( input: CreateGrantRequest , output: CreateGrantResponse )
+ lemma {:axiom} AssumeCreateGrantSucceededWith ( input: CreateGrantRequest , output: CreateGrantResponse )
+ ensures CreateGrantSucceededWith ( input , output )
+ predicate {:axiom} CreateKeyCalledWith ( input: CreateKeyRequest )
+ lemma {:axiom} AssumeCreateKeyCalledWith ( input: CreateKeyRequest )
+ ensures CreateKeyCalledWith ( input )
+ predicate {:axiom} CreateKeySucceededWith ( input: CreateKeyRequest , output: CreateKeyResponse )
+ lemma {:axiom} AssumeCreateKeySucceededWith ( input: CreateKeyRequest , output: CreateKeyResponse )
+ ensures CreateKeySucceededWith ( input , output )
+ predicate {:axiom} DecryptCalledWith ( input: DecryptRequest )
+ lemma {:axiom} AssumeDecryptCalledWith ( input: DecryptRequest )
+ ensures DecryptCalledWith ( input )
+ predicate {:axiom} DecryptSucceededWith ( input: DecryptRequest , output: DecryptResponse )
+ lemma {:axiom} AssumeDecryptSucceededWith ( input: DecryptRequest , output: DecryptResponse )
+ ensures DecryptSucceededWith ( input , output )
+ predicate {:axiom} DeleteAliasCalledWith ( input: DeleteAliasRequest )
+ lemma {:axiom} AssumeDeleteAliasCalledWith ( input: DeleteAliasRequest )
+ ensures DeleteAliasCalledWith ( input )
+ predicate {:axiom} DeleteAliasSucceededWith ( input: DeleteAliasRequest ,  )
+ lemma {:axiom} AssumeDeleteAliasSucceededWith ( input: DeleteAliasRequest ,  )
+ ensures DeleteAliasSucceededWith ( input ,  )
+ predicate {:axiom} DeleteCustomKeyStoreCalledWith ( input: DeleteCustomKeyStoreRequest )
+ lemma {:axiom} AssumeDeleteCustomKeyStoreCalledWith ( input: DeleteCustomKeyStoreRequest )
+ ensures DeleteCustomKeyStoreCalledWith ( input )
+ predicate {:axiom} DeleteCustomKeyStoreSucceededWith ( input: DeleteCustomKeyStoreRequest , output: DeleteCustomKeyStoreResponse )
+ lemma {:axiom} AssumeDeleteCustomKeyStoreSucceededWith ( input: DeleteCustomKeyStoreRequest , output: DeleteCustomKeyStoreResponse )
+ ensures DeleteCustomKeyStoreSucceededWith ( input , output )
+ predicate {:axiom} DeleteImportedKeyMaterialCalledWith ( input: DeleteImportedKeyMaterialRequest )
+ lemma {:axiom} AssumeDeleteImportedKeyMaterialCalledWith ( input: DeleteImportedKeyMaterialRequest )
+ ensures DeleteImportedKeyMaterialCalledWith ( input )
+ predicate {:axiom} DeleteImportedKeyMaterialSucceededWith ( input: DeleteImportedKeyMaterialRequest ,  )
+ lemma {:axiom} AssumeDeleteImportedKeyMaterialSucceededWith ( input: DeleteImportedKeyMaterialRequest ,  )
+ ensures DeleteImportedKeyMaterialSucceededWith ( input ,  )
+ predicate {:axiom} DescribeCustomKeyStoresCalledWith ( input: DescribeCustomKeyStoresRequest )
+ lemma {:axiom} AssumeDescribeCustomKeyStoresCalledWith ( input: DescribeCustomKeyStoresRequest )
+ ensures DescribeCustomKeyStoresCalledWith ( input )
+ predicate {:axiom} DescribeCustomKeyStoresSucceededWith ( input: DescribeCustomKeyStoresRequest , output: DescribeCustomKeyStoresResponse )
+ lemma {:axiom} AssumeDescribeCustomKeyStoresSucceededWith ( input: DescribeCustomKeyStoresRequest , output: DescribeCustomKeyStoresResponse )
+ ensures DescribeCustomKeyStoresSucceededWith ( input , output )
+ predicate {:axiom} DescribeKeyCalledWith ( input: DescribeKeyRequest )
+ lemma {:axiom} AssumeDescribeKeyCalledWith ( input: DescribeKeyRequest )
+ ensures DescribeKeyCalledWith ( input )
+ predicate {:axiom} DescribeKeySucceededWith ( input: DescribeKeyRequest , output: DescribeKeyResponse )
+ lemma {:axiom} AssumeDescribeKeySucceededWith ( input: DescribeKeyRequest , output: DescribeKeyResponse )
+ ensures DescribeKeySucceededWith ( input , output )
+ predicate {:axiom} DisableKeyCalledWith ( input: DisableKeyRequest )
+ lemma {:axiom} AssumeDisableKeyCalledWith ( input: DisableKeyRequest )
+ ensures DisableKeyCalledWith ( input )
+ predicate {:axiom} DisableKeySucceededWith ( input: DisableKeyRequest ,  )
+ lemma {:axiom} AssumeDisableKeySucceededWith ( input: DisableKeyRequest ,  )
+ ensures DisableKeySucceededWith ( input ,  )
+ predicate {:axiom} DisableKeyRotationCalledWith ( input: DisableKeyRotationRequest )
+ lemma {:axiom} AssumeDisableKeyRotationCalledWith ( input: DisableKeyRotationRequest )
+ ensures DisableKeyRotationCalledWith ( input )
+ predicate {:axiom} DisableKeyRotationSucceededWith ( input: DisableKeyRotationRequest ,  )
+ lemma {:axiom} AssumeDisableKeyRotationSucceededWith ( input: DisableKeyRotationRequest ,  )
+ ensures DisableKeyRotationSucceededWith ( input ,  )
+ predicate {:axiom} DisconnectCustomKeyStoreCalledWith ( input: DisconnectCustomKeyStoreRequest )
+ lemma {:axiom} AssumeDisconnectCustomKeyStoreCalledWith ( input: DisconnectCustomKeyStoreRequest )
+ ensures DisconnectCustomKeyStoreCalledWith ( input )
+ predicate {:axiom} DisconnectCustomKeyStoreSucceededWith ( input: DisconnectCustomKeyStoreRequest , output: DisconnectCustomKeyStoreResponse )
+ lemma {:axiom} AssumeDisconnectCustomKeyStoreSucceededWith ( input: DisconnectCustomKeyStoreRequest , output: DisconnectCustomKeyStoreResponse )
+ ensures DisconnectCustomKeyStoreSucceededWith ( input , output )
+ predicate {:axiom} EnableKeyCalledWith ( input: EnableKeyRequest )
+ lemma {:axiom} AssumeEnableKeyCalledWith ( input: EnableKeyRequest )
+ ensures EnableKeyCalledWith ( input )
+ predicate {:axiom} EnableKeySucceededWith ( input: EnableKeyRequest ,  )
+ lemma {:axiom} AssumeEnableKeySucceededWith ( input: EnableKeyRequest ,  )
+ ensures EnableKeySucceededWith ( input ,  )
+ predicate {:axiom} EnableKeyRotationCalledWith ( input: EnableKeyRotationRequest )
+ lemma {:axiom} AssumeEnableKeyRotationCalledWith ( input: EnableKeyRotationRequest )
+ ensures EnableKeyRotationCalledWith ( input )
+ predicate {:axiom} EnableKeyRotationSucceededWith ( input: EnableKeyRotationRequest ,  )
+ lemma {:axiom} AssumeEnableKeyRotationSucceededWith ( input: EnableKeyRotationRequest ,  )
+ ensures EnableKeyRotationSucceededWith ( input ,  )
+ predicate {:axiom} EncryptCalledWith ( input: EncryptRequest )
+ lemma {:axiom} AssumeEncryptCalledWith ( input: EncryptRequest )
+ ensures EncryptCalledWith ( input )
+ predicate {:axiom} EncryptSucceededWith ( input: EncryptRequest , output: EncryptResponse )
+ lemma {:axiom} AssumeEncryptSucceededWith ( input: EncryptRequest , output: EncryptResponse )
+ ensures EncryptSucceededWith ( input , output )
+ predicate {:axiom} GenerateDataKeyCalledWith ( input: GenerateDataKeyRequest )
+ lemma {:axiom} AssumeGenerateDataKeyCalledWith ( input: GenerateDataKeyRequest )
+ ensures GenerateDataKeyCalledWith ( input )
+ predicate {:axiom} GenerateDataKeySucceededWith ( input: GenerateDataKeyRequest , output: GenerateDataKeyResponse )
+ lemma {:axiom} AssumeGenerateDataKeySucceededWith ( input: GenerateDataKeyRequest , output: GenerateDataKeyResponse )
+ ensures GenerateDataKeySucceededWith ( input , output )
+ predicate {:axiom} GenerateDataKeyPairCalledWith ( input: GenerateDataKeyPairRequest )
+ lemma {:axiom} AssumeGenerateDataKeyPairCalledWith ( input: GenerateDataKeyPairRequest )
+ ensures GenerateDataKeyPairCalledWith ( input )
+ predicate {:axiom} GenerateDataKeyPairSucceededWith ( input: GenerateDataKeyPairRequest , output: GenerateDataKeyPairResponse )
+ lemma {:axiom} AssumeGenerateDataKeyPairSucceededWith ( input: GenerateDataKeyPairRequest , output: GenerateDataKeyPairResponse )
+ ensures GenerateDataKeyPairSucceededWith ( input , output )
+ predicate {:axiom} GenerateDataKeyPairWithoutPlaintextCalledWith ( input: GenerateDataKeyPairWithoutPlaintextRequest )
+ lemma {:axiom} AssumeGenerateDataKeyPairWithoutPlaintextCalledWith ( input: GenerateDataKeyPairWithoutPlaintextRequest )
+ ensures GenerateDataKeyPairWithoutPlaintextCalledWith ( input )
+ predicate {:axiom} GenerateDataKeyPairWithoutPlaintextSucceededWith ( input: GenerateDataKeyPairWithoutPlaintextRequest , output: GenerateDataKeyPairWithoutPlaintextResponse )
+ lemma {:axiom} AssumeGenerateDataKeyPairWithoutPlaintextSucceededWith ( input: GenerateDataKeyPairWithoutPlaintextRequest , output: GenerateDataKeyPairWithoutPlaintextResponse )
+ ensures GenerateDataKeyPairWithoutPlaintextSucceededWith ( input , output )
+ predicate {:axiom} GenerateDataKeyWithoutPlaintextCalledWith ( input: GenerateDataKeyWithoutPlaintextRequest )
+ lemma {:axiom} AssumeGenerateDataKeyWithoutPlaintextCalledWith ( input: GenerateDataKeyWithoutPlaintextRequest )
+ ensures GenerateDataKeyWithoutPlaintextCalledWith ( input )
+ predicate {:axiom} GenerateDataKeyWithoutPlaintextSucceededWith ( input: GenerateDataKeyWithoutPlaintextRequest , output: GenerateDataKeyWithoutPlaintextResponse )
+ lemma {:axiom} AssumeGenerateDataKeyWithoutPlaintextSucceededWith ( input: GenerateDataKeyWithoutPlaintextRequest , output: GenerateDataKeyWithoutPlaintextResponse )
+ ensures GenerateDataKeyWithoutPlaintextSucceededWith ( input , output )
+ predicate {:axiom} GenerateRandomCalledWith ( input: GenerateRandomRequest )
+ lemma {:axiom} AssumeGenerateRandomCalledWith ( input: GenerateRandomRequest )
+ ensures GenerateRandomCalledWith ( input )
+ predicate {:axiom} GenerateRandomSucceededWith ( input: GenerateRandomRequest , output: GenerateRandomResponse )
+ lemma {:axiom} AssumeGenerateRandomSucceededWith ( input: GenerateRandomRequest , output: GenerateRandomResponse )
+ ensures GenerateRandomSucceededWith ( input , output )
+ predicate {:axiom} GetKeyPolicyCalledWith ( input: GetKeyPolicyRequest )
+ lemma {:axiom} AssumeGetKeyPolicyCalledWith ( input: GetKeyPolicyRequest )
+ ensures GetKeyPolicyCalledWith ( input )
+ predicate {:axiom} GetKeyPolicySucceededWith ( input: GetKeyPolicyRequest , output: GetKeyPolicyResponse )
+ lemma {:axiom} AssumeGetKeyPolicySucceededWith ( input: GetKeyPolicyRequest , output: GetKeyPolicyResponse )
+ ensures GetKeyPolicySucceededWith ( input , output )
+ predicate {:axiom} GetKeyRotationStatusCalledWith ( input: GetKeyRotationStatusRequest )
+ lemma {:axiom} AssumeGetKeyRotationStatusCalledWith ( input: GetKeyRotationStatusRequest )
+ ensures GetKeyRotationStatusCalledWith ( input )
+ predicate {:axiom} GetKeyRotationStatusSucceededWith ( input: GetKeyRotationStatusRequest , output: GetKeyRotationStatusResponse )
+ lemma {:axiom} AssumeGetKeyRotationStatusSucceededWith ( input: GetKeyRotationStatusRequest , output: GetKeyRotationStatusResponse )
+ ensures GetKeyRotationStatusSucceededWith ( input , output )
+ predicate {:axiom} GetParametersForImportCalledWith ( input: GetParametersForImportRequest )
+ lemma {:axiom} AssumeGetParametersForImportCalledWith ( input: GetParametersForImportRequest )
+ ensures GetParametersForImportCalledWith ( input )
+ predicate {:axiom} GetParametersForImportSucceededWith ( input: GetParametersForImportRequest , output: GetParametersForImportResponse )
+ lemma {:axiom} AssumeGetParametersForImportSucceededWith ( input: GetParametersForImportRequest , output: GetParametersForImportResponse )
+ ensures GetParametersForImportSucceededWith ( input , output )
+ predicate {:axiom} GetPublicKeyCalledWith ( input: GetPublicKeyRequest )
+ lemma {:axiom} AssumeGetPublicKeyCalledWith ( input: GetPublicKeyRequest )
+ ensures GetPublicKeyCalledWith ( input )
+ predicate {:axiom} GetPublicKeySucceededWith ( input: GetPublicKeyRequest , output: GetPublicKeyResponse )
+ lemma {:axiom} AssumeGetPublicKeySucceededWith ( input: GetPublicKeyRequest , output: GetPublicKeyResponse )
+ ensures GetPublicKeySucceededWith ( input , output )
+ predicate {:axiom} ImportKeyMaterialCalledWith ( input: ImportKeyMaterialRequest )
+ lemma {:axiom} AssumeImportKeyMaterialCalledWith ( input: ImportKeyMaterialRequest )
+ ensures ImportKeyMaterialCalledWith ( input )
+ predicate {:axiom} ImportKeyMaterialSucceededWith ( input: ImportKeyMaterialRequest , output: ImportKeyMaterialResponse )
+ lemma {:axiom} AssumeImportKeyMaterialSucceededWith ( input: ImportKeyMaterialRequest , output: ImportKeyMaterialResponse )
+ ensures ImportKeyMaterialSucceededWith ( input , output )
+ predicate {:axiom} ListAliasesCalledWith ( input: ListAliasesRequest )
+ lemma {:axiom} AssumeListAliasesCalledWith ( input: ListAliasesRequest )
+ ensures ListAliasesCalledWith ( input )
+ predicate {:axiom} ListAliasesSucceededWith ( input: ListAliasesRequest , output: ListAliasesResponse )
+ lemma {:axiom} AssumeListAliasesSucceededWith ( input: ListAliasesRequest , output: ListAliasesResponse )
+ ensures ListAliasesSucceededWith ( input , output )
+ predicate {:axiom} ListGrantsCalledWith ( input: ListGrantsRequest )
+ lemma {:axiom} AssumeListGrantsCalledWith ( input: ListGrantsRequest )
+ ensures ListGrantsCalledWith ( input )
+ predicate {:axiom} ListGrantsSucceededWith ( input: ListGrantsRequest , output: ListGrantsResponse )
+ lemma {:axiom} AssumeListGrantsSucceededWith ( input: ListGrantsRequest , output: ListGrantsResponse )
+ ensures ListGrantsSucceededWith ( input , output )
+ predicate {:axiom} ListKeyPoliciesCalledWith ( input: ListKeyPoliciesRequest )
+ lemma {:axiom} AssumeListKeyPoliciesCalledWith ( input: ListKeyPoliciesRequest )
+ ensures ListKeyPoliciesCalledWith ( input )
+ predicate {:axiom} ListKeyPoliciesSucceededWith ( input: ListKeyPoliciesRequest , output: ListKeyPoliciesResponse )
+ lemma {:axiom} AssumeListKeyPoliciesSucceededWith ( input: ListKeyPoliciesRequest , output: ListKeyPoliciesResponse )
+ ensures ListKeyPoliciesSucceededWith ( input , output )
+ predicate {:axiom} ListResourceTagsCalledWith ( input: ListResourceTagsRequest )
+ lemma {:axiom} AssumeListResourceTagsCalledWith ( input: ListResourceTagsRequest )
+ ensures ListResourceTagsCalledWith ( input )
+ predicate {:axiom} ListResourceTagsSucceededWith ( input: ListResourceTagsRequest , output: ListResourceTagsResponse )
+ lemma {:axiom} AssumeListResourceTagsSucceededWith ( input: ListResourceTagsRequest , output: ListResourceTagsResponse )
+ ensures ListResourceTagsSucceededWith ( input , output )
+ predicate {:axiom} PutKeyPolicyCalledWith ( input: PutKeyPolicyRequest )
+ lemma {:axiom} AssumePutKeyPolicyCalledWith ( input: PutKeyPolicyRequest )
+ ensures PutKeyPolicyCalledWith ( input )
+ predicate {:axiom} PutKeyPolicySucceededWith ( input: PutKeyPolicyRequest ,  )
+ lemma {:axiom} AssumePutKeyPolicySucceededWith ( input: PutKeyPolicyRequest ,  )
+ ensures PutKeyPolicySucceededWith ( input ,  )
+ predicate {:axiom} ReEncryptCalledWith ( input: ReEncryptRequest )
+ lemma {:axiom} AssumeReEncryptCalledWith ( input: ReEncryptRequest )
+ ensures ReEncryptCalledWith ( input )
+ predicate {:axiom} ReEncryptSucceededWith ( input: ReEncryptRequest , output: ReEncryptResponse )
+ lemma {:axiom} AssumeReEncryptSucceededWith ( input: ReEncryptRequest , output: ReEncryptResponse )
+ ensures ReEncryptSucceededWith ( input , output )
+ predicate {:axiom} ReplicateKeyCalledWith ( input: ReplicateKeyRequest )
+ lemma {:axiom} AssumeReplicateKeyCalledWith ( input: ReplicateKeyRequest )
+ ensures ReplicateKeyCalledWith ( input )
+ predicate {:axiom} ReplicateKeySucceededWith ( input: ReplicateKeyRequest , output: ReplicateKeyResponse )
+ lemma {:axiom} AssumeReplicateKeySucceededWith ( input: ReplicateKeyRequest , output: ReplicateKeyResponse )
+ ensures ReplicateKeySucceededWith ( input , output )
+ predicate {:axiom} RetireGrantCalledWith ( input: RetireGrantRequest )
+ lemma {:axiom} AssumeRetireGrantCalledWith ( input: RetireGrantRequest )
+ ensures RetireGrantCalledWith ( input )
+ predicate {:axiom} RetireGrantSucceededWith ( input: RetireGrantRequest ,  )
+ lemma {:axiom} AssumeRetireGrantSucceededWith ( input: RetireGrantRequest ,  )
+ ensures RetireGrantSucceededWith ( input ,  )
+ predicate {:axiom} RevokeGrantCalledWith ( input: RevokeGrantRequest )
+ lemma {:axiom} AssumeRevokeGrantCalledWith ( input: RevokeGrantRequest )
+ ensures RevokeGrantCalledWith ( input )
+ predicate {:axiom} RevokeGrantSucceededWith ( input: RevokeGrantRequest ,  )
+ lemma {:axiom} AssumeRevokeGrantSucceededWith ( input: RevokeGrantRequest ,  )
+ ensures RevokeGrantSucceededWith ( input ,  )
+ predicate {:axiom} ScheduleKeyDeletionCalledWith ( input: ScheduleKeyDeletionRequest )
+ lemma {:axiom} AssumeScheduleKeyDeletionCalledWith ( input: ScheduleKeyDeletionRequest )
+ ensures ScheduleKeyDeletionCalledWith ( input )
+ predicate {:axiom} ScheduleKeyDeletionSucceededWith ( input: ScheduleKeyDeletionRequest , output: ScheduleKeyDeletionResponse )
+ lemma {:axiom} AssumeScheduleKeyDeletionSucceededWith ( input: ScheduleKeyDeletionRequest , output: ScheduleKeyDeletionResponse )
+ ensures ScheduleKeyDeletionSucceededWith ( input , output )
+ predicate {:axiom} SignCalledWith ( input: SignRequest )
+ lemma {:axiom} AssumeSignCalledWith ( input: SignRequest )
+ ensures SignCalledWith ( input )
+ predicate {:axiom} SignSucceededWith ( input: SignRequest , output: SignResponse )
+ lemma {:axiom} AssumeSignSucceededWith ( input: SignRequest , output: SignResponse )
+ ensures SignSucceededWith ( input , output )
+ predicate {:axiom} TagResourceCalledWith ( input: TagResourceRequest )
+ lemma {:axiom} AssumeTagResourceCalledWith ( input: TagResourceRequest )
+ ensures TagResourceCalledWith ( input )
+ predicate {:axiom} TagResourceSucceededWith ( input: TagResourceRequest ,  )
+ lemma {:axiom} AssumeTagResourceSucceededWith ( input: TagResourceRequest ,  )
+ ensures TagResourceSucceededWith ( input ,  )
+ predicate {:axiom} UntagResourceCalledWith ( input: UntagResourceRequest )
+ lemma {:axiom} AssumeUntagResourceCalledWith ( input: UntagResourceRequest )
+ ensures UntagResourceCalledWith ( input )
+ predicate {:axiom} UntagResourceSucceededWith ( input: UntagResourceRequest ,  )
+ lemma {:axiom} AssumeUntagResourceSucceededWith ( input: UntagResourceRequest ,  )
+ ensures UntagResourceSucceededWith ( input ,  )
+ predicate {:axiom} UpdateAliasCalledWith ( input: UpdateAliasRequest )
+ lemma {:axiom} AssumeUpdateAliasCalledWith ( input: UpdateAliasRequest )
+ ensures UpdateAliasCalledWith ( input )
+ predicate {:axiom} UpdateAliasSucceededWith ( input: UpdateAliasRequest ,  )
+ lemma {:axiom} AssumeUpdateAliasSucceededWith ( input: UpdateAliasRequest ,  )
+ ensures UpdateAliasSucceededWith ( input ,  )
+ predicate {:axiom} UpdateCustomKeyStoreCalledWith ( input: UpdateCustomKeyStoreRequest )
+ lemma {:axiom} AssumeUpdateCustomKeyStoreCalledWith ( input: UpdateCustomKeyStoreRequest )
+ ensures UpdateCustomKeyStoreCalledWith ( input )
+ predicate {:axiom} UpdateCustomKeyStoreSucceededWith ( input: UpdateCustomKeyStoreRequest , output: UpdateCustomKeyStoreResponse )
+ lemma {:axiom} AssumeUpdateCustomKeyStoreSucceededWith ( input: UpdateCustomKeyStoreRequest , output: UpdateCustomKeyStoreResponse )
+ ensures UpdateCustomKeyStoreSucceededWith ( input , output )
+ predicate {:axiom} UpdateKeyDescriptionCalledWith ( input: UpdateKeyDescriptionRequest )
+ lemma {:axiom} AssumeUpdateKeyDescriptionCalledWith ( input: UpdateKeyDescriptionRequest )
+ ensures UpdateKeyDescriptionCalledWith ( input )
+ predicate {:axiom} UpdateKeyDescriptionSucceededWith ( input: UpdateKeyDescriptionRequest ,  )
+ lemma {:axiom} AssumeUpdateKeyDescriptionSucceededWith ( input: UpdateKeyDescriptionRequest ,  )
+ ensures UpdateKeyDescriptionSucceededWith ( input ,  )
+ predicate {:axiom} UpdatePrimaryRegionCalledWith ( input: UpdatePrimaryRegionRequest )
+ lemma {:axiom} AssumeUpdatePrimaryRegionCalledWith ( input: UpdatePrimaryRegionRequest )
+ ensures UpdatePrimaryRegionCalledWith ( input )
+ predicate {:axiom} UpdatePrimaryRegionSucceededWith ( input: UpdatePrimaryRegionRequest ,  )
+ lemma {:axiom} AssumeUpdatePrimaryRegionSucceededWith ( input: UpdatePrimaryRegionRequest ,  )
+ ensures UpdatePrimaryRegionSucceededWith ( input ,  )
+ predicate {:axiom} VerifyCalledWith ( input: VerifyRequest )
+ lemma {:axiom} AssumeVerifyCalledWith ( input: VerifyRequest )
+ ensures VerifyCalledWith ( input )
+ predicate {:axiom} VerifySucceededWith ( input: VerifyRequest , output: VerifyResponse )
+ lemma {:axiom} AssumeVerifySucceededWith ( input: VerifyRequest , output: VerifyResponse )
+ ensures VerifySucceededWith ( input , output )
  datatype KeyManagerType =
 	| AWS
 	| CUSTOMER

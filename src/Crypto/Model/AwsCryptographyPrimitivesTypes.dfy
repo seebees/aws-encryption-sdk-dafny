@@ -75,23 +75,59 @@ include "../../StandardLibrary/StandardLibrary.dfy"
   ensures AESDecryptCalledWith (  input )
  ensures output.Success? ==> AESDecryptSucceededWith (  input , output.value )
 }
- // Predicates are separated from the trait. This is temporary.
- predicate {:opaque} GenerateRandomBytesCalledWith ( input: GenerateRandomBytesInput ) {true}
- predicate {:opaque} GenerateRandomBytesSucceededWith (  input: GenerateRandomBytesInput , output: seq<uint8> ) {true}
- predicate {:opaque} DigestCalledWith ( input: DigestInput ) {true}
- predicate {:opaque} DigestSucceededWith (  input: DigestInput , output: seq<uint8> ) {true}
- predicate {:opaque} HMacCalledWith ( input: HMacInput ) {true}
- predicate {:opaque} HMacSucceededWith (  input: HMacInput , output: seq<uint8> ) {true}
- predicate {:opaque} HkdfExtractCalledWith ( input: HkdfExtractInput ) {true}
- predicate {:opaque} HkdfExtractSucceededWith (  input: HkdfExtractInput , output: seq<uint8> ) {true}
- predicate {:opaque} HkdfExpandCalledWith ( input: HkdfExpandInput ) {true}
- predicate {:opaque} HkdfExpandSucceededWith (  input: HkdfExpandInput , output: seq<uint8> ) {true}
- predicate {:opaque} HkdfCalledWith ( input: HkdfInput ) {true}
- predicate {:opaque} HkdfSucceededWith (  input: HkdfInput , output: seq<uint8> ) {true}
- predicate {:opaque} AESEncryptCalledWith ( input: AESEncryptInput ) {true}
- predicate {:opaque} AESEncryptSucceededWith (  input: AESEncryptInput , output: AESEncryptOutput ) {true}
- predicate {:opaque} AESDecryptCalledWith ( input: AESDecryptInput ) {true}
- predicate {:opaque} AESDecryptSucceededWith (  input: AESDecryptInput , output: seq<uint8> ) {true}
+ // Predicates are separated from the trait.
+ // This is intentional, otherwise they would need to be reDefined in the concrete class.
+ // In the concrete method you MUST use `assume` for the `ensures` clause to verify.
+ // However you MUST NOT use `assume` anywhere else.
+ // Otherwise any such proof will be unsound.
+ predicate {:axiom} GenerateRandomBytesCalledWith ( input: GenerateRandomBytesInput )
+ lemma {:axiom} AssumeGenerateRandomBytesCalledWith ( input: GenerateRandomBytesInput )
+ ensures GenerateRandomBytesCalledWith ( input )
+ predicate {:axiom} GenerateRandomBytesSucceededWith ( input: GenerateRandomBytesInput , output: seq<uint8> )
+ lemma {:axiom} AssumeGenerateRandomBytesSucceededWith ( input: GenerateRandomBytesInput , output: seq<uint8> )
+ ensures GenerateRandomBytesSucceededWith ( input , output )
+ predicate {:axiom} DigestCalledWith ( input: DigestInput )
+ lemma {:axiom} AssumeDigestCalledWith ( input: DigestInput )
+ ensures DigestCalledWith ( input )
+ predicate {:axiom} DigestSucceededWith ( input: DigestInput , output: seq<uint8> )
+ lemma {:axiom} AssumeDigestSucceededWith ( input: DigestInput , output: seq<uint8> )
+ ensures DigestSucceededWith ( input , output )
+ predicate {:axiom} HMacCalledWith ( input: HMacInput )
+ lemma {:axiom} AssumeHMacCalledWith ( input: HMacInput )
+ ensures HMacCalledWith ( input )
+ predicate {:axiom} HMacSucceededWith ( input: HMacInput , output: seq<uint8> )
+ lemma {:axiom} AssumeHMacSucceededWith ( input: HMacInput , output: seq<uint8> )
+ ensures HMacSucceededWith ( input , output )
+ predicate {:axiom} HkdfExtractCalledWith ( input: HkdfExtractInput )
+ lemma {:axiom} AssumeHkdfExtractCalledWith ( input: HkdfExtractInput )
+ ensures HkdfExtractCalledWith ( input )
+ predicate {:axiom} HkdfExtractSucceededWith ( input: HkdfExtractInput , output: seq<uint8> )
+ lemma {:axiom} AssumeHkdfExtractSucceededWith ( input: HkdfExtractInput , output: seq<uint8> )
+ ensures HkdfExtractSucceededWith ( input , output )
+ predicate {:axiom} HkdfExpandCalledWith ( input: HkdfExpandInput )
+ lemma {:axiom} AssumeHkdfExpandCalledWith ( input: HkdfExpandInput )
+ ensures HkdfExpandCalledWith ( input )
+ predicate {:axiom} HkdfExpandSucceededWith ( input: HkdfExpandInput , output: seq<uint8> )
+ lemma {:axiom} AssumeHkdfExpandSucceededWith ( input: HkdfExpandInput , output: seq<uint8> )
+ ensures HkdfExpandSucceededWith ( input , output )
+ predicate {:axiom} HkdfCalledWith ( input: HkdfInput )
+ lemma {:axiom} AssumeHkdfCalledWith ( input: HkdfInput )
+ ensures HkdfCalledWith ( input )
+ predicate {:axiom} HkdfSucceededWith ( input: HkdfInput , output: seq<uint8> )
+ lemma {:axiom} AssumeHkdfSucceededWith ( input: HkdfInput , output: seq<uint8> )
+ ensures HkdfSucceededWith ( input , output )
+ predicate {:axiom} AESEncryptCalledWith ( input: AESEncryptInput )
+ lemma {:axiom} AssumeAESEncryptCalledWith ( input: AESEncryptInput )
+ ensures AESEncryptCalledWith ( input )
+ predicate {:axiom} AESEncryptSucceededWith ( input: AESEncryptInput , output: AESEncryptOutput )
+ lemma {:axiom} AssumeAESEncryptSucceededWith ( input: AESEncryptInput , output: AESEncryptOutput )
+ ensures AESEncryptSucceededWith ( input , output )
+ predicate {:axiom} AESDecryptCalledWith ( input: AESDecryptInput )
+ lemma {:axiom} AssumeAESDecryptCalledWith ( input: AESDecryptInput )
+ ensures AESDecryptCalledWith ( input )
+ predicate {:axiom} AESDecryptSucceededWith ( input: AESDecryptInput , output: seq<uint8> )
+ lemma {:axiom} AssumeAESDecryptSucceededWith ( input: AESDecryptInput , output: seq<uint8> )
+ ensures AESDecryptSucceededWith ( input , output )
  datatype CryptoConfig = | CryptoConfig (
  
  )
@@ -104,25 +140,25 @@ include "../../StandardLibrary/StandardLibrary.dfy"
  nameonly message: seq<uint8>
  )
  datatype GenerateRandomBytesInput = | GenerateRandomBytesInput (
- nameonly length: int32
+ nameonly length: PositiveInteger
  )
  datatype HkdfExpandInput = | HkdfExpandInput (
  nameonly digestAlgorithm: DigestAlgorithm ,
  nameonly prk: seq<uint8> ,
- nameonly info: Option<seq<uint8>> ,
- nameonly expectedLength: int32
+ nameonly info: seq<uint8> ,
+ nameonly expectedLength: PositiveInteger
  )
  datatype HkdfExtractInput = | HkdfExtractInput (
- nameonly digest: DigestAlgorithm ,
+ nameonly digestAlgorithm: DigestAlgorithm ,
  nameonly salt: Option<seq<uint8>> ,
  nameonly ikm: seq<uint8>
  )
  datatype HkdfInput = | HkdfInput (
- nameonly digest: DigestAlgorithm ,
+ nameonly digestAlgorithm: DigestAlgorithm ,
  nameonly salt: Option<seq<uint8>> ,
  nameonly ikm: seq<uint8> ,
- nameonly info: Option<seq<uint8>> ,
- nameonly expectedLength: int64
+ nameonly info: seq<uint8> ,
+ nameonly expectedLength: PositiveInteger
  )
  datatype HMacInput = | HMacInput (
  nameonly digestAlgorithm: DigestAlgorithm ,
