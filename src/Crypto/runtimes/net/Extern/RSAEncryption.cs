@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using System.IO;
-using AWS.EncryptionSDK;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Engines;
@@ -21,15 +20,10 @@ using icharseq = Dafny.ISequence<char>;
 using ibyteseq = Dafny.ISequence<byte>;
 using byteseq = Dafny.Sequence<byte>;
 
-namespace RSAEncryption {
+using _IError = Dafny.Aws.Cryptography.Primitives.Types._IError;
+using Error_Opaque = Dafny.Aws.Cryptography.Primitives.Types.Error_Opaque;
 
-    public class RSAUnsupportedPaddingSchemeException : AwsEncryptionSdkBaseException
-    {
-        public RSAUnsupportedPaddingSchemeException(string paddingScheme)
-            : base(String.Format("Invalid RSA Padding Scheme: {0}", paddingScheme))
-        {
-        }
-    }
+namespace RSAEncryption {
 
     public partial class RSA {
 
@@ -77,7 +71,7 @@ namespace RSAEncryption {
             } else if (padding.is_OAEP__SHA512) {
                 return new OaepEncoding(new RsaBlindedEngine(), new Sha512Digest());
             } else {
-                throw new RSAUnsupportedPaddingSchemeException(padding.ToString());
+                throw new System.Exception(padding.ToString());
             }
         }
 
@@ -137,20 +131,21 @@ namespace RSAEncryption {
             privateKey = byteseq.FromArray(privateKeyBytes);
         }
 
-        public static _IResult<ibyteseq, icharseq> EncryptExtern(_IPaddingMode padding, ibyteseq publicKey, ibyteseq plaintextMessage) {
+        public static _IResult<ibyteseq, _IError> EncryptExtern(_IPaddingMode padding, ibyteseq publicKey, ibyteseq plaintextMessage) {
             try {
                 IAsymmetricBlockCipher engine = GetEngineForPadding(padding);
                 AsymmetricKeyParameter publicKeyParam = GetPublicKeyFromByteSeq(publicKey);
                 engine.Init(true, publicKeyParam);
-                return Result<ibyteseq, icharseq>.create_Success(byteseq.FromArray(
+                return Result<ibyteseq, _IError>.create_Success(byteseq.FromArray(
                     engine.ProcessBlock(plaintextMessage.Elements, 0, plaintextMessage.Elements.Length)));
             }
             catch (Exception encryptEx) {
-                return DafnyFFI.CreateFailure<ibyteseq>(encryptEx.ToString());
+                return Result<ibyteseq, _IError>
+                    .create_Failure(new Error_Opaque(encryptEx));
             }
         }
 
-        public static _IResult<ibyteseq, icharseq> DecryptExtern(_IPaddingMode padding, ibyteseq privateKey, ibyteseq cipherText) {
+        public static _IResult<ibyteseq, _IError> DecryptExtern(_IPaddingMode padding, ibyteseq privateKey, ibyteseq cipherText) {
             try {
                 IAsymmetricBlockCipher engine = GetEngineForPadding(padding);
                 AsymmetricCipherKeyPair keyPair;
@@ -160,11 +155,12 @@ namespace RSAEncryption {
                     keyPair = (AsymmetricCipherKeyPair) new PemReader(stringReader).ReadObject();
                 }
                 engine.Init(false, keyPair.Private);
-                return Result<ibyteseq, icharseq>.create_Success(byteseq.FromArray(
+                return Result<ibyteseq, _IError>.create_Success(byteseq.FromArray(
                     engine.ProcessBlock(cipherText.Elements, 0, cipherText.Elements.Length)));
             }
             catch (Exception decryptEx) {
-                return DafnyFFI.CreateFailure<ibyteseq>(decryptEx.ToString());
+                return Result<ibyteseq, _IError>
+                    .create_Failure(new Error_Opaque(decryptEx));
             }
         }
     }

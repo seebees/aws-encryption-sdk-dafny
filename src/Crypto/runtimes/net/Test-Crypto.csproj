@@ -9,7 +9,10 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
-  <ItemGroup>    <!--
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.7.12.2" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.5.2" />
+    <!--
       System.Collections.Immutable can be removed once dafny.msbuild is updated with
       https://github.com/dafny-lang/dafny.msbuild/pull/10 and versioned
     -->
@@ -17,9 +20,19 @@
     <!-- Work around for dafny-lang/dafny/issues/1951; remove once resolved -->
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+  </ItemGroup>
+
 
   <ItemGroup>
-    <Content Remove="ImplemenationFromDafny.cs" />
+    <Compile Remove="ImplementationFromDafny.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net452'" />
   </ItemGroup>
 
   <!-- <ItemGroup>

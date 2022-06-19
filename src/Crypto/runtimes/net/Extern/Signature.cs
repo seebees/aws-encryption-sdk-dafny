@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System;
-using AWS.EncryptionSDK;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -17,18 +16,14 @@ using Wrappers_Compile;
 using icharseq = Dafny.ISequence<char>;
 using ibyteseq = Dafny.ISequence<byte>;
 using byteseq = Dafny.Sequence<byte>;
+using _IError = Dafny.Aws.Cryptography.Primitives.Types._IError;
+using Error_Opaque = Dafny.Aws.Cryptography.Primitives.Types.Error_Opaque;
+using Error_AwsCryptographicPrimitivesError = Dafny.Aws.Cryptography.Primitives.Types.Error_AwsCryptographicPrimitivesError;
 
 namespace Signature {
-    public class ECDSAUnsupportedParametersException : AwsEncryptionSdkBaseException
-    {
-        public ECDSAUnsupportedParametersException(ECDSAParams parameters)
-            : base(String.Format("Unsupported ECDSA parameters: {0}", parameters))
-        {
-        }
-    }
 
     public partial class ECDSA {
-        public static _IResult<SignatureKeyPair, icharseq> ExternKeyGen(_IECDSAParams x) {
+        public static _IResult<SignatureKeyPair, _IError> ExternKeyGen(_IECDSAParams x) {
             try {
                 ECKeyPairGenerator generator = new ECKeyPairGenerator();
                 SecureRandom rng = new SecureRandom();
@@ -38,7 +33,9 @@ namespace Signature {
                 } else if (x.is_ECDSA__P256) {
                     p = ECNamedCurveTable.GetByName("secp256r1");
                 } else {
-                    throw new ECDSAUnsupportedParametersException((ECDSAParams)x);
+                    return Result<SignatureKeyPair, _IError>
+                        .create_Failure(new Error_AwsCryptographicPrimitivesError(
+                            Dafny.Sequence<char>.FromString("Unsupported ECDSA Parameter")));
                 }
                 generator.Init(new ECKeyGenerationParameters(new ECDomainParameters(p.Curve, p.G, p.N, p.H), rng));
                 AsymmetricCipherKeyPair kp = generator.GenerateKeyPair();
@@ -46,9 +43,11 @@ namespace Signature {
                 // serialize the public and private keys, and then return them
                 var vk = SerializePublicKey((ECPublicKeyParameters)kp.Public);
                 var sk = byteseq.FromArray(((ECPrivateKeyParameters)kp.Private).D.ToByteArray());
-                return Result<SignatureKeyPair, icharseq>.create_Success(new SignatureKeyPair(vk, sk));
+                return Result<SignatureKeyPair, _IError>
+                    .create_Success(new SignatureKeyPair(vk, sk));
             } catch (Exception e) {
-                return DafnyFFI.CreateFailure<SignatureKeyPair>(e.ToString());
+                return Result<SignatureKeyPair, _IError>
+                    .create_Failure(new Error_Opaque(e));
             }
         }
 
@@ -85,18 +84,21 @@ namespace Signature {
             return byteseq.Concat(byteseq.FromArray(yBytes), (byteseq.FromArray(xBytes)));
         }
 
-        public static _IResult<bool, icharseq> Verify(_IECDSAParams x, ibyteseq vk, ibyteseq msg, ibyteseq sig) {
+        public static _IResult<bool, _IError> Verify(_IECDSAParams x, ibyteseq vk, ibyteseq msg, ibyteseq sig) {
             try {
-                byte[] digest = InternalDigest(x, msg);
-
                 X9ECParameters parameters;
                 if (x.is_ECDSA__P384) {
                     parameters = ECNamedCurveTable.GetByName("secp384r1");
                 } else if (x.is_ECDSA__P256) {
                     parameters = ECNamedCurveTable.GetByName("secp256r1");
                 } else {
-                    throw new ECDSAUnsupportedParametersException((ECDSAParams)x);
+                    return Result<bool, _IError>
+                        .create_Failure(new Error_AwsCryptographicPrimitivesError(
+                            Dafny.Sequence<char>.FromString("Unsupported ECDSA Parameter")));
                 }
+                
+                byte[] digest = InternalDigest(x, msg);
+
                 ECDomainParameters dp = new ECDomainParameters(parameters.Curve, parameters.G, parameters.N, parameters.H);
                 ECPoint pt = parameters.Curve.DecodePoint((byte[])vk.Elements.Clone());
                 ECPublicKeyParameters vkp = new ECPublicKeyParameters(pt, dp);
@@ -104,24 +106,27 @@ namespace Signature {
                 sign.Init(false, vkp);
                 BigInteger r, s;
                 DERDeserialize(sig.Elements, out r, out s);
-                return Result<bool, icharseq>.create_Success(sign.VerifySignature(digest, r, s));
+                return Result<bool, _IError>.create_Success(sign.VerifySignature(digest, r, s));
             } catch (Exception e) {
-                return Result<bool, icharseq>.create_Failure(Dafny.Sequence<char>.FromString(e.ToString()));
+                return Result<bool, _IError>
+                    .create_Failure(new Error_Opaque(e));
             }
         }
 
-        public static _IResult<ibyteseq, icharseq> Sign(_IECDSAParams x, ibyteseq sk, ibyteseq msg) {
+        public static _IResult<ibyteseq, _IError> Sign(_IECDSAParams x, ibyteseq sk, ibyteseq msg) {
             try {
-                byte[] digest = InternalDigest(x, msg);
-
                 X9ECParameters parameters;
                 if (x.is_ECDSA__P384) {
                     parameters = ECNamedCurveTable.GetByName("secp384r1");
                 } else if (x.is_ECDSA__P256) {
                     parameters = ECNamedCurveTable.GetByName("secp256r1");
                 } else {
-                    throw new ECDSAUnsupportedParametersException((ECDSAParams)x);
+                    return Result<ibyteseq, _IError>
+                        .create_Failure(new Error_AwsCryptographicPrimitivesError(
+                            Dafny.Sequence<char>.FromString("Unsupported ECDSA Parameter")));
                 }
+
+                byte[] digest = InternalDigest(x, msg);
                 ECDomainParameters dp = new ECDomainParameters(parameters.Curve, parameters.G, parameters.N, parameters.H);
                 ECPrivateKeyParameters skp = new ECPrivateKeyParameters(new BigInteger(sk.Elements), dp);
                 ECDsaSigner sign = new ECDsaSigner();
@@ -139,9 +144,10 @@ namespace Signature {
                         serializedSignature = DERSerialize(sig[0], parameters.N.Subtract(sig[1]));
                     }
                 } while (serializedSignature.Length != x.SignatureLength());
-                return Result<ibyteseq, icharseq>.create_Success(byteseq.FromArray(serializedSignature));
+                return Result<ibyteseq, _IError>.create_Success(byteseq.FromArray(serializedSignature));
             } catch (Exception e) {
-                return DafnyFFI.CreateFailure<ibyteseq>(e.ToString());
+                return Result<ibyteseq, _IError>
+                    .create_Failure(new Error_Opaque(e));
             }
         }
 
@@ -152,7 +158,7 @@ namespace Signature {
             } else if (x.is_ECDSA__P256) {
                 alg = System.Security.Cryptography.SHA256.Create();
             } else {
-                throw new ECDSAUnsupportedParametersException((ECDSAParams)x);
+                throw new System.Exception("Unsupported Curve.");
             }
             return alg.ComputeHash(msg.Elements);
         }

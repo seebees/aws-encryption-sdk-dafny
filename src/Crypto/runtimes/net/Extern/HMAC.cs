@@ -5,6 +5,8 @@ using System;
 
 using ibyteseq = Dafny.ISequence<byte>;
 using byteseq = Dafny.Sequence<byte>;
+using _IDigestAlgorithm = Dafny.Aws.Cryptography.Primitives.Types._IDigestAlgorithm;
+using Error_Opaque = Dafny.Aws.Cryptography.Primitives.Types.Error_Opaque;
 
 namespace HMAC {
 
@@ -12,7 +14,7 @@ namespace HMAC {
 
         private Org.BouncyCastle.Crypto.Macs.HMac hmac;
 
-        public HMac(_IDigests digest) {
+        public HMac(_IDigestAlgorithm digest) {
             Org.BouncyCastle.Crypto.IDigest bouncyCastleDigest;
             if(digest.is_SHA__256) {
                 bouncyCastleDigest = new Org.BouncyCastle.Crypto.Digests.Sha256Digest();
@@ -20,8 +22,9 @@ namespace HMAC {
                 bouncyCastleDigest = new Org.BouncyCastle.Crypto.Digests.Sha384Digest();
             } else if(digest.is_SHA__512) {
                 bouncyCastleDigest = new Org.BouncyCastle.Crypto.Digests.Sha512Digest();
-            } else {
-                throw new ExternDigest.UnsupportedDigestException((Digests)digest);
+            } else
+            {
+                throw new System.Exception("Unsupported");
             }
             hmac = new Org.BouncyCastle.Crypto.Macs.HMac(bouncyCastleDigest);
         }

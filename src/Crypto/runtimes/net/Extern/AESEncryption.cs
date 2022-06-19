@@ -4,20 +4,21 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
 using Wrappers_Compile;
 using ibyteseq = Dafny.ISequence<byte>;
 using byteseq = Dafny.Sequence<byte>;
 using icharseq = Dafny.ISequence<char>;
 using charseq = Dafny.Sequence<char>;
+using _IAES__GCM = Dafny.Aws.Cryptography.Primitives.Types._IAES__GCM;
+using _IAESEncryptOutput = Dafny.Aws.Cryptography.Primitives.Types._IAESEncryptOutput;
+using _IError = Dafny.Aws.Cryptography.Primitives.Types._IError;
+using Error_Opaque = Dafny.Aws.Cryptography.Primitives.Types.Error_Opaque;
 
 
 namespace AESEncryption {
     public partial class AES_GCM {
-        public static _IResult<_IEncryptionOutput, icharseq> AESEncryptExtern(
-            AESEncryption._IAES__GCM encAlg,
+        public static _IResult<_IAESEncryptOutput, _IError> AESEncryptExtern(
+            _IAES__GCM encAlg,
             ibyteseq iv,
             ibyteseq key,
             ibyteseq msg,
@@ -49,18 +50,18 @@ namespace AESEncryption {
                 var cipher = new AesGcm(keyBytes);
                 cipher.Encrypt(nonceBytes, plaintextBytes, aesCiphertext, tag, aadBytes);
 #endif
-                return Result<_IEncryptionOutput, icharseq>.create_Success(
+                return Result<_IAESEncryptOutput, _IError>.create_Success(
                     __default.EncryptionOutputFromByteSeq(byteseq.FromArray(ciphertext), encAlg));
             }
             catch (Exception ex)
             {
-                var message = string.IsNullOrEmpty(ex.Message) ? "" : $": {ex.Message}";
-                return DafnyFFI.CreateFailure<EncryptionOutput>("AES encrypt error" + message);
+                return Wrappers_Compile.Result<_IAESEncryptOutput, _IError>
+                    .create_Failure(new Error_Opaque(ex));
             }
         }
 
-        public static _IResult<ibyteseq, icharseq> AESDecryptExtern(
-            AESEncryption._IAES__GCM encAlg,
+        public static _IResult<ibyteseq, _IError> AESDecryptExtern(
+            _IAES__GCM encAlg,
             ibyteseq key,
             ibyteseq cipherText,
             ibyteseq authTag,
@@ -90,12 +91,13 @@ namespace AESEncryption {
                 var cipher = new AesGcm(keyBytes);
                 cipher.Decrypt(nonceBytes, ciphertextBytes, tagBytes, plaintext, aadBytes);
 #endif
-                return Result<ibyteseq, icharseq>.create_Success(byteseq.FromArray(plaintext));
+                return Result<ibyteseq, _IError>
+                    .create_Success(byteseq.FromArray(plaintext));
             }
             catch (Exception ex)
             {
-                var message = string.IsNullOrEmpty(ex.Message) ? "" : $": {ex.Message}";
-                return DafnyFFI.CreateFailure<ibyteseq>("AES decrypt error" + message);
+                return Wrappers_Compile.Result<ibyteseq, _IError>
+                    .create_Failure(new Error_Opaque(ex));
             }
         }
     }

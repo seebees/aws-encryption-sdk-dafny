@@ -1,17 +1,18 @@
 // Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-include "../../StandardLibrary/StandardLibrary.dfy"
+include "../Model/AwsCryptographyPrimitivesTypes.dfy"
 
 module {:extern "Signature"} Signature {
   export
     reveals SignatureKeyPair
     reveals ECDSAParams, ECDSAParams.SignatureLength, ECDSAParams.FieldSize
     provides KeyGen, Sign, Verify, IsSigned, IsValidSignatureKeyPair
-    provides Wrappers, UInt
+    provides Wrappers, UInt, Types
 
   import opened Wrappers
   import opened UInt = StandardLibrary.UInt
+  import Types = AwsCryptographyPrimitivesTypes
 
   datatype SignatureKeyPair = SignatureKeyPair(verificationKey: seq<uint8>, signingKey: seq<uint8>)
 
@@ -34,7 +35,7 @@ module {:extern "Signature"} Signature {
 
   predicate {:axiom} IsValidSignatureKeyPair(sigKeyPair: SignatureKeyPair)
 
-  method KeyGen(s: ECDSAParams) returns (res: Result<SignatureKeyPair, string>)
+  method KeyGen(s: ECDSAParams) returns (res: Result<SignatureKeyPair, Types.Error>)
     ensures match res
       case Success(sigKeyPair) =>
         //= compliance/framework/structures.txt#2.3.3.2.5
@@ -50,20 +51,22 @@ module {:extern "Signature"} Signature {
     if |sigKeyPair.verificationKey| == s.FieldSize() {
       return Success(sigKeyPair);
     } else {
-      return Failure("Incorrect verification-key length from ExternKeyGen.");
+      return Failure(Types.AwsCryptographicPrimitivesError(
+        message := "Incorrect verification-key length from ExternKeyGen."
+      ));
     }
   }
 
   method {:extern "Signature.ECDSA", "ExternKeyGen"} ExternKeyGen(s: ECDSAParams)
-    returns (res: Result<SignatureKeyPair, string>)
+    returns (res: Result<SignatureKeyPair, Types.Error>)
     ensures res.Success? ==> IsValidSignatureKeyPair(res.value)
 
   method {:extern "Signature.ECDSA", "Sign"} Sign(s: ECDSAParams, key: seq<uint8>, msg: seq<uint8>)
-    returns (sig: Result<seq<uint8>, string>)
+    returns (sig: Result<seq<uint8>, Types.Error>)
     ensures sig.Success? ==> IsSigned(key, msg, sig.value)
 
   // This is a valid function
   // because the same inputs will result in the same outputs.
   function method {:extern "Signature.ECDSA", "Verify"} Verify(s: ECDSAParams, key: seq<uint8>, msg: seq<uint8>, sig: seq<uint8>)
-    : (res: Result<bool, string>)
+    : (res: Result<bool, Types.Error>)
 }

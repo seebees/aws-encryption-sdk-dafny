@@ -32,7 +32,7 @@ cd "$POLYMORPH_ROOT"
 
 # Generate code for cryptographic primitives
 ./gradlew run --args="\
-    --output-dotnet $DOTNET_ROOT/Source/API/Generated/Crypto \
+    --output-dotnet $Crypto_ROOT/runtimes/net/Generated/ \
     --model $Crypto_ROOT/Model \
     --dependent-model $DAFNY_ROOT/model \
     --namespace aws.cryptography.primitives"

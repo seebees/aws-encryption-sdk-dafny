@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.5.2" />
     <!--
       System.Collections.Immutable can be removed once dafny.msbuild is updated with
       https://github.com/dafny-lang/dafny.msbuild/pull/10 and versioned
@@ -19,11 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net452'" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="TestsFromDafny.cs" />
+    <Compile Remove="TestsFromDafny.cs" />
   </ItemGroup>
 
   <!-- <ItemGroup>

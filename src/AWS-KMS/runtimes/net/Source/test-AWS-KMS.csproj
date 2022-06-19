@@ -25,10 +25,6 @@
     <Content Remove="ImplemenationFromDafny.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net452'" />
-  </ItemGroup>
-
   <!-- Test dependencies
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0">
