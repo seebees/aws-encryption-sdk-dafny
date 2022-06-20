@@ -4,6 +4,8 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
 using Wrappers_Compile;
 using ibyteseq = Dafny.ISequence<byte>;
 using byteseq = Dafny.Sequence<byte>;

@@ -438,31 +438,31 @@ throw new System.ArgumentException("Invalid AWS.Cryptography.Primitives.DigestAl
  public static Dafny.ISequence<byte> ToDafny_N3_aws__N12_cryptography__N10_primitives__S25_GenerateRandomBytesOutput (System.IO.MemoryStream value) {
  return ToDafny_N3_aws__N12_cryptography__N10_primitives__S25_GenerateRandomBytesOutput__M4_data(value);
 }
- public static AWS.Cryptography.Primitives.AwsCryptographicPrimitivesBaseException FromDafny_CommonError_AwsCryptographicPrimitivesBaseException(Dafny.Aws.Cryptography.Primitives.Types._IError value) {
+ public static System.Exception FromDafny_CommonError(Dafny.Aws.Cryptography.Primitives.Types._IError value) {
  switch(value)
  {
  case Dafny.Aws.Cryptography.Primitives.Types.Error_AwsCryptographicPrimitivesError dafnyVal:
 return FromDafny_N3_aws__N12_cryptography__N10_primitives__S31_AwsCryptographicPrimitivesError(dafnyVal);
+ case Dafny.Aws.Cryptography.Primitives.Types.Error_Opaque dafnyVal:
+ return new OpaqueError(dafnyVal.obj);
  default:
-return new AWS.Cryptography.Primitives.AwsCryptographicPrimitivesBaseException(
-FromDafny_N6_smithy__N3_api__S6_String(value.GetMessage()));
+ // The switch MUST be complete for _IError, so `value` MUST NOT be an _IError. (How did you get here?) 
+ return new OpaqueError();
 }
 }
  public static Dafny.Aws.Cryptography.Primitives.Types._IError ToDafny_CommonError(System.Exception value) {
- Dafny.Aws.Cryptography.Primitives.Types.AwsCryptographicPrimitivesBaseException rtn;
-switch (value)
+ switch (value)
  {
  case AWS.Cryptography.Primitives.AwsCryptographicPrimitivesError exception:
  return ToDafny_N3_aws__N12_cryptography__N10_primitives__S31_AwsCryptographicPrimitivesError(exception);
- case AWS.Cryptography.Primitives.AwsCryptographicPrimitivesBaseException exception:
-rtn = new Dafny.Aws.Cryptography.Primitives.Types.AwsCryptographicPrimitivesBaseException();
-rtn.message = ToDafny_N6_smithy__N3_api__S6_String(exception.Message);
-return rtn;
+ // OpaqueError is redundant, but listed for completeness.
+ case OpaqueError exception:
+ return new Dafny.Aws.Cryptography.Primitives.Types.Error_Opaque(exception);
+ case System.Exception exception:
+ return new Dafny.Aws.Cryptography.Primitives.Types.Error_Opaque(exception);
  default:
-var message = $"AwsCryptographicPrimitives encountered unexpected: {value.GetType()}: \"{value.Message}\"";
-rtn = new Dafny.Aws.Cryptography.Primitives.Types.AwsCryptographicPrimitivesBaseException();
-rtn.message = ToDafny_N6_smithy__N3_api__S6_String(message);
-return rtn;
+ // The switch MUST be complete for System.Exception, so `value` MUST NOT be an System.Exception. (How did you get here?) 
+ return new Dafny.Aws.Cryptography.Primitives.Types.Error_Opaque(value);
 }
 }
 }

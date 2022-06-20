@@ -3,7 +3,7 @@
 // Do not modify this file. This file is machine generated, and any changes to it will be overwritten.
 using System;
  using AWS.Cryptography.Primitives; namespace AWS.Cryptography.Primitives {
- public class AwsCryptographicPrimitivesError : AwsCryptographicPrimitivesBaseException {
+ public class AwsCryptographicPrimitivesError : Exception {
  public AwsCryptographicPrimitivesError(string message) : base(message) {}
 }
 }
