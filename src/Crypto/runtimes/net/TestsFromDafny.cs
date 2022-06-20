@@ -15,8 +15,25 @@ using System.Numerics;
 module TestAwsCryptographyPrimitivesDigest {
 
   import Primitives = Aws.Cryptography.Primitives
-  method {:test} BasigDigest()
+
+  import opened UInt = StandardLibrary.UInt
+
+  import Digest
+  method {:test} DigestTests()
   {
+    BasicDigestTest(Primitives.Types.SHA_256, [97, 115, 100, 102], [240, 228, 194, 247, 108, 88, 145, 110, 194, 88, 242, 70, 133, 27, 234, 9, 29, 20, 212, 36, 122, 47, 195, 225, 134, 148, 70, 27, 24, 22, 225, 59]);
+    BasicDigestTest(Primitives.Types.SHA_384, [97, 115, 100, 102], [166, 158, 125, 243, 11, 36, 192, 66, 236, 84, 12, 203, 189, 191, 177, 86, 44, 133, 120, 112, 56, 200, 133, 116, 156, 30, 64, 142, 45, 98, 250, 54, 100, 44, 208, 7, 95, 163, 81, 232, 34, 226, 184, 165, 145, 57, 205, 157]);
+    BasicDigestTest(Primitives.Types.SHA_512, [97, 115, 100, 102], [64, 27, 9, 234, 179, 192, 19, 212, 202, 84, 146, 43, 184, 2, 190, 200, 253, 83, 24, 25, 43, 10, 117, 242, 1, 216, 179, 114, 116, 41, 8, 15, 179, 55, 89, 26, 189, 62, 68, 69, 59, 149, 69, 85, 183, 160, 129, 46, 16, 129, 195, 155, 116, 2, 147, 247, 101, 234, 231, 49, 245, 166, 94, 209]);
+  }
+
+  method BasicDigestTest(digestAlgorithm: Primitives.Types.DigestAlgorithm, message: seq<uint8>, expectedDigest: seq<uint8>)
+    decreases digestAlgorithm, message, expectedDigest
+  {
+    var client :- Primitives.Crypto();
+    var input := Primitives.Types.DigestInput(digestAlgorithm := digestAlgorithm, message := message);
+    var output :- client.Digest(input);
+    expect |output| == Digest.Length(digestAlgorithm), ""expectation violation""
+    expect output == expectedDigest, ""expectation violation""
   }
 }
 method {:verify false} Main()
@@ -529,6 +546,49 @@ module StandardLibrary {
   }
 }
 
+module Digest {
+
+  import opened Wrappers
+
+  import opened UInt = StandardLibrary.UInt
+
+  import Types = AwsCryptographyPrimitivesTypes
+
+  import ExternDigest
+  function method Length(digestAlgorithm: Types.DigestAlgorithm): nat
+    decreases digestAlgorithm
+  {
+    match digestAlgorithm
+    case SHA_512() =>
+      64
+    case SHA_384() =>
+      48
+    case SHA_256() =>
+      32
+  }
+
+  method Digest(input: Types.DigestInput) returns (res: Result<seq<uint8>, Types.Error>)
+    ensures res.Success? ==> |res.value| == Length(input.digestAlgorithm)
+    decreases input
+  {
+    var DigestInput(digestAlgorithm, message) := input;
+    var value :- ExternDigest.Digest(digestAlgorithm, message);
+    :- Need(|value| == Length(digestAlgorithm), Types.AwsCryptographicPrimitivesError(message := ""Incorrect length digest from ExternDigest.""));
+    return Success(value);
+  }
+}
+
+module {:extern ""ExternDigest""} ExternDigest {
+
+  import opened Wrappers
+
+  import opened UInt = StandardLibrary.UInt
+
+  import Types = AwsCryptographyPrimitivesTypes
+  method {:extern} Digest(alg: Types.DigestAlgorithm, msg: seq<uint8>) returns (res: Result<seq<uint8>, Types.OpaqueError>)
+    decreases alg, msg
+}
+
 module {:extern ""Dafny.Aws.Cryptography.Primitives.Types""} AwsCryptographyPrimitivesTypes {
 
   import opened Wrappers
@@ -936,49 +996,6 @@ module {:extern ""AESEncryption""} AESEncryption {
     :- Need(|cipherTxt| == |value|, Types.AwsCryptographicPrimitivesError(message := ""AESDecrypt did not return plaintext of expected length""));
     return Success(value);
   }
-}
-
-module Digest {
-
-  import opened Wrappers
-
-  import opened UInt = StandardLibrary.UInt
-
-  import Types = AwsCryptographyPrimitivesTypes
-
-  import ExternDigest
-  function method Length(digestAlgorithm: Types.DigestAlgorithm): nat
-    decreases digestAlgorithm
-  {
-    match digestAlgorithm
-    case SHA_512() =>
-      64
-    case SHA_384() =>
-      48
-    case SHA_256() =>
-      32
-  }
-
-  method Digest(input: Types.DigestInput) returns (res: Result<seq<uint8>, Types.Error>)
-    ensures res.Success? ==> |res.value| == Length(input.digestAlgorithm)
-    decreases input
-  {
-    var DigestInput(digestAlgorithm, message) := input;
-    var value :- ExternDigest.Digest(digestAlgorithm, message);
-    :- Need(|value| == Length(digestAlgorithm), Types.AwsCryptographicPrimitivesError(message := ""Incorrect length digest from ExternDigest.""));
-    return Success(value);
-  }
-}
-
-module {:extern ""ExternDigest""} ExternDigest {
-
-  import opened Wrappers
-
-  import opened UInt = StandardLibrary.UInt
-
-  import Types = AwsCryptographyPrimitivesTypes
-  method {:extern} Digest(alg: Types.DigestAlgorithm, msg: seq<uint8>) returns (res: Result<seq<uint8>, Types.OpaqueError>)
-    decreases alg, msg
 }
 
 module {:extern ""RSAEncryption""} RSAEncryption {
@@ -5774,8 +5791,40 @@ namespace Aws_Compile {
 namespace TestAwsCryptographyPrimitivesDigest_Compile {
 
   public partial class __default {
-    public static void BasigDigest()
+    public static void DigestTests()
     {
+      TestAwsCryptographyPrimitivesDigest_Compile.__default.BasicDigestTest(Dafny.Aws.Cryptography.Primitives.Types.DigestAlgorithm.create_SHA__256(), Dafny.Sequence<byte>.FromElements(97, 115, 100, 102), Dafny.Sequence<byte>.FromElements(240, 228, 194, 247, 108, 88, 145, 110, 194, 88, 242, 70, 133, 27, 234, 9, 29, 20, 212, 36, 122, 47, 195, 225, 134, 148, 70, 27, 24, 22, 225, 59));
+      TestAwsCryptographyPrimitivesDigest_Compile.__default.BasicDigestTest(Dafny.Aws.Cryptography.Primitives.Types.DigestAlgorithm.create_SHA__384(), Dafny.Sequence<byte>.FromElements(97, 115, 100, 102), Dafny.Sequence<byte>.FromElements(166, 158, 125, 243, 11, 36, 192, 66, 236, 84, 12, 203, 189, 191, 177, 86, 44, 133, 120, 112, 56, 200, 133, 116, 156, 30, 64, 142, 45, 98, 250, 54, 100, 44, 208, 7, 95, 163, 81, 232, 34, 226, 184, 165, 145, 57, 205, 157));
+      TestAwsCryptographyPrimitivesDigest_Compile.__default.BasicDigestTest(Dafny.Aws.Cryptography.Primitives.Types.DigestAlgorithm.create_SHA__512(), Dafny.Sequence<byte>.FromElements(97, 115, 100, 102), Dafny.Sequence<byte>.FromElements(64, 27, 9, 234, 179, 192, 19, 212, 202, 84, 146, 43, 184, 2, 190, 200, 253, 83, 24, 25, 43, 10, 117, 242, 1, 216, 179, 114, 116, 41, 8, 15, 179, 55, 89, 26, 189, 62, 68, 69, 59, 149, 69, 85, 183, 160, 129, 46, 16, 129, 195, 155, 116, 2, 147, 247, 101, 234, 231, 49, 245, 166, 94, 209));
+    }
+    public static void BasicDigestTest(Dafny.Aws.Cryptography.Primitives.Types._IDigestAlgorithm digestAlgorithm, Dafny.ISequence<byte> message, Dafny.ISequence<byte> expectedDigest)
+    {
+      Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient _156_client;
+      Wrappers_Compile._IResult<Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient, Dafny.Aws.Cryptography.Primitives.Types._IError> _157_valueOrError0;
+      Wrappers_Compile._IResult<Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient, Dafny.Aws.Cryptography.Primitives.Types._IError> _out20;
+      _out20 = Dafny.Aws.Cryptography.Primitives.__default.Crypto(Dafny.Aws.Cryptography.Primitives.__default.DefaultCryptoConfig());
+      _157_valueOrError0 = _out20;
+      if (!(!((_157_valueOrError0).IsFailure()))) {
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestDigest.dfy(59,15): " + _157_valueOrError0);
+      }
+      _156_client = (_157_valueOrError0).Extract();
+      Dafny.Aws.Cryptography.Primitives.Types._IDigestInput _158_input;
+      _158_input = Dafny.Aws.Cryptography.Primitives.Types.DigestInput.create(digestAlgorithm, message);
+      Dafny.ISequence<byte> _159_output;
+      Wrappers_Compile._IResult<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError> _160_valueOrError1 = Wrappers_Compile.Result<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError>.Default(Dafny.Sequence<byte>.Empty);
+      Wrappers_Compile._IResult<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError> _out21;
+      _out21 = (_156_client).Digest(_158_input);
+      _160_valueOrError1 = _out21;
+      if (!(!((_160_valueOrError1).IsFailure()))) {
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestDigest.dfy(66,15): " + _160_valueOrError1);
+      }
+      _159_output = (_160_valueOrError1).Extract();
+      if (!((new BigInteger((_159_output).Count)) == (Digest_Compile.__default.Length(digestAlgorithm)))) {
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestDigest.dfy(67,4): " + Dafny.Sequence<char>.FromString("expectation violation"));
+      }
+      if (!((_159_output).Equals((expectedDigest)))) {
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestDigest.dfy(68,4): " + Dafny.Sequence<char>.FromString("expectation violation"));
+      }
     }
   }
 } // end of namespace TestAwsCryptographyPrimitivesDigest_Compile
@@ -5784,29 +5833,29 @@ namespace TestAwsCryptographyPrimitivesGenerateRandomBytes_Compile {
   public partial class __default {
     public static void BasicGenerateRandomBytes()
     {
-      Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient _156_client;
-      Wrappers_Compile._IResult<Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient, Dafny.Aws.Cryptography.Primitives.Types._IError> _157_valueOrError0;
-      Wrappers_Compile._IResult<Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient, Dafny.Aws.Cryptography.Primitives.Types._IError> _out20;
-      _out20 = Dafny.Aws.Cryptography.Primitives.__default.Crypto(Dafny.Aws.Cryptography.Primitives.__default.DefaultCryptoConfig());
-      _157_valueOrError0 = _out20;
-      if (!(!((_157_valueOrError0).IsFailure()))) {
-        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestGenerateRandomBytes.dfy(12,15): " + _157_valueOrError0);
+      Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient _161_client;
+      Wrappers_Compile._IResult<Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient, Dafny.Aws.Cryptography.Primitives.Types._IError> _162_valueOrError0;
+      Wrappers_Compile._IResult<Dafny.Aws.Cryptography.Primitives.Types.IAwsCryptographicPrimitivesClient, Dafny.Aws.Cryptography.Primitives.Types._IError> _out22;
+      _out22 = Dafny.Aws.Cryptography.Primitives.__default.Crypto(Dafny.Aws.Cryptography.Primitives.__default.DefaultCryptoConfig());
+      _162_valueOrError0 = _out22;
+      if (!(!((_162_valueOrError0).IsFailure()))) {
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestGenerateRandomBytes.dfy(12,15): " + _162_valueOrError0);
       }
-      _156_client = (_157_valueOrError0).Extract();
-      int _158_length;
-      _158_length = (int)(5);
-      Dafny.Aws.Cryptography.Primitives.Types._IGenerateRandomBytesInput _159_input;
-      _159_input = Dafny.Aws.Cryptography.Primitives.Types.GenerateRandomBytesInput.create(_158_length);
-      Dafny.ISequence<byte> _160_value;
-      Wrappers_Compile._IResult<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError> _161_valueOrError1 = Wrappers_Compile.Result<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError>.Default(Dafny.Sequence<byte>.Empty);
-      Wrappers_Compile._IResult<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError> _out21;
-      _out21 = (_156_client).GenerateRandomBytes(_159_input);
-      _161_valueOrError1 = _out21;
-      if (!(!((_161_valueOrError1).IsFailure()))) {
-        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestGenerateRandomBytes.dfy(20,14): " + _161_valueOrError1);
+      _161_client = (_162_valueOrError0).Extract();
+      int _163_length;
+      _163_length = (int)(5);
+      Dafny.Aws.Cryptography.Primitives.Types._IGenerateRandomBytesInput _164_input;
+      _164_input = Dafny.Aws.Cryptography.Primitives.Types.GenerateRandomBytesInput.create(_163_length);
+      Dafny.ISequence<byte> _165_value;
+      Wrappers_Compile._IResult<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError> _166_valueOrError1 = Wrappers_Compile.Result<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError>.Default(Dafny.Sequence<byte>.Empty);
+      Wrappers_Compile._IResult<Dafny.ISequence<byte>, Dafny.Aws.Cryptography.Primitives.Types._IError> _out23;
+      _out23 = (_161_client).GenerateRandomBytes(_164_input);
+      _166_valueOrError1 = _out23;
+      if (!(!((_166_valueOrError1).IsFailure()))) {
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestGenerateRandomBytes.dfy(20,14): " + _166_valueOrError1);
       }
-      _160_value = (_161_valueOrError1).Extract();
-      if (!((new BigInteger((_160_value).Count)) == (new BigInteger(_158_length)))) {
+      _165_value = (_166_valueOrError1).Extract();
+      if (!((new BigInteger((_165_value).Count)) == (new BigInteger(_163_length)))) {
         throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestGenerateRandomBytes.dfy(22,4): " + Dafny.Sequence<char>.FromString("expectation violation"));
       }
     }
@@ -6032,18 +6081,18 @@ namespace RSAEncryption {
     {
       publicKey = default(RSAEncryption.PublicKey);
       privateKey = default(RSAEncryption.PrivateKey);
-      Dafny.ISequence<byte> _162_pemPublic;
-      Dafny.ISequence<byte> _163_pemPrivate;
-      Dafny.ISequence<byte> _out22;
-      Dafny.ISequence<byte> _out23;
-      RSAEncryption.RSA.GenerateKeyPairExtern(strength, out _out22, out _out23);
-      _162_pemPublic = _out22;
-      _163_pemPrivate = _out23;
+      Dafny.ISequence<byte> _167_pemPublic;
+      Dafny.ISequence<byte> _168_pemPrivate;
+      Dafny.ISequence<byte> _out24;
+      Dafny.ISequence<byte> _out25;
+      RSAEncryption.RSA.GenerateKeyPairExtern(strength, out _out24, out _out25);
+      _167_pemPublic = _out24;
+      _168_pemPrivate = _out25;
       RSAEncryption.PrivateKey _nw6 = new RSAEncryption.PrivateKey();
-      _nw6.__ctor(_163_pemPrivate, strength);
+      _nw6.__ctor(_168_pemPrivate, strength);
       privateKey = _nw6;
       RSAEncryption.PublicKey _nw7 = new RSAEncryption.PublicKey();
-      _nw7.__ctor(_162_pemPublic, strength);
+      _nw7.__ctor(_167_pemPublic, strength);
       publicKey = _nw7;
     }
   }
@@ -6207,18 +6256,18 @@ namespace Signature {
     public static Wrappers_Compile._IResult<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError> KeyGen(Signature._IECDSAParams s)
     {
       Wrappers_Compile._IResult<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError> res = Wrappers_Compile.Result<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError>.Default(Signature.SignatureKeyPair.Default());
-      Signature._ISignatureKeyPair _164_sigKeyPair;
-      Wrappers_Compile._IResult<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError> _165_valueOrError0 = Wrappers_Compile.Result<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError>.Default(Signature.SignatureKeyPair.Default());
-      Wrappers_Compile._IResult<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError> _out24;
-      _out24 = Signature.ECDSA.ExternKeyGen(s);
-      _165_valueOrError0 = _out24;
-      if ((_165_valueOrError0).IsFailure()) {
-        res = (_165_valueOrError0).PropagateFailure<Signature._ISignatureKeyPair>();
+      Signature._ISignatureKeyPair _169_sigKeyPair;
+      Wrappers_Compile._IResult<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError> _170_valueOrError0 = Wrappers_Compile.Result<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError>.Default(Signature.SignatureKeyPair.Default());
+      Wrappers_Compile._IResult<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError> _out26;
+      _out26 = Signature.ECDSA.ExternKeyGen(s);
+      _170_valueOrError0 = _out26;
+      if ((_170_valueOrError0).IsFailure()) {
+        res = (_170_valueOrError0).PropagateFailure<Signature._ISignatureKeyPair>();
         return res;
       }
-      _164_sigKeyPair = (_165_valueOrError0).Extract();
-      if ((new BigInteger(((_164_sigKeyPair).dtor_verificationKey).Count)) == ((s).FieldSize())) {
-        res = Wrappers_Compile.Result<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError>.create_Success(_164_sigKeyPair);
+      _169_sigKeyPair = (_170_valueOrError0).Extract();
+      if ((new BigInteger(((_169_sigKeyPair).dtor_verificationKey).Count)) == ((s).FieldSize())) {
+        res = Wrappers_Compile.Result<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError>.create_Success(_169_sigKeyPair);
         return res;
       } else {
         res = Wrappers_Compile.Result<Signature._ISignatureKeyPair, Dafny.Aws.Cryptography.Primitives.Types._IError>.create_Failure(Dafny.Aws.Cryptography.Primitives.Types.Error.create_AwsCryptographicPrimitivesError(Dafny.Sequence<char>.FromString("Incorrect verification-key length from ExternKeyGen.")));
@@ -6233,12 +6282,12 @@ namespace _module {
   public partial class __default {
     public static void _Main()
     {
-      bool _166_success;
-      _166_success = true;
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"TestAwsCryptographyPrimitivesDigest.BasigDigest: "));
+      bool _171_success;
+      _171_success = true;
+      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"TestAwsCryptographyPrimitivesDigest.DigestTests: "));
       try {
         {
-          TestAwsCryptographyPrimitivesDigest_Compile.__default.BasigDigest();
+          TestAwsCryptographyPrimitivesDigest_Compile.__default.DigestTests();
           {
             Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"PASSED
 "));
@@ -6246,14 +6295,14 @@ namespace _module {
         }
       }
       catch (Dafny.HaltException e) {
-        var _167_haltMessage = Dafny.Sequence<char>.FromString(e.Message);
+        var _172_haltMessage = Dafny.Sequence<char>.FromString(e.Message);
         {
           Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"FAILED
 	"));
-          Dafny.Helpers.Print(_167_haltMessage);
+          Dafny.Helpers.Print(_172_haltMessage);
           Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"
 "));
-          _166_success = false;
+          _171_success = false;
         }
       }
       Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"TestAwsCryptographyPrimitivesGenerateRandomBytes.BasicGenerateRandomBytes: "));
@@ -6267,17 +6316,17 @@ namespace _module {
         }
       }
       catch (Dafny.HaltException e) {
-        var _168_haltMessage = Dafny.Sequence<char>.FromString(e.Message);
+        var _173_haltMessage = Dafny.Sequence<char>.FromString(e.Message);
         {
           Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"FAILED
 	"));
-          Dafny.Helpers.Print(_168_haltMessage);
+          Dafny.Helpers.Print(_173_haltMessage);
           Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"
 "));
-          _166_success = false;
+          _171_success = false;
         }
       }
-      if (!(_166_success)) {
+      if (!(_171_success)) {
         Dafny.Helpers.Print(Dafny.Sequence<char>.FromString(@"Test failures occurred: see above.
 "));
       }
