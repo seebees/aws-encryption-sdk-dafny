@@ -47,7 +47,29 @@ module TestAwsCryptographyPrimitivesAES {
   }
 
   method {:test} AESEncryptTests() {
-
+    BasicAESEncryptTest(
+      Primitives.Types.AESEncryptInput(
+        encAlg := Primitives.Types.AES_GCM(
+          keyLength := 32,
+          tagLength := 16,
+          ivLength := 12
+        ),
+        iv := [
+          2, 2, 2, 2, 2,
+          2, 2, 2, 2, 2,
+          2, 2
+        ],
+        key := [
+          1, 1, 1, 1, 1, 1, 1, 1, 1,
+          1, 1, 1, 1, 1, 1, 1, 1, 1,
+          1, 1, 1, 1, 1, 1, 1, 1, 1,
+          1, 1, 1, 1, 1
+        ],
+        // The string "asdf" as bytes
+        msg := [ 97, 115, 100, 102 ],
+        aad := [3,3,3,3]
+      )
+    );
   }
 
   method BasicAESDecryptTest(

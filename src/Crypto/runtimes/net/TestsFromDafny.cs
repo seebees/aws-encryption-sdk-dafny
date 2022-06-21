@@ -28,6 +28,7 @@ module TestAwsCryptographyPrimitivesAES {
 
   method {:test} AESEncryptTests()
   {
+    BasicAESEncryptTest(Primitives.Types.AESEncryptInput(encAlg := Primitives.Types.AES_GCM(keyLength := 32, tagLength := 16, ivLength := 12), iv := [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], key := [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], msg := [97, 115, 100, 102], aad := [3, 3, 3, 3]));
   }
 
   method BasicAESDecryptTest(input: Primitives.Types.AESDecryptInput, expectedOutput: seq<uint8>)
@@ -5858,6 +5859,7 @@ namespace TestAwsCryptographyPrimitivesAES_Compile {
     }
     public static void AESEncryptTests()
     {
+      TestAwsCryptographyPrimitivesAES_Compile.__default.BasicAESEncryptTest(Dafny.Aws.Cryptography.Primitives.Types.AESEncryptInput.create(Dafny.Aws.Cryptography.Primitives.Types.AES__GCM.create(32, 16, 12), Dafny.Sequence<byte>.FromElements(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), Dafny.Sequence<byte>.FromElements(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), Dafny.Sequence<byte>.FromElements(97, 115, 100, 102), Dafny.Sequence<byte>.FromElements(3, 3, 3, 3)));
     }
     public static void BasicAESDecryptTest(Dafny.Aws.Cryptography.Primitives.Types._IAESDecryptInput input, Dafny.ISequence<byte> expectedOutput)
     {
@@ -5867,7 +5869,7 @@ namespace TestAwsCryptographyPrimitivesAES_Compile {
       _out20 = Dafny.Aws.Cryptography.Primitives.__default.Crypto(Dafny.Aws.Cryptography.Primitives.__default.DefaultCryptoConfig());
       _157_valueOrError0 = _out20;
       if (!(!((_157_valueOrError0).IsFailure()))) {
-        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(58,15): " + _157_valueOrError0);
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(80,15): " + _157_valueOrError0);
       }
       _156_client = (_157_valueOrError0).Extract();
       Dafny.ISequence<byte> _158_output;
@@ -5876,11 +5878,11 @@ namespace TestAwsCryptographyPrimitivesAES_Compile {
       _out21 = (_156_client).AESDecrypt(input);
       _159_valueOrError1 = _out21;
       if (!(!((_159_valueOrError1).IsFailure()))) {
-        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(59,15): " + _159_valueOrError1);
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(81,15): " + _159_valueOrError1);
       }
       _158_output = (_159_valueOrError1).Extract();
       if (!((_158_output).Equals((expectedOutput)))) {
-        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(60,4): " + Dafny.Sequence<char>.FromString("expectation violation"));
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(82,4): " + Dafny.Sequence<char>.FromString("expectation violation"));
       }
     }
     public static void BasicAESEncryptTest(Dafny.Aws.Cryptography.Primitives.Types._IAESEncryptInput input)
@@ -5891,7 +5893,7 @@ namespace TestAwsCryptographyPrimitivesAES_Compile {
       _out22 = Dafny.Aws.Cryptography.Primitives.__default.Crypto(Dafny.Aws.Cryptography.Primitives.__default.DefaultCryptoConfig());
       _161_valueOrError0 = _out22;
       if (!(!((_161_valueOrError0).IsFailure()))) {
-        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(67,15): " + _161_valueOrError0);
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(89,15): " + _161_valueOrError0);
       }
       _160_client = (_161_valueOrError0).Extract();
       Dafny.Aws.Cryptography.Primitives.Types._IAESEncryptOutput _162_output;
@@ -5900,7 +5902,7 @@ namespace TestAwsCryptographyPrimitivesAES_Compile {
       _out23 = (_160_client).AESEncrypt(input);
       _163_valueOrError1 = _out23;
       if (!(!((_163_valueOrError1).IsFailure()))) {
-        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(68,15): " + _163_valueOrError1);
+        throw new Dafny.HaltException("/Users/ryanemer/aws-encryption-sdk-dafny/src/Crypto/test/TestAES.dfy(90,15): " + _163_valueOrError1);
       }
       _162_output = (_163_valueOrError1).Extract();
       Dafny.Aws.Cryptography.Primitives.Types._IAESDecryptInput _164_decryptInput;
